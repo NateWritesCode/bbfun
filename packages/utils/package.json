@@ -1,0 +1,12 @@
+{
+    "name": "@bbfun/utils",
+    "module": "index.ts",
+    "type": "module",
+    "version": "0.0.1",
+    "exports": {
+      ".": "./index.ts",
+      "./constants": "./constants/index.ts",
+      "./entities": "./entities/index.ts",
+      "./functions": "./functions/index.ts"
+    }
+  }

@@ -1,0 +1,25 @@
+{
+  "name": "@bbfun/monorepo",
+  "version": "0.0.1",
+  "dependencies": {
+    "@faker-js/faker": "^8.2.0",
+    "@msgpack/msgpack": "^3.0.0-beta2",
+    "@tensorflow/tfjs": "^4.12.0",
+    "csv-string": "^4.1.1",
+    "dayjs": "^1.11.10",
+    "lmdb": "^2.8.5",
+    "lodash": "^4.17.21",
+    "zod": "latest"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/lodash": "^4.14.200",
+    "bun-types": "latest",
+    "typescript": "latest"
+  }
+}

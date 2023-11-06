@@ -1,0 +1,9 @@
+{
+  "extends": ["../biome.json"],
+  "linter": {
+    "include": [
+      "src/**/*.ts",
+      "vite.config.ts"
+    ]
+  }
+}
