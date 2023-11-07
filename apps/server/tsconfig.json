@@ -25,9 +25,7 @@
 		}
 	},
 	"include": [
-		"../data/geography/**/*.json",
 		"src/**/*",
 		"test/**/*.test.ts",
-		"../constants/src/date.ts"
 	]
 }

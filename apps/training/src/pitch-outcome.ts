@@ -2,6 +2,7 @@ import {
 	PATH_MODEL_ROOT,
 	PATH_OUTPUT_ROOT,
 	PITCH_TYPES_LIST,
+	wrangleXPitchOutcome,
 } from "@bbfun/utils";
 import {
 	TRowOotp,
@@ -82,29 +83,7 @@ const getXs = (rows: typeof wrangledData) => {
 	const pitchInputs: number[][] = [];
 
 	for (const row of rows) {
-		const input = [
-			row.ax,
-			row.ay,
-			row.az,
-			row.pfxX,
-			row.pfxZ,
-			row.plateX,
-			row.plateZ,
-			row.releaseSpeed,
-			row.releasePosX,
-			row.releasePosY,
-			row.releasePosZ,
-			row.szBot,
-			row.szTop,
-			row.vx0,
-			row.vy0,
-			row.vz0,
-			row.avoidKs,
-			row.contact,
-			row.eye,
-			row.gap,
-			row.power,
-		];
+		const input = wrangleXPitchOutcome(row);
 
 		pitchInputs.push(input);
 	}
@@ -161,31 +140,7 @@ model.compile({
 	let numRight = 0;
 
 	for (const row of testingData) {
-		const tensor = tf.tensor2d([
-			[
-				row.ax,
-				row.ay,
-				row.az,
-				row.pfxX,
-				row.pfxZ,
-				row.plateX,
-				row.plateZ,
-				row.releaseSpeed,
-				row.releasePosX,
-				row.releasePosY,
-				row.releasePosZ,
-				row.szBot,
-				row.szTop,
-				row.vx0,
-				row.vy0,
-				row.vz0,
-				row.avoidKs,
-				row.contact,
-				row.eye,
-				row.gap,
-				row.power,
-			],
-		]);
+		const tensor = tf.tensor2d([wrangleXPitchOutcome(row)]);
 
 		const predictResult = model.predict(tensor) as tf.Tensor;
 
