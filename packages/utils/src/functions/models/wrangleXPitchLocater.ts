@@ -7,21 +7,21 @@ import {
 import tf from "@tensorflow/tfjs";
 
 export default (input: TInputWrangleXPitchLocater) => {
-	ZInputWrangleXPitchLocater.parse(input);
+	const parsedInput = ZInputWrangleXPitchLocater.parse(input);
 
 	const pitchName = tf
 		.oneHot(
-			PITCH_TYPES.indexOf(input.pitchName as typeof PITCH_TYPES[0]),
+			PITCH_TYPES.indexOf(parsedInput.pitchName as typeof PITCH_TYPES[0]),
 			PITCH_TYPES.length,
 		)
 		.dataSync();
 
 	const response = [
-		input.control,
-		input.movement,
-		input.pitchRating,
-		input.pitchNumber,
-		input.stuff,
+		parsedInput.control,
+		parsedInput.movement,
+		parsedInput.pitchRating,
+		parsedInput.pitchNumber,
+		parsedInput.stuff,
 		...pitchName,
 	];
 

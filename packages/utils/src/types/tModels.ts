@@ -75,3 +75,38 @@ export const ZResponseWrangleYPitchLocater = z
 export type TResponseWrangleYPitchLocater = z.infer<
 	typeof ZResponseWrangleYPitchLocater
 >;
+
+export const ZInputWrangleXPitchOutcome = z.object({
+	ax: z.number(),
+	ay: z.number(),
+	az: z.number(),
+	pfxX: z.number(),
+	pfxZ: z.number(),
+	plateX: z.number(),
+	plateZ: z.number(),
+	releaseSpeed: z.number(),
+	releasePosX: z.number(),
+	releasePosY: z.number(),
+	releasePosZ: z.number(),
+	szBot: z.number(),
+	szTop: z.number(),
+	vx0: z.number(),
+	vy0: z.number(),
+	vz0: z.number(),
+	avoidKs: z.number(),
+	contact: z.number(),
+	eye: z.number(),
+	gap: z.number(),
+	power: z.number(),
+});
+export type TInputWrangleXPitchOutcome = z.infer<
+	typeof ZInputWrangleXPitchOutcome
+>;
+
+export const ZResponseWrangleXPitchOutcome = z
+	.array(z.number())
+	.max(21)
+	.min(21);
+export type TResponseWrangleXPitchOutcome = z.infer<
+	typeof ZResponseWrangleXPitchOutcome
+>;

@@ -67,7 +67,7 @@ export const ZPlayerRatings = z.object({
 		movement: z.number(),
 		pitches: z.object({
 			changeup: z.number(),
-			circlechange: z.number(),
+			// circlechange: z.number(),
 			cutter: z.number(),
 			curveball: z.number(),
 			fastball: z.number(),

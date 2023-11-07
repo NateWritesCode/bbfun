@@ -439,10 +439,10 @@ class FakeClient {
 				min: 1,
 				max: 100,
 			}),
-			circlechange: this._getRandomNumberBetween({
-				min: 1,
-				max: 100,
-			}),
+			// circlechange: this._getRandomNumberBetween({
+			// 	min: 1,
+			// 	max: 100,
+			// }),
 			cutter: this._getRandomNumberBetween({
 				min: 1,
 				max: 100,

@@ -1,4 +1,8 @@
-import { PATH_MODEL_ROOT, PATH_OUTPUT_ROOT } from "@bbfun/utils";
+import {
+	PATH_MODEL_ROOT,
+	PATH_OUTPUT_ROOT,
+	PITCH_TYPES_LIST,
+} from "@bbfun/utils";
 import {
 	TRowOotp,
 	TRowOutputPitchFx,
@@ -13,8 +17,6 @@ const MODEL_NAME = "pitch-outcome";
 const PATH_OUTPUT = `${PATH_MODEL_ROOT}/${MODEL_NAME}`;
 
 createFolderPathIfNeeded(PATH_OUTPUT);
-
-const PITCH_TYPES_LIST = ["B", "S", "X"];
 
 const battingData = getJsonData<TRowOutputPitchFx[]>({
 	path: `${PATH_OUTPUT_ROOT}/historical/pitchfx/2011/batting.json`,

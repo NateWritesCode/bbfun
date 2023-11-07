@@ -7,6 +7,21 @@
 			"command": "bash scripts/dev-server.sh"
 		},
 		{
+			"label": "format",
+			"type": "shell",
+			"command": "bash scripts/format.sh"
+		},
+		{
+			"label": "lint",
+			"type": "shell",
+			"command": "bash scripts/lint.sh"
+		},
+		{
+			"label": "test",
+			"type": "shell",
+			"command": "bash scripts/test.sh"
+		},
+		{
 			"label": "train-models",
 			"type": "shell",
 			"command": "bash scripts/train-models.sh"

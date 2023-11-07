@@ -28,5 +28,6 @@
 	"search.exclude": {
 		"**/model.json": true,
 		"**/weights.bin": true
-	}
+	},
+	"bun.debugTerminal.stopOnEntry": true
 }

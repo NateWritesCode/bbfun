@@ -2,30 +2,20 @@ import {
 	TInputWrangleYPitchLocater,
 	ZInputWrangleYPitchLocater,
 	ZResponseWrangleYPitchLocater,
+	getObjKeysInAlphabeticOrder,
 } from "src";
 
 export default (input: TInputWrangleYPitchLocater) => {
-	ZInputWrangleYPitchLocater.parse(input);
-	const keys = Object.keys(input);
+	const parsedInput = ZInputWrangleYPitchLocater.parse(input);
+	const keys = getObjKeysInAlphabeticOrder(parsedInput) as Array<
+		keyof TInputWrangleYPitchLocater
+	>;
 
-	const response = [
-		input.ax,
-		input.ay,
-		input.az,
-		input.pfxX,
-		input.pfxZ,
-		input.plateX,
-		input.plateZ,
-		input.releaseSpeed,
-		input.releasePosX,
-		input.releasePosY,
-		input.releasePosZ,
-		input.szBot,
-		input.szTop,
-		input.vx0,
-		input.vy0,
-		input.vz0,
-	];
+	const response: number[] = [];
+
+	for (const key of keys) {
+		response.push(parsedInput[key]);
+	}
 
 	return ZResponseWrangleYPitchLocater.parse(response);
 };

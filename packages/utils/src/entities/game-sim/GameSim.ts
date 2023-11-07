@@ -293,7 +293,39 @@ export default class GameSim {
 			...pitcher.ratings.pitching.pitches,
 		});
 
-		console.log("pitchName", pitchName);
+		const pitchLocation = this.modelClient.predictPitchLocater({
+			control: pitcher.ratings.pitching.control,
+			movement: pitcher.ratings.pitching.movement,
+			pitchName,
+			pitchNumber: 1,
+			pitchRating: pitcher.ratings.pitching.pitches[pitchName],
+			stuff: pitcher.ratings.pitching.stuff,
+		});
+
+		const pitchOutcome = this.modelClient.predictPitchOutcome({
+			avoidKs: hitter.ratings.batting.avoidKs,
+			contact: hitter.ratings.batting.contact,
+			eye: hitter.ratings.batting.eye,
+			gap: hitter.ratings.batting.gap,
+			power: hitter.ratings.batting.power,
+			...pitchLocation,
+		});
+
+		switch (pitchOutcome) {
+			case "B": {
+				break;
+			}
+			case "S": {
+				break;
+			}
+			case "X": {
+				break;
+			}
+			default: {
+				const exhaustiveCheck: never = pitchOutcome;
+				throw new Error(exhaustiveCheck);
+			}
+		}
 
 		// const pitchLocation = this.modelClient.predictPitchLocater({
 		// 	control: pitcher.ratings.pitching.control,

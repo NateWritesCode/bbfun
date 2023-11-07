@@ -1,0 +1,9 @@
+{
+	"extends": ["../../biome.json"],
+	"formatter": {
+		"ignore": ["./src/data/**/*"]
+	},
+	"linter": {
+		"ignore": ["./src/data/**/*"]
+	}
+}

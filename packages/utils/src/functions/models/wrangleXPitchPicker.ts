@@ -2,27 +2,21 @@ import {
 	TInputWrangleXPitchPicker,
 	ZInputWrangleXPitchPicker,
 	ZResponseWrangleXPitchPicker,
+	getObjKeysInAlphabeticOrder,
 } from "@bbfun/utils";
 
 export default (input: TInputWrangleXPitchPicker) => {
-	ZInputWrangleXPitchPicker.parse(input);
+	const parsedInput = ZInputWrangleXPitchPicker.parse(input);
 
-	const response = [
-		input.balls,
-		input.changeup,
-		input.cutter,
-		input.curveball,
-		input.fastball,
-		input.forkball,
-		input.knuckleball,
-		input.knucklecurve,
-		input.outs,
-		input.screwball,
-		input.sinker,
-		input.slider,
-		input.splitter,
-		input.strikes,
-	];
+	const keys = getObjKeysInAlphabeticOrder(parsedInput) as Array<
+		keyof TInputWrangleXPitchPicker
+	>;
+
+	const response: number[] = [];
+
+	for (const key of keys) {
+		response.push(parsedInput[key]);
+	}
 
 	return ZResponseWrangleXPitchPicker.parse(response);
 };

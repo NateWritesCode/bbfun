@@ -1,8 +1,6 @@
 {
-  "extends": ["../biome.json"],
-  "linter": {
-    "include": [
-      "src/**/*.ts"
-    ]
-  }
+	"extends": ["../../biome.json"],
+	"linter": {
+		"include": ["src/**/*.ts"]
+	}
 }

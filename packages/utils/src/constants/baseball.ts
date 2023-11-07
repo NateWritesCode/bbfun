@@ -25,3 +25,5 @@ export const POSITIONS = [
 	"cf",
 	"rf",
 ] as const;
+
+export const PITCH_TYPES_LIST = ["B", "S", "X"] as const;

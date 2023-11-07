@@ -8,7 +8,7 @@
 			"internalConsoleOptions": "openOnSessionStart",
 			"program": "${file}",
 			"args": [],
-			"cwd": "${workspaceFolder}/server",
+			"cwd": "${workspaceFolder}/apps/server",
 			"env": {},
 			"strictEnv": false,
 			"watchMode": true,
