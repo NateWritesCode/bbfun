@@ -5,8 +5,8 @@ const getJsonData = <T>({
 	zodParser,
 }: { path: string; zodParser: ZodTypeAny }): T => {
 	const data = require(path);
-	const parsedData = zodParser.parse(data);
-	return parsedData;
+
+	return zodParser.parse(data);
 };
 
 export default getJsonData;

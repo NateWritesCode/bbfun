@@ -1,7 +1,12 @@
 import { PATH_MODEL_ROOT, PATH_OUTPUT_ROOT } from "@bbfun/utils";
-import { TRowOotp, TRowPitchFx, ZRowOotp, ZRowPitchFx } from "@bbfun/utils";
+import {
+	TRowOotp,
+	TRowOutputPitchFx,
+	ZRowOotp,
+	ZRowOutputPitchFx,
+} from "@bbfun/utils";
 import { createFolderPathIfNeeded, getJsonData } from "@bbfun/utils";
-import tf from "@tensorflow/tfjs-node";
+import tf from "@tensorflow/tfjs";
 import { z } from "zod";
 
 const MODEL_NAME = "pitch-outcome";
@@ -11,9 +16,9 @@ createFolderPathIfNeeded(PATH_OUTPUT);
 
 const PITCH_TYPES_LIST = ["B", "S", "X"];
 
-const battingData = getJsonData<TRowPitchFx[]>({
+const battingData = getJsonData<TRowOutputPitchFx[]>({
 	path: `${PATH_OUTPUT_ROOT}/historical/pitchfx/2011/batting.json`,
-	zodParser: z.array(ZRowPitchFx),
+	zodParser: z.array(ZRowOutputPitchFx),
 });
 
 const ootp = getJsonData<TRowOotp[]>({
@@ -144,10 +149,12 @@ model.compile({
 });
 
 (async () => {
+	console.info(`Fitting model ${MODEL_NAME}...`);
 	await model.fit(getXs(trainingData), getYs(trainingData), {
-		epochs: 100,
+		epochs: 1,
 		validationSplit: 0.1,
 	});
+	console.info(`Finished fitting model ${MODEL_NAME}...`);
 
 	let numRight = 0;
 
@@ -179,7 +186,6 @@ model.compile({
 		]);
 
 		const predictResult = model.predict(tensor) as tf.Tensor;
-		predictResult.print();
 
 		const maxIndex = predictResult.argMax(1).dataSync()[0];
 
@@ -193,5 +199,5 @@ model.compile({
 
 	console.info("numRight", numRight);
 	console.info("accuracy", numRight / testingData.length);
-	await model.save(`file://${PATH_OUTPUT}`);
+	await model.save(`http://localhost:3000/uploadModel/${MODEL_NAME}`);
 })();

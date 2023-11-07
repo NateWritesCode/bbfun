@@ -1,16 +1,15 @@
 import {
-	TInputPitchPicker,
-	ZInputPitchPicker,
-	ZResponsePitchPicker,
+	TInputWrangleXPitchPicker,
+	ZInputWrangleXPitchPicker,
+	ZResponseWrangleXPitchPicker,
 } from "@bbfun/utils";
 
-export default (input: TInputPitchPicker) => {
-	ZInputPitchPicker.parse(input);
+export default (input: TInputWrangleXPitchPicker) => {
+	ZInputWrangleXPitchPicker.parse(input);
 
 	const response = [
 		input.balls,
 		input.changeup,
-		input.circlechange,
 		input.cutter,
 		input.curveball,
 		input.fastball,
@@ -25,5 +24,5 @@ export default (input: TInputPitchPicker) => {
 		input.strikes,
 	];
 
-	return ZResponsePitchPicker.parse(response);
+	return ZResponseWrangleXPitchPicker.parse(response);
 };

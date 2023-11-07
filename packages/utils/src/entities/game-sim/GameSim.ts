@@ -3,6 +3,7 @@ import {
 	GameSimLog,
 	GameSimPlayerState,
 	GameSimTeamState,
+	ModelClient,
 } from "@bbfun/utils";
 import {
 	OGameSimObserver,
@@ -26,6 +27,7 @@ import {
 export default class GameSim {
 	balls: number;
 	d: 0 | 1;
+	modelClient: ModelClient;
 	o: 0 | 1;
 	inning: 1;
 	isNeutralVenue: boolean;
@@ -52,6 +54,7 @@ export default class GameSim {
 	constructor(input: TConstructorGameSim) {
 		ZConstructorGameSim.parse(input);
 
+		this.modelClient = input.modelClient;
 		this.teams = input.teams;
 		this.venue = input.venue;
 
@@ -80,6 +83,7 @@ export default class GameSim {
 			for (const player of team.players) {
 				const playerState = new GameSimPlayerState({
 					id: player.id,
+					ratings: player.ratings,
 				});
 				this.playerStates[player.id] = playerState;
 				this.observers.push(playerState);
@@ -113,7 +117,8 @@ export default class GameSim {
 		const team0Runs = this.teamStates[team0.id].runs;
 		const team1Runs = this.teamStates[team1.id].runs;
 
-		if (this.inning > this.numInningsInGame && team0Runs !== team1Runs) {
+		if (this.inning > this.numInningsInGame) {
+			// if (this.inning > this.numInningsInGame && team0Runs !== team1Runs) {
 			return true;
 		}
 
@@ -193,14 +198,17 @@ export default class GameSim {
 
 	_simulateAtBat = () => {
 		this.notifyObservers({
-			gameEvent: "AT_BAT_START",
+			gameEvent: "atBatStart",
 		});
 
 		let isAtBatOver = false;
 
 		while (!isAtBatOver) {
 			this._simulatePitch();
-			isAtBatOver = true;
+			this.outs++;
+
+			const _isAtBatOver = this._checkIsAtBatOver();
+			isAtBatOver = _isAtBatOver;
 
 			// const isHomeRun = faker.datatype.boolean();
 
@@ -214,7 +222,7 @@ export default class GameSim {
 			//       r2: this.r2,
 			//       r3: this.r3,
 			//     },
-			//     gameEvent: "HOME_RUN",
+			//     gameEvent: "homeRun",
 			//   });
 			// } else {
 			//   this.notifyObservers({
@@ -228,7 +236,7 @@ export default class GameSim {
 			//       r2: this.r2,
 			//       r3: this.r3,
 			//     },
-			//     gameEvent: "OUT",
+			//     gameEvent: "out",
 			//   });
 			//   this.outs++;
 			// }
@@ -240,13 +248,13 @@ export default class GameSim {
 		this._endAtBat();
 
 		this.notifyObservers({
-			gameEvent: "AT_BAT_END",
+			gameEvent: "atBatEnd",
 		});
 	};
 
 	private _simulateHalfInning = () => {
 		this.notifyObservers({
-			gameEvent: "HALF_INNING_START",
+			gameEvent: "halfInningStart",
 		});
 
 		let isHalfInningOver = false;
@@ -266,7 +274,7 @@ export default class GameSim {
 				r2: this.r2,
 				r3: this.r3,
 			},
-			gameEvent: "HALF_INNING_END",
+			gameEvent: "halfInningEnd",
 		});
 	};
 
@@ -277,11 +285,29 @@ export default class GameSim {
 		const hitter = this._getCurrentHitter({
 			teamIndex: this.o,
 		});
+
+		const pitchName = this.modelClient.predictPitchPicker({
+			balls: this.balls,
+			outs: this.outs,
+			strikes: this.strikes,
+			...pitcher.ratings.pitching.pitches,
+		});
+
+		console.log("pitchName", pitchName);
+
+		// const pitchLocation = this.modelClient.predictPitchLocater({
+		// 	control: pitcher.ratings.pitching.control,
+		// 	movement: pitcher.ratings.pitching.movement,
+		// 	pitchName,
+		// 	stuff: pitcher.ratings.pitching.stuff,
+		// 	pitchRating: pitcher.ratings.pitching.pitches[pitchName],
+		// 	pitchNumber: 1,
+		// });
 	};
 
 	public start() {
 		this.notifyObservers({
-			gameEvent: "GAME_START",
+			gameEvent: "gameStart",
 		});
 
 		let isGameOver = false;
@@ -294,7 +320,7 @@ export default class GameSim {
 		}
 
 		this.notifyObservers({
-			gameEvent: "GAME_END",
+			gameEvent: "gameEnd",
 		});
 	}
 }

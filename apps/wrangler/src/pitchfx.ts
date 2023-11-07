@@ -1,6 +1,6 @@
 import { PATH_INPUT_ROOT, PATH_OUTPUT_ROOT } from "@bbfun/utils";
 import { PersonHistoricalIdHelper } from "@bbfun/utils";
-import { ZRowPitchFx } from "@bbfun/utils";
+import { ZRowInputPitchFx } from "@bbfun/utils";
 import { createFolderPathIfNeeded } from "@bbfun/utils";
 import CSV from "csv-string";
 
@@ -117,7 +117,7 @@ const mapFunc = (row: string[], index: number) => {
 		deltaRunExp: row[91],
 	};
 
-	const parsedRow = ZRowPitchFx.parse(holderObj);
+	const parsedRow = ZRowInputPitchFx.parse(holderObj);
 	parsedRow.pitcherId = personHistoricalIdHelper.getPersonIdFromMlbId(
 		parsedRow.pitcherId,
 	);
@@ -134,6 +134,8 @@ const mapFunc = (row: string[], index: number) => {
 	parsedRow.runner3b = parsedRow.runner3b
 		? personHistoricalIdHelper.getPersonIdFromMlbId(parsedRow.runner3b)
 		: null;
+
+	return parsedRow;
 };
 
 console.info("Starting pitching");

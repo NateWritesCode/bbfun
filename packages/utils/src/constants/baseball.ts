@@ -2,7 +2,6 @@ export const MAX_BASEBALL_RATING = 100;
 export const MIN_BASEBALL_RATING = 0;
 export const PITCH_TYPES = [
 	"changeup",
-	"circlechange",
 	"cutter",
 	"curveball",
 	"fastball",

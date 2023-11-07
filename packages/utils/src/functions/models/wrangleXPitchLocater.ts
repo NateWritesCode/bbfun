@@ -1,13 +1,13 @@
 import { PITCH_TYPES } from "@bbfun/utils";
 import {
-	TInputPitchLocater,
-	ZInputPitchLocater,
-	ZResponsePitchLocater,
+	TInputWrangleXPitchLocater,
+	ZInputWrangleXPitchLocater,
+	ZResponseWrangleXPitchLocater,
 } from "@bbfun/utils";
 import tf from "@tensorflow/tfjs";
 
-export default (input: TInputPitchLocater) => {
-	ZInputPitchLocater.parse(input);
+export default (input: TInputWrangleXPitchLocater) => {
+	ZInputWrangleXPitchLocater.parse(input);
 
 	const pitchName = tf
 		.oneHot(
@@ -25,5 +25,5 @@ export default (input: TInputPitchLocater) => {
 		...pitchName,
 	];
 
-	return ZResponsePitchLocater.parse(response);
+	return ZResponseWrangleXPitchLocater.parse(response);
 };

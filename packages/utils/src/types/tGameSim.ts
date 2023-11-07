@@ -1,13 +1,14 @@
-import { GameSimPlayerState, GameSimTeamState } from "@bbfun/utils";
+import {
+	GameSimPlayerState,
+	GameSimTeamState,
+	ModelClient,
+} from "@bbfun/utils";
 import { z } from "zod";
 import { ZEGamePositions } from "./tEnums";
 import { ZPerson } from "./tPerson";
-import { ZPlayer } from "./tPlayer";
+import { ZPlayer, ZPlayerRatings } from "./tPlayer";
 import { ZRegexSlug } from "./tRegex";
 import { ZVenue } from "./tVenue";
-
-console.log("GameSimTeamState", GameSimTeamState);
-console.log("GameSimPlayerState", GameSimPlayerState);
 
 export const ZGameTeamPlayers = z
 	.array(
@@ -33,6 +34,7 @@ export type TGameVenue = z.infer<typeof ZGameVenue>;
 
 export const ZConstructorGameSim = z.object({
 	id: z.string(),
+	modelClient: z.instanceof(ModelClient),
 	teams: z.tuple([ZGameTeam, ZGameTeam]),
 	venue: ZGameVenue,
 });
@@ -48,6 +50,7 @@ export type TConstructorGameSimTeamState = z.infer<
 
 export const ZConstructorGameSimPlayerState = z.object({
 	id: ZRegexSlug,
+	ratings: ZPlayerRatings,
 });
 export type TConstructorGameSimPlayerState = z.infer<
 	typeof ZConstructorGameSimPlayerState
@@ -72,19 +75,19 @@ export type TGameSimTeamStates = z.infer<typeof ZGameSimTeamStates>;
 
 const ZGameSimEventGameStart = z.object({
 	data: z.null().optional(),
-	gameEvent: z.literal("GAME_START"),
+	gameEvent: z.literal("gameStart"),
 });
 export type TGameSimEventGameStart = z.infer<typeof ZGameSimEventGameStart>;
 
 const ZGameSimEventGameEnd = z.object({
 	data: z.null().optional(),
-	gameEvent: z.literal("GAME_END"),
+	gameEvent: z.literal("gameEnd"),
 });
 export type TGameSimEventGameEnd = z.infer<typeof ZGameSimEventGameEnd>;
 
 const ZGameSimEventHalfInningStart = z.object({
 	data: z.null().optional(),
-	gameEvent: z.literal("HALF_INNING_START"),
+	gameEvent: z.literal("halfInningStart"),
 });
 export type TGameSimEventHalfInningStart = z.infer<
 	typeof ZGameSimEventHalfInningStart
@@ -97,19 +100,19 @@ const ZGameSimEventHalfInningEnd = z.object({
 		r3: z.instanceof(GameSimPlayerState).nullable(),
 	}),
 
-	gameEvent: z.literal("HALF_INNING_END"),
+	gameEvent: z.literal("halfInningEnd"),
 });
 export type TGameSimEventHalfInningEnd = z.infer<typeof ZGameSimEventGameEnd>;
 
 const ZGameSimEventAtBatStart = z.object({
 	data: z.null().optional(),
-	gameEvent: z.literal("AT_BAT_START"),
+	gameEvent: z.literal("atBatStart"),
 });
 export type TGameSimEventAtBatStart = z.infer<typeof ZGameSimEventAtBatStart>;
 
 const ZGameSimEventAtBatEnd = z.object({
 	data: z.null().optional(),
-	gameEvent: z.literal("AT_BAT_END"),
+	gameEvent: z.literal("atBatEnd"),
 });
 export type TGameSimEventAtBatEnd = z.infer<typeof ZGameSimEventAtBatEnd>;
 
@@ -122,7 +125,7 @@ const ZGameSimEventHomeRun = z.object({
 		r2: z.instanceof(GameSimPlayerState).nullable(),
 		r3: z.instanceof(GameSimPlayerState).nullable(),
 	}),
-	gameEvent: z.literal("HOME_RUN"),
+	gameEvent: z.literal("homeRun"),
 });
 export type TGameSimEventHomeRun = z.infer<typeof ZGameSimEventHomeRun>;
 
@@ -135,7 +138,7 @@ const ZGameSimEventOut = z.object({
 		r2: z.instanceof(GameSimPlayerState).nullable(),
 		r3: z.instanceof(GameSimPlayerState).nullable(),
 	}),
-	gameEvent: z.literal("OUT"),
+	gameEvent: z.literal("out"),
 });
 export type TGameSimEventOut = z.infer<typeof ZGameSimEventOut>;
 

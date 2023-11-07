@@ -16,28 +16,28 @@ export default class GameSimEventStore implements OGameSimObserver {
 
 	notifyGameEvent(input: TGameSimEvent): void {
 		switch (input.gameEvent) {
-			case "AT_BAT_END": {
+			case "atBatEnd": {
 				break;
 			}
-			case "AT_BAT_START": {
+			case "atBatStart": {
 				break;
 			}
-			case "GAME_END": {
+			case "gameEnd": {
 				break;
 			}
-			case "GAME_START": {
+			case "gameStart": {
 				break;
 			}
-			case "HALF_INNING_END": {
+			case "halfInningEnd": {
 				break;
 			}
-			case "HALF_INNING_START": {
+			case "halfInningStart": {
 				break;
 			}
-			case "HOME_RUN": {
+			case "homeRun": {
 				break;
 			}
-			case "OUT": {
+			case "out": {
 				break;
 			}
 			default:

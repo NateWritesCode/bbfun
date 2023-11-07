@@ -2,13 +2,14 @@ import {
 	OGameSimObserver,
 	TConstructorGameSimPlayerState,
 	TGameSimEvent,
+	TPlayerRatings,
 	ZConstructorGameSimPlayerState,
 } from "@bbfun/utils";
 import { assertExhaustive } from "@bbfun/utils";
 
 class GamePlayerState implements OGameSimObserver {
 	id: string;
-
+	ratings: TPlayerRatings;
 	// Stats
 	hr: number;
 	lob: number;
@@ -17,6 +18,7 @@ class GamePlayerState implements OGameSimObserver {
 
 	constructor(input: TConstructorGameSimPlayerState) {
 		ZConstructorGameSimPlayerState.parse(input);
+		this.ratings = input.ratings;
 
 		this.id = input.id;
 		this.hr = 0;
@@ -27,25 +29,25 @@ class GamePlayerState implements OGameSimObserver {
 
 	notifyGameEvent(input: TGameSimEvent): void {
 		switch (input.gameEvent) {
-			case "AT_BAT_END": {
+			case "atBatEnd": {
 				break;
 			}
-			case "AT_BAT_START": {
+			case "atBatStart": {
 				break;
 			}
-			case "GAME_END": {
+			case "gameEnd": {
 				break;
 			}
-			case "GAME_START": {
+			case "gameStart": {
 				break;
 			}
-			case "HALF_INNING_END": {
+			case "halfInningEnd": {
 				break;
 			}
-			case "HALF_INNING_START": {
+			case "halfInningStart": {
 				break;
 			}
-			case "HOME_RUN": {
+			case "homeRun": {
 				const { h, r1, r2, r3 } = input.data;
 
 				if (h.id === this.id) {
@@ -66,7 +68,7 @@ class GamePlayerState implements OGameSimObserver {
 
 				break;
 			}
-			case "OUT": {
+			case "out": {
 				const { h, r1, r2, r3 } = input.data;
 
 				if (h.id === this.id) {

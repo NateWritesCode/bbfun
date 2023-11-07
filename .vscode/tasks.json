@@ -1,23 +1,27 @@
 {
-  "version": "2.0.0",
-  "tasks": [
-    {
-      "label": "build:packages",
-      "type": "shell",
-      "command": "bash scripts/build-packages.sh",
-      "problemMatcher": []
-    },
-    {
-      "label": "wrangle:ootp",
-      "type": "shell",
-      "command": "bash scripts/wrangle-ootp.sh",
-      "problemMatcher": []
-    },
-    {
-      "label": "wrangle:pitchfx",
-      "type": "shell",
-      "command": "bash scripts/wrangle-pitchfx.sh",
-      "problemMatcher": []
-    }
-  ]
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "dev-server",
+			"type": "shell",
+			"command": "bash scripts/dev-server.sh"
+		},
+		{
+			"label": "train-models",
+			"type": "shell",
+			"command": "bash scripts/train-models.sh"
+		},
+		{
+			"label": "wrangle:ootp",
+			"type": "shell",
+			"command": "bash scripts/wrangle-ootp.sh",
+			"problemMatcher": []
+		},
+		{
+			"label": "wrangle:pitchfx",
+			"type": "shell",
+			"command": "bash scripts/wrangle-pitchfx.sh",
+			"problemMatcher": []
+		}
+	]
 }

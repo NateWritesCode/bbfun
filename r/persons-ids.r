@@ -18,7 +18,7 @@ names(player_ids) <- c(
     "firstName", "lastName", "givenName", "suffix", "matrilineal", "nickname",
     "birthYear", "birthMonth", "birthDay"
 )
-path_output <- file.path("data", "input", "historical", "persons")
+path_output <- file.path("packages", "data", "src", "data", "input", "historical", "persons")
 print(path_output)
 ifelse(!dir.exists(path_output), dir.create(path_output, recursive = TRUE, showWarnings = FALSE), FALSE)
 write.csv(player_ids, file.path(path_output, "persons.csv"), na = "", row.names = FALSE)

@@ -1,16 +1,45 @@
-import { POSITIONS } from "@bbfun/utils";
 import { Db } from "@bbfun/data";
+import { initServer } from "@bbfun/server/utils";
+import { POSITIONS } from "@bbfun/utils";
 import { FakeClient, GameSim } from "@bbfun/utils";
 import dayjs from "dayjs";
 
-const fakeClient = new FakeClient();
-
-const db = new Db();
+const port = 3000;
 
 Bun.serve({
-	port: 3000,
+	port,
 	async fetch(req) {
-		const filePath = `./src${new URL(req.url).pathname}`;
+		const url = new URL(req.url);
+
+		if (url.pathname.includes("uploadModel")) {
+			const [model] = url.pathname.split("uploadModel/").slice(1);
+
+			const formData = await req.formData();
+
+			const modelJson = formData.get("model.json");
+			const weightsBin = formData.get("model.weights.bin");
+
+			if (!modelJson || !weightsBin) {
+				return new Response(null, { status: 400 });
+			}
+
+			console.info("Uploading model", model);
+
+			await Bun.write(
+				`./src/models/${model}/model.json`,
+				modelJson as unknown as Blob,
+			);
+			await Bun.write(
+				`./src/models/${model}/model.weights.bin`,
+				weightsBin as unknown as Blob,
+			);
+
+			console.info("Finished uploading model", model);
+
+			return new Response(null, { status: 200 });
+		}
+
+		const filePath = `./src${url.pathname}`;
 		const file = Bun.file(filePath).stream();
 		return new Response(file);
 	},
@@ -19,7 +48,13 @@ Bun.serve({
 	},
 });
 
-console.info("Starting script...");
+console.info(`Server running at http://localhost:${port}`);
+
+const { modelClient } = await initServer();
+
+const fakeClient = new FakeClient();
+
+const db = new Db();
 
 const personsTeam0 = new Array(9)
 	.fill(0)
@@ -53,6 +88,7 @@ const today = dayjs();
 
 const game = new GameSim({
 	id: `${teams[0].id}-${teams[1].id}-${today.format("YYYY-MM-DD")}-0`,
+	modelClient,
 	teams: [
 		{
 			id: teams[0].id,
@@ -80,5 +116,3 @@ const game = new GameSim({
 console.info("Starting game...");
 
 game.start();
-
-console.info("Finished script!");

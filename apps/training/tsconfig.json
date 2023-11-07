@@ -1,19 +1,19 @@
 {
-  "compilerOptions": {
-    "lib": ["esnext"],
-    "module": "ESNext",
-    "target": "ESNext",
-    "moduleResolution": "Bundler",
-    "moduleDetection": "force",
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
-    // "esModuleInterop": true,
-    "strict": true,
-    "downlevelIteration": true,
-    "skipLibCheck": true,
-    "resolveJsonModule": true
-  },
-  "include": [
+	"compilerOptions": {
+		"lib": ["esnext"],
+		"module": "ESNext",
+		"target": "ESNext",
+		"moduleResolution": "Bundler",
+		"moduleDetection": "force",
+		"allowImportingTsExtensions": true,
+		"noEmit": true,
+		// "esModuleInterop": true,
+		"strict": true,
+		"downlevelIteration": true,
+		"skipLibCheck": true,
+		"resolveJsonModule": true
+	},
+	"include": [
     "src/**/*.ts",
     "test/**/*.test.ts",
   ]

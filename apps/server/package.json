@@ -1,5 +1,8 @@
 {
-  "name": "@bbfun/server",
-  "module": "src/main.ts",
-  "type": "module"
+	"name": "@bbfun/server",
+	"module": "src/main.ts",
+	"type": "module",
+	"scripts": {
+		"dev": "bun run --watch src/main.ts"
+	}
 }

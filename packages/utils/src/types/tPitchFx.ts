@@ -1,36 +1,58 @@
 import { z } from "zod";
-import { ZNumberAllowNull, ZNumberNotNull } from "./tGeneral";
+import { ZInputStringNumber, ZInputStringNumberNullable, ZRegexDate } from ".";
 
-export const ZRowPitchFx = z.object({
-	atBatNumber: ZNumberNotNull,
-	awayScore: ZNumberNotNull,
+export const ZRowInputPitchFx = z.object({
+	atBatNumber: ZInputStringNumber,
+	awayScore: ZInputStringNumber,
 	awayTeam: z.string(),
-	ax: ZNumberNotNull,
-	ay: ZNumberNotNull,
-	az: ZNumberNotNull,
-	// babipValue: ZNumberAllowNull,
+	ax: ZInputStringNumber,
+	ay: ZInputStringNumber,
+	az: ZInputStringNumber,
+	// babipValue: z.number().nullable(),
 	batterId: z.string(),
-	batScore: ZNumberNotNull,
-	balls: ZNumberNotNull,
+	batScore: ZInputStringNumber,
+	balls: ZInputStringNumber,
 	bbType: z
 		.enum(["", "fly_ball", "ground_ball", "line_drive", "popup"])
-		.transform((x) => (x === "" ? null : x)),
-	// breakAngleDeprecated: ZNumberAllowNull,
-	// breakLengthDeprecated: ZNumberAllowNull,
+		.transform((bbType) => {
+			if (bbType === "") return null;
+
+			switch (bbType) {
+				case "fly_ball": {
+					return "FLY_BALL";
+				}
+				case "ground_ball": {
+					return "GROUND_BALL";
+				}
+				case "line_drive": {
+					return "LINE_DRIVE";
+				}
+				case "popup": {
+					return "POPUP";
+				}
+				default: {
+					const exhaustiveCheck: never = bbType;
+					throw new Error(exhaustiveCheck);
+				}
+			}
+		}),
+
+	// breakAngleDeprecated: z.number().nullable(),
+	// breakLengthDeprecated: z.number().nullable(),
 	// catcher: ZPlayerIdNotNull,
 	// centerField: ZPlayerIdNotNull,
-	// deltaHomeWinExp: ZNumberNotNull,
-	// deltaRunExp: ZNumberNotNull,
+	// deltaHomeWinExp: z.number(),
+	// deltaRunExp: z.number(),
 	descriptionPitch: z.string(),
 	descriptionPlate: z.string(),
-	effectiveSpeed: ZNumberAllowNull,
-	// estimatedBaUsingSpeedAngle: ZNumberAllowNull,
-	// estimatedWobaUsingSpeedAngle: ZNumberAllowNull,
+	effectiveSpeed: ZInputStringNumberNullable,
+	// estimatedBaUsingSpeedAngle: z.number().nullable(),
+	// estimatedWobaUsingSpeedAngle: z.number().nullable(),
 	events: z
 		.enum([
 			"",
 			"field_out",
-			"home_run",
+			"homeRun",
 			"walk",
 			"single",
 			"strikeout",
@@ -55,33 +77,118 @@ export const ZRowPitchFx = z.object({
 			"other_out",
 			"wild_pitch",
 		])
-		.transform((x) => (x === "" ? null : x)),
+		.transform((event) => {
+			if (event === "") return null;
+
+			switch (event) {
+				case "field_out": {
+					return "fieldOut";
+				}
+				case "homeRun": {
+					return "homeRun";
+				}
+				case "walk": {
+					return "walk";
+				}
+				case "single": {
+					return "single";
+				}
+				case "strikeout": {
+					return "strikeout";
+				}
+				case "grounded_into_double_play": {
+					return "groundedIntoDoublePlay";
+				}
+				case "field_error": {
+					return "fieldError";
+				}
+				case "hit_by_pitch": {
+					return "hitByPitch";
+				}
+				case "double": {
+					return "double";
+				}
+				case "sac_bunt": {
+					return "sacBunt";
+				}
+				case "force_out": {
+					return "forceOut";
+				}
+				case "triple": {
+					return "triple";
+				}
+				case "intent_walk": {
+					return "intentionalWalk";
+				}
+				case "caught_stealing_2b": {
+					return "caughtStealing2B";
+				}
+				case "sac_fly": {
+					return "sacFly";
+				}
+				case "fielders_choice_out": {
+					return "fieldersChoiceOut";
+				}
+				case "pickoff_2b": {
+					return "pickoff2B";
+				}
+				case "strikeout_double_play": {
+					return "strikeoutDoublePlay";
+				}
+				case "double_play": {
+					return "doublePlay";
+				}
+				case "triple_play": {
+					return "triplePlay";
+				}
+				case "fielders_choice": {
+					return "fieldersChoice";
+				}
+				case "pickoff_1b": {
+					return "pickoff1B";
+				}
+				case "runner_double_play": {
+					return "runnerDoublePlay";
+				}
+				case "other_out": {
+					return "otherOut";
+				}
+				case "wild_pitch": {
+					return "wildPitch";
+				}
+
+				default: {
+					const exhaustiveCheck: never = event;
+					throw new Error(exhaustiveCheck);
+				}
+			}
+		}),
 	// firstBase: ZPlayerIdNotNull,
-	fldScore: ZNumberNotNull,
+	fldScore: ZInputStringNumber,
 	gameDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
 	gameId: z.string(),
 	gameType: z.enum(["E", "S", "R", "F", "D", "L", "W"]),
-	gameYear: ZNumberNotNull,
-	hcX: ZNumberAllowNull,
-	hcY: ZNumberAllowNull,
-	hitDistanceSc: ZNumberAllowNull,
+	gameYear: ZInputStringNumber,
+	hcX: ZInputStringNumberNullable,
+	hcY: ZInputStringNumberNullable,
+	hitDistanceSc: ZInputStringNumberNullable,
 	hitLocation: z
 		.enum(["", "1", "2", "3", "4", "5", "6", "7", "8", "9"])
 		.transform((x) => (x === "" ? null : x)),
-	homeScore: ZNumberNotNull,
+	homeScore: ZInputStringNumber,
 	homeTeam: z.string(),
 	// ifFieldingAlignment: z.string(),
-	inning: ZNumberNotNull,
-	isoValue: ZNumberAllowNull,
+	inning: ZInputStringNumber,
+	isoValue: ZInputStringNumberNullable,
 	isTopOfInning: z.enum(["Top", "Bot"]).transform((x) => x === "Top"),
-	launchAngle: ZNumberAllowNull,
-	launchSpeed: ZNumberAllowNull,
-	launchSpeedAngle: ZNumberAllowNull,
+	launchAngle: ZInputStringNumberNullable,
+	launchSpeed: ZInputStringNumberNullable,
+	launchSpeedAngle: ZInputStringNumberNullable,
 	// leftField: ZPlayerIdNotNull,
 	// ofFieldingAlignment: z.string(),
-	outs: ZNumberNotNull,
-	pfxX: ZNumberNotNull,
-	pfxZ: ZNumberNotNull,
+	outs: ZInputStringNumber,
+	pfxX: ZInputStringNumber,
+	pfxZ: ZInputStringNumber,
 	pitchName: z
 		.enum([
 			"",
@@ -145,7 +252,7 @@ export const ZRowPitchFx = z.object({
 					return "pitchout";
 				}
 				case "Intentional Ball": {
-					return "intentional-ball";
+					return "intentionalBall";
 				}
 				case "Other": {
 					return "other";
@@ -156,7 +263,7 @@ export const ZRowPitchFx = z.object({
 				}
 			}
 		}),
-	pitchNumber: ZNumberNotNull,
+	pitchNumber: ZInputStringNumber,
 	pitchType: z.enum([
 		"CH",
 		"CU",
@@ -176,43 +283,43 @@ export const ZRowPitchFx = z.object({
 		"SL",
 	]),
 	pitcherId: z.string(),
-	plateX: ZNumberNotNull,
-	plateZ: ZNumberNotNull,
+	plateX: ZInputStringNumber,
+	plateZ: ZInputStringNumber,
 	playerName: z.string(),
 	pThrows: z.enum(["L", "R"]),
-	// postAwayScore: ZNumberNotNull,
-	// postHomeScore: ZNumberNotNull,
-	// postFldScore: ZNumberNotNull,
-	releaseExtension: ZNumberAllowNull,
-	releasePosX: ZNumberNotNull,
-	releasePosY: ZNumberNotNull,
-	releasePosZ: ZNumberNotNull,
-	releaseSpeed: ZNumberNotNull,
-	releaseSpinRate: ZNumberAllowNull,
+	// postAwayScore: ZInputStringNumber,
+	// postHomeScore: ZInputStringNumber,
+	// postFldScore: ZInputStringNumber,
+	releaseExtension: ZInputStringNumberNullable,
+	releasePosX: ZInputStringNumber,
+	releasePosY: ZInputStringNumber,
+	releasePosZ: ZInputStringNumber,
+	releaseSpeed: ZInputStringNumber,
+	releaseSpinRate: ZInputStringNumberNullable,
 	// rightField: ZPlayerIdNotNull,
-	runner1b: z.string().transform((x) => (x === "" ? null : x)),
-	runner2b: z.string().transform((x) => (x === "" ? null : x)),
-	runner3b: z.string().transform((x) => (x === "" ? null : x)),
+	runner1b: z.string().nullable(),
+	runner2b: z.string().nullable(),
+	runner3b: z.string().nullable(),
 	// secondBase: ZPlayerIdNotNull,
 	// shortstop: ZPlayerIdNotNull,
-	spinAxis: ZNumberAllowNull,
-	// spinDirDeprecated: ZNumberAllowNull,
-	// spinRateDeprecated: ZNumberAllowNull,
+	spinAxis: ZInputStringNumberNullable,
+	// spinDirDeprecated: ZInputStringNumberNullable,
+	// spinRateDeprecated: ZInputStringNumberNullable,
 	stand: z.enum(["L", "R"]),
-	strikes: ZNumberNotNull,
+	strikes: ZInputStringNumber,
 	svId: z.string(),
-	szBot: ZNumberNotNull,
-	szTop: ZNumberNotNull,
+	szBot: ZInputStringNumber,
+	szTop: ZInputStringNumber,
 	// tfsDeprecated: z.string().transform((x) => (x === "" ? null : x)),
 	// tfsZuluDeprecated: z.string().transform((x) => (x === "" ? null : x)),
 	// thirdBase: ZPlayerIdNotNull,
 	type: z.enum(["B", "S", "X"]),
 	// umpire: z.string().transform((x) => (x === "" ? null : x)),
-	// wobaDenom: ZNumberAllowNull,
-	// wobaValue: ZNumberAllowNull,
-	vx0: ZNumberNotNull,
-	vy0: ZNumberNotNull,
-	vz0: ZNumberNotNull,
+	// wobaDenom: ZInputStringNumber.nullable(),
+	// wobaValue: ZInputStringNumber.nullable(),
+	vx0: ZInputStringNumber,
+	vy0: ZInputStringNumber,
+	vz0: ZInputStringNumber,
 	zone: z
 		.enum([
 			"",
@@ -233,4 +340,136 @@ export const ZRowPitchFx = z.object({
 		.transform((x) => (x === "" ? null : x)),
 });
 
-export type TRowPitchFx = z.infer<typeof ZRowPitchFx>;
+export type TRowInputPitchFx = z.infer<typeof ZRowInputPitchFx>;
+
+export const ZRowOutputPitchFx = z.object({
+	atBatNumber: z.number(),
+	awayScore: z.number(),
+	awayTeam: z.string(),
+	ax: z.number(),
+	ay: z.number(),
+	az: z.number(),
+	batterId: z.string(),
+	batScore: z.number(),
+	balls: z.number(),
+	bbType: z.enum(["FLY_BALL", "GROUND_BALL", "LINE_DRIVE", "POPUP"]).nullable(),
+	descriptionPitch: z.string(),
+	descriptionPlate: z.string(),
+	effectiveSpeed: z.number().nullable(),
+	events: z
+		.enum([
+			"fieldOut",
+			"homeRun",
+			"walk",
+			"single",
+			"strikeout",
+			"groundedIntoDoublePlay",
+			"fieldError",
+			"hitByPitch",
+			"double",
+			"sacBunt",
+			"forceOut",
+			"triple",
+			"intentionalWalk",
+			"caughtStealing2B",
+			"sacFly",
+			"fieldersChoiceOut",
+			"pickoff2B",
+			"strikeoutDoublePlay",
+			"doublePlay",
+			"triplePlay",
+			"fieldersChoice",
+			"pickoff1B",
+			"runnerDoublePlay",
+			"otherOut",
+			"wildPitch",
+		])
+		.nullable(),
+	fldScore: z.number(),
+	gameDate: ZRegexDate,
+	gameId: z.string(),
+	gameType: z.enum(["E", "S", "R", "F", "D", "L", "W"]),
+	gameYear: z.number(),
+	hcX: z.number().nullable(),
+	hcY: z.number().nullable(),
+	hitDistanceSc: z.number().nullable(),
+	hitLocation: z.enum(["1", "2", "3", "4", "5", "6", "7", "8", "9"]).nullable(),
+	homeScore: z.number(),
+	homeTeam: z.string(),
+	inning: z.number(),
+	isoValue: z.number().nullable(),
+	isTopOfInning: z.boolean(),
+	launchAngle: z.number().nullable(),
+	launchSpeed: z.number().nullable(),
+	launchSpeedAngle: z.number().nullable(),
+	outs: z.number(),
+	pfxX: z.number(),
+	pfxZ: z.number(),
+	pitchName: z
+		.enum([
+			"fastball",
+			"sinker",
+			"cutter",
+			"splitter",
+			"knucklecurve",
+			"knuckleball",
+			"curveball",
+			"slider",
+			"changeup",
+			"forkball",
+			"screwball",
+			"eephus",
+			"pitchout",
+			"intentionalBall",
+			"other",
+		])
+		.nullable(),
+	pitchNumber: z.number(),
+	pitchType: z.enum([
+		"CH",
+		"CU",
+		"EP",
+		"FA",
+		"FC",
+		"FO",
+		"FF",
+		"FS",
+		"FT",
+		"IN",
+		"KC",
+		"KN",
+		"PO",
+		"SC",
+		"SI",
+		"SL",
+	]),
+	pitcherId: z.string(),
+	plateX: z.number(),
+	plateZ: z.number(),
+	playerName: z.string(),
+	pThrows: z.enum(["L", "R"]),
+	releaseExtension: z.number().nullable(),
+	releasePosX: z.number(),
+	releasePosY: z.number(),
+	releasePosZ: z.number(),
+	releaseSpeed: z.number(),
+	releaseSpinRate: z.number().nullable(),
+	runner1b: z.string().nullable(),
+	runner2b: z.string().nullable(),
+	runner3b: z.string().nullable(),
+	spinAxis: z.number().nullable(),
+	stand: z.enum(["L", "R"]),
+	strikes: z.number(),
+	svId: z.string(),
+	szBot: z.number(),
+	szTop: z.number(),
+	type: z.enum(["B", "S", "X"]),
+	vx0: z.number(),
+	vy0: z.number(),
+	vz0: z.number(),
+	zone: z
+		.enum(["1", "2", "3", "4", "5", "6", "7", "8", "9", "11", "12", "13", "14"])
+		.nullable(),
+});
+
+export type TRowOutputPitchFx = z.infer<typeof ZRowOutputPitchFx>;

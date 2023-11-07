@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const ZRowOotpPitches = z.object({
 	changeup: z.number(),
-	circlechange: z.number(),
+	// circlechange: z.number(),
 	cutter: z.number(),
 	curveball: z.number(),
 	fastball: z.number(),

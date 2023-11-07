@@ -2,10 +2,16 @@ import {
 	PATH_MODEL_ROOT,
 	PATH_OUTPUT_ROOT,
 	PITCH_TYPES,
+	wrangleYPitchLocater,
 } from "@bbfun/utils";
-import { TRowOotp, TRowPitchFx, ZRowOotp, ZRowPitchFx } from "@bbfun/utils";
+import {
+	TRowOotp,
+	TRowOutputPitchFx,
+	ZRowOotp,
+	ZRowOutputPitchFx,
+} from "@bbfun/utils";
 import { createFolderPathIfNeeded, getJsonData } from "@bbfun/utils";
-import tf from "@tensorflow/tfjs-node";
+import tf from "@tensorflow/tfjs";
 import { z } from "zod";
 
 const MODEL_NAME = "pitch-locater";
@@ -13,9 +19,9 @@ const PATH_OUTPUT = `${PATH_MODEL_ROOT}/${MODEL_NAME}`;
 
 createFolderPathIfNeeded(PATH_OUTPUT);
 
-const pitchingData = getJsonData<TRowPitchFx[]>({
+const pitchingData = getJsonData<TRowOutputPitchFx[]>({
 	path: `${PATH_OUTPUT_ROOT}/historical/pitchfx/2011/pitching.json`,
-	zodParser: z.array(ZRowPitchFx),
+	zodParser: z.array(ZRowOutputPitchFx),
 });
 
 const ootp = getJsonData<TRowOotp[]>({
@@ -114,24 +120,7 @@ const getYs = (rows: typeof wrangledData) => {
 	const pitchOutputs: number[][] = [];
 
 	for (const row of rows) {
-		const output = [
-			row.ax,
-			row.ay,
-			row.az,
-			row.pfxX,
-			row.pfxZ,
-			row.plateX,
-			row.plateZ,
-			row.releaseSpeed,
-			row.releasePosX,
-			row.releasePosY,
-			row.releasePosZ,
-			row.szBot,
-			row.szTop,
-			row.vx0,
-			row.vy0,
-			row.vz0,
-		];
+		const output = wrangleYPitchLocater(row);
 
 		pitchOutputs.push(output);
 	}
@@ -142,7 +131,7 @@ const getYs = (rows: typeof wrangledData) => {
 };
 
 const model = tf.sequential();
-model.add(tf.layers.layerNormalization({ inputShape: [17] }));
+model.add(tf.layers.layerNormalization({ inputShape: [16] }));
 model.add(tf.layers.dense({ units: 250, activation: "relu" }));
 model.add(tf.layers.dense({ units: 175, activation: "relu" }));
 model.add(tf.layers.dense({ units: 150, activation: "relu" }));
@@ -154,10 +143,12 @@ model.compile({
 });
 
 (async () => {
+	console.info(`Fitting model ${MODEL_NAME}...`);
 	await model.fit(getXs(trainingData), getYs(trainingData), {
-		epochs: 100,
+		epochs: 1,
 		validationSplit: 0.1,
 	});
+	console.info(`Finished fitting model ${MODEL_NAME}...`);
 
-	await model.save(`file://${PATH_OUTPUT}`);
+	await model.save(`http://localhost:3000/uploadModel/${MODEL_NAME}`);
 })();

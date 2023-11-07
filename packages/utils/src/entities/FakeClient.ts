@@ -433,6 +433,59 @@ class FakeClient {
 		};
 	}
 
+	_createPlayerPitches() {
+		return {
+			changeup: this._getRandomNumberBetween({
+				min: 1,
+				max: 100,
+			}),
+			circlechange: this._getRandomNumberBetween({
+				min: 1,
+				max: 100,
+			}),
+			cutter: this._getRandomNumberBetween({
+				min: 1,
+				max: 100,
+			}),
+			curveball: this._getRandomNumberBetween({
+				min: 1,
+				max: 100,
+			}),
+			fastball: this._getRandomNumberBetween({
+				min: 1,
+				max: 100,
+			}),
+			forkball: this._getRandomNumberBetween({
+				min: 1,
+				max: 100,
+			}),
+			knuckleball: this._getRandomNumberBetween({
+				min: 1,
+				max: 100,
+			}),
+			knucklecurve: this._getRandomNumberBetween({
+				min: 1,
+				max: 100,
+			}),
+			screwball: this._getRandomNumberBetween({
+				min: 1,
+				max: 100,
+			}),
+			sinker: this._getRandomNumberBetween({
+				min: 1,
+				max: 100,
+			}),
+			slider: this._getRandomNumberBetween({
+				min: 1,
+				max: 100,
+			}),
+			splitter: this._getRandomNumberBetween({
+				min: 1,
+				max: 100,
+			}),
+		};
+	}
+
 	public createPlayerRatings() {
 		return {
 			batting: {
@@ -470,56 +523,7 @@ class FakeClient {
 					min: 1,
 					max: 100,
 				}),
-				pitches: {
-					changeup: this._getRandomNumberBetween({
-						min: 1,
-						max: 100,
-					}),
-					circlechange: this._getRandomNumberBetween({
-						min: 1,
-						max: 100,
-					}),
-					cutter: this._getRandomNumberBetween({
-						min: 1,
-						max: 100,
-					}),
-					curveball: this._getRandomNumberBetween({
-						min: 1,
-						max: 100,
-					}),
-					fastball: this._getRandomNumberBetween({
-						min: 1,
-						max: 100,
-					}),
-					forkball: this._getRandomNumberBetween({
-						min: 1,
-						max: 100,
-					}),
-					knuckleball: this._getRandomNumberBetween({
-						min: 1,
-						max: 100,
-					}),
-					knucklecurve: this._getRandomNumberBetween({
-						min: 1,
-						max: 100,
-					}),
-					screwball: this._getRandomNumberBetween({
-						min: 1,
-						max: 100,
-					}),
-					sinker: this._getRandomNumberBetween({
-						min: 1,
-						max: 100,
-					}),
-					slider: this._getRandomNumberBetween({
-						min: 1,
-						max: 100,
-					}),
-					splitter: this._getRandomNumberBetween({
-						min: 1,
-						max: 100,
-					}),
-				},
+				pitches: this._createPlayerPitches(),
 			},
 		};
 	}

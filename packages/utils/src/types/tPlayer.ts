@@ -54,36 +54,39 @@ import { z } from "zod";
 //   }),
 // });
 
+export const ZPlayerRatings = z.object({
+	batting: z.object({
+		avoidKs: z.number(),
+		contact: z.number(),
+		eye: z.number(),
+		gap: z.number(),
+		power: z.number(),
+	}),
+	pitching: z.object({
+		control: z.number(),
+		movement: z.number(),
+		pitches: z.object({
+			changeup: z.number(),
+			circlechange: z.number(),
+			cutter: z.number(),
+			curveball: z.number(),
+			fastball: z.number(),
+			forkball: z.number(),
+			knuckleball: z.number(),
+			knucklecurve: z.number(),
+			screwball: z.number(),
+			sinker: z.number(),
+			slider: z.number(),
+			splitter: z.number(),
+		}),
+		stuff: z.number(),
+	}),
+});
+export type TPlayerRatings = z.infer<typeof ZPlayerRatings>;
+
 export const ZPlayer = z.object({
 	personId: z.string(),
-	ratings: z.object({
-		batting: z.object({
-			avoidKs: z.number(),
-			contact: z.number(),
-			eye: z.number(),
-			gap: z.number(),
-			power: z.number(),
-		}),
-		pitching: z.object({
-			control: z.number(),
-			movement: z.number(),
-			pitches: z.object({
-				changeup: z.number(),
-				circlechange: z.number(),
-				cutter: z.number(),
-				curveball: z.number(),
-				fastball: z.number(),
-				forkball: z.number(),
-				knuckleball: z.number(),
-				knucklecurve: z.number(),
-				screwball: z.number(),
-				sinker: z.number(),
-				slider: z.number(),
-				splitter: z.number(),
-			}),
-			stuff: z.number(),
-		}),
-	}),
+	ratings: ZPlayerRatings,
 	// handednessBat: ZEHandedness,
 	// handednessThrow: ZEHandedness,
 	// ratings: z.object({

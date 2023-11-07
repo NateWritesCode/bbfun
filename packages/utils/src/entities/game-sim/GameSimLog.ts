@@ -16,28 +16,36 @@ export default class GameSimLog implements OGameSimObserver {
 
 	notifyGameEvent(input: TGameSimEvent): void {
 		switch (input.gameEvent) {
-			case "AT_BAT_END": {
+			case "atBatEnd": {
+				console.info("atBatEnd");
 				break;
 			}
-			case "AT_BAT_START": {
+			case "atBatStart": {
+				console.info("atBatStart");
 				break;
 			}
-			case "GAME_END": {
+			case "gameEnd": {
+				console.info("gameEnd");
 				break;
 			}
-			case "GAME_START": {
+			case "gameStart": {
+				console.info("gameStart");
 				break;
 			}
-			case "HALF_INNING_END": {
+			case "halfInningEnd": {
+				console.info("halfInningEnd");
 				break;
 			}
-			case "HALF_INNING_START": {
+			case "halfInningStart": {
+				console.info("halfInningStart");
 				break;
 			}
-			case "HOME_RUN": {
+			case "homeRun": {
+				console.info("homeRun");
 				break;
 			}
-			case "OUT": {
+			case "out": {
+				console.info("out");
 				break;
 			}
 			default:

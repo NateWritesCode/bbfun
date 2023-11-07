@@ -1,9 +1,9 @@
 import { z } from "zod";
+import { ZEPitchTypes } from ".";
 
-export const ZInputPitchPicker = z.object({
+export const ZInputWrangleXPitchPicker = z.object({
 	balls: z.number().min(0).max(3),
 	changeup: z.number(),
-	circlechange: z.number(),
 	cutter: z.number(),
 	curveball: z.number(),
 	fastball: z.number(),
@@ -17,20 +17,61 @@ export const ZInputPitchPicker = z.object({
 	splitter: z.number(),
 	strikes: z.number().min(0).max(2),
 });
-export type TInputPitchPicker = z.infer<typeof ZInputPitchPicker>;
+export type TInputWrangleXPitchPicker = z.infer<
+	typeof ZInputWrangleXPitchPicker
+>;
 
-export const ZResponsePitchPicker = z.array(z.number()).max(15).min(15);
-export type TResponsePitchPicker = z.infer<typeof ZResponsePitchPicker>;
+export const ZResponseWrangleXPitchPicker = z.array(z.number()).max(14).min(14);
+export type TResponseWrangleXPitchPicker = z.infer<
+	typeof ZResponseWrangleXPitchPicker
+>;
 
-export const ZInputPitchLocater = z.object({
+export const ZInputWrangleXPitchLocater = z.object({
 	control: z.number(),
 	movement: z.number(),
-	pitchName: z.string(),
+	pitchName: ZEPitchTypes,
 	pitchRating: z.number(),
 	pitchNumber: z.number(),
 	stuff: z.number(),
 });
-export type TInputPitchLocater = z.infer<typeof ZInputPitchLocater>;
+export type TInputWrangleXPitchLocater = z.infer<
+	typeof ZInputWrangleXPitchLocater
+>;
 
-export const ZResponsePitchLocater = z.array(z.number()).max(17).min(17);
-export type TResponsePitchLocater = z.infer<typeof ZResponsePitchLocater>;
+export const ZResponseWrangleXPitchLocater = z
+	.array(z.number())
+	.max(16)
+	.min(16);
+export type TResponseWrangleXPitchLocater = z.infer<
+	typeof ZResponseWrangleXPitchLocater
+>;
+
+export const ZInputWrangleYPitchLocater = z.object({
+	ax: z.number(),
+	ay: z.number(),
+	az: z.number(),
+	pfxX: z.number(),
+	pfxZ: z.number(),
+	plateX: z.number(),
+	plateZ: z.number(),
+	releaseSpeed: z.number(),
+	releasePosX: z.number(),
+	releasePosY: z.number(),
+	releasePosZ: z.number(),
+	szBot: z.number(),
+	szTop: z.number(),
+	vx0: z.number(),
+	vy0: z.number(),
+	vz0: z.number(),
+});
+export type TInputWrangleYPitchLocater = z.infer<
+	typeof ZInputWrangleYPitchLocater
+>;
+
+export const ZResponseWrangleYPitchLocater = z
+	.array(z.number())
+	.max(16)
+	.min(16);
+export type TResponseWrangleYPitchLocater = z.infer<
+	typeof ZResponseWrangleYPitchLocater
+>;

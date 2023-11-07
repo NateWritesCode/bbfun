@@ -1,17 +1,25 @@
-import { PATH_OUTPUT_ROOT, PITCH_TYPES } from "@bbfun/utils";
-import { TRowOotp, TRowPitchFx, ZRowOotp, ZRowPitchFx } from "@bbfun/utils";
+import {
+	PATH_MODEL_ROOT,
+	PATH_OUTPUT_ROOT,
+	PITCH_TYPES,
+	TRowOotp,
+	TRowOutputPitchFx,
+	ZRowOotp,
+	ZRowOutputPitchFx,
+	wrangleXPitchPicker,
+} from "@bbfun/utils";
 import { createFolderPathIfNeeded, getJsonData } from "@bbfun/utils";
-import tf from "@tensorflow/tfjs-node";
+import tf from "@tensorflow/tfjs";
 import { z } from "zod";
 
 const MODEL_NAME = "pitch-picker";
-const PATH_OUTPUT = `../server/src/models/${MODEL_NAME}`;
+const PATH_OUTPUT = `${PATH_MODEL_ROOT}/${MODEL_NAME}`;
 
 createFolderPathIfNeeded(PATH_OUTPUT);
 
-const pitchingData = getJsonData<TRowPitchFx[]>({
+const pitchingData = getJsonData<TRowOutputPitchFx[]>({
 	path: `${PATH_OUTPUT_ROOT}/historical/pitchfx/2011/pitching.json`,
-	zodParser: z.array(ZRowPitchFx),
+	zodParser: z.array(ZRowOutputPitchFx),
 });
 
 const ootp = getJsonData<TRowOotp[]>({
@@ -63,23 +71,11 @@ const getXs = (rows: typeof wrangledData) => {
 	const pitchInputs: number[][] = [];
 
 	for (const row of rows) {
-		pitchInputs.push([
-			row.balls,
-			row.changeup,
-			row.circlechange,
-			row.cutter,
-			row.curveball,
-			row.fastball,
-			row.forkball,
-			row.knuckleball,
-			row.knucklecurve,
-			row.outs,
-			row.screwball,
-			row.sinker,
-			row.slider,
-			row.splitter,
-			row.strikes,
-		]);
+		pitchInputs.push(
+			wrangleXPitchPicker({
+				...row,
+			}),
+		);
 	}
 
 	const xs = tf.tensor2d(pitchInputs);
@@ -106,7 +102,7 @@ const getYs = (rows: typeof wrangledData) => {
 const model = tf.sequential();
 model.add(
 	tf.layers.dense({
-		inputShape: [15],
+		inputShape: [14],
 		units: 250,
 		activation: "relu",
 	}),
@@ -126,36 +122,23 @@ model.compile({
 });
 
 (async () => {
+	console.info(`Fitting model ${MODEL_NAME}...`);
 	await model.fit(getXs(trainingData), getYs(trainingData), {
-		epochs: 100,
+		epochs: 1,
 		validationSplit: 0.1,
 	});
+	console.info(`Finished fitting model ${MODEL_NAME}...`);
 
 	let numRight = 0;
 
 	for (const row of testingData) {
 		const tensor = tf.tensor2d([
-			[
-				row.balls,
-				row.changeup,
-				row.circlechange,
-				row.cutter,
-				row.curveball,
-				row.fastball,
-				row.forkball,
-				row.knuckleball,
-				row.knucklecurve,
-				row.outs,
-				row.screwball,
-				row.sinker,
-				row.slider,
-				row.splitter,
-				row.strikes,
-			],
+			wrangleXPitchPicker({
+				...row,
+			}),
 		]);
 
 		const predictResult = model.predict(tensor) as tf.Tensor;
-		predictResult.print();
 
 		const maxIndex = predictResult.argMax(1).dataSync()[0];
 
@@ -169,5 +152,5 @@ model.compile({
 
 	console.info("numRight", numRight);
 	console.info("accuracy", numRight / testingData.length);
-	await model.save(`file://${PATH_OUTPUT}`);
+	await model.save(`http://localhost:3000/uploadModel/${MODEL_NAME}`);
 })();

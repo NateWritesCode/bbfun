@@ -81,7 +81,7 @@ for (const [iterPlayer, player] of playersRows.entries()) {
 	const splitter = Number(pitcherRatings[36]);
 	const knuckleball = Number(pitcherRatings[37]);
 	const cutter = Number(pitcherRatings[38]);
-	const circlechange = Number(pitcherRatings[39]);
+	// const circlechange = Number(pitcherRatings[39]);
 	const knucklecurve = Number(pitcherRatings[40]);
 
 	const row = ZRowOotp.parse({
@@ -96,7 +96,7 @@ for (const [iterPlayer, player] of playersRows.entries()) {
 		movement,
 		pitches: {
 			changeup,
-			circlechange,
+			// circlechange,
 			cutter,
 			curveball,
 			fastball,
