@@ -1,7 +1,7 @@
 import {
 	PATH_MODEL_ROOT,
 	PATH_OUTPUT_ROOT,
-	PITCH_TYPES,
+	PITCH_NAMES,
 	TRowOotp,
 	TRowOutputPitchFx,
 	ZRowOotp,
@@ -88,13 +88,13 @@ const getYs = (rows: typeof wrangledData) => {
 
 	for (const row of rows) {
 		pitchTypes.push(
-			PITCH_TYPES.indexOf(row.pitchName as typeof PITCH_TYPES[number]),
+			PITCH_NAMES.indexOf(row.pitchName as typeof PITCH_NAMES[number]),
 		);
 	}
 
 	const pitchTypesTensor = tf.tensor1d(pitchTypes, "int32");
 
-	const ys = tf.oneHot(pitchTypesTensor, PITCH_TYPES.length);
+	const ys = tf.oneHot(pitchTypesTensor, PITCH_NAMES.length);
 
 	return ys;
 };
@@ -111,7 +111,7 @@ model.add(tf.layers.dense({ units: 175, activation: "relu" }));
 model.add(tf.layers.dense({ units: 150, activation: "relu" }));
 model.add(
 	tf.layers.dense({
-		units: PITCH_TYPES.length,
+		units: PITCH_NAMES.length,
 		activation: "softmax",
 	}),
 );
@@ -142,7 +142,7 @@ model.compile({
 
 		const maxIndex = predictResult.argMax(1).dataSync()[0];
 
-		const predictedPitchType = PITCH_TYPES[maxIndex];
+		const predictedPitchType = PITCH_NAMES[maxIndex];
 		const actualPitchType = row.pitchName;
 
 		if (predictedPitchType === actualPitchType) {

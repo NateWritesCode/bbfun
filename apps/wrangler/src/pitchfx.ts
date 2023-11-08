@@ -44,7 +44,7 @@ const mapFunc = (row: string[], index: number) => {
 		pThrows: row[18],
 		homeTeam: row[19],
 		awayTeam: row[20],
-		type: row[21],
+		pitchOutcome: row[21],
 		hitLocation: row[22],
 		bbType: row[23],
 		balls: row[24],

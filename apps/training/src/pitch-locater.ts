@@ -1,7 +1,7 @@
 import {
 	PATH_MODEL_ROOT,
 	PATH_OUTPUT_ROOT,
-	PITCH_TYPES,
+	PITCH_NAMES,
 	wrangleYPitchLocater,
 } from "@bbfun/utils";
 import {
@@ -94,8 +94,8 @@ const getXs = (rows: typeof wrangledData) => {
 	for (const row of rows) {
 		const pitchName = tf
 			.oneHot(
-				PITCH_TYPES.indexOf(row.pitchName as typeof PITCH_TYPES[0]),
-				PITCH_TYPES.length,
+				PITCH_NAMES.indexOf(row.pitchName as typeof PITCH_NAMES[0]),
+				PITCH_NAMES.length,
 			)
 			.dataSync();
 

@@ -2,6 +2,9 @@ import {
 	GameSimPlayerState,
 	GameSimTeamState,
 	ModelClient,
+	PITCH_NAMES,
+	PITCH_OUTCOMES,
+	ZInputWrangleYPitchLocater,
 } from "@bbfun/utils";
 import { z } from "zod";
 import { ZEGamePositions } from "./tEnums";
@@ -142,6 +145,20 @@ const ZGameSimEventOut = z.object({
 });
 export type TGameSimEventOut = z.infer<typeof ZGameSimEventOut>;
 
+const ZGameSimEventPitch = z.object({
+	data: z.object({
+		d: z.instanceof(GameSimTeamState),
+		h: z.instanceof(GameSimPlayerState),
+		o: z.instanceof(GameSimTeamState),
+		p: z.instanceof(GameSimPlayerState),
+		pitchLocation: ZInputWrangleYPitchLocater,
+		pitchName: z.enum(PITCH_NAMES),
+		pitchOutcome: z.enum(PITCH_OUTCOMES),
+	}),
+	gameEvent: z.literal("pitch"),
+});
+export type TGameSimEventPitch = z.infer<typeof ZGameSimEventPitch>;
+
 const ZGameSimEvent = z.discriminatedUnion("gameEvent", [
 	ZGameSimEventGameEnd,
 	ZGameSimEventGameStart,
@@ -151,6 +168,7 @@ const ZGameSimEvent = z.discriminatedUnion("gameEvent", [
 	ZGameSimEventAtBatEnd,
 	ZGameSimEventHomeRun,
 	ZGameSimEventOut,
+	ZGameSimEventPitch,
 ]);
 
 export type TGameSimEvent = z.infer<typeof ZGameSimEvent>;

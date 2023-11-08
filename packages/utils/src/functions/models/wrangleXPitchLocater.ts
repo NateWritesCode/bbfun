@@ -1,4 +1,4 @@
-import { PITCH_TYPES } from "@bbfun/utils";
+import { PITCH_NAMES } from "@bbfun/utils";
 import {
 	TInputWrangleXPitchLocater,
 	ZInputWrangleXPitchLocater,
@@ -11,8 +11,8 @@ export default (input: TInputWrangleXPitchLocater) => {
 
 	const pitchName = tf
 		.oneHot(
-			PITCH_TYPES.indexOf(parsedInput.pitchName as typeof PITCH_TYPES[0]),
-			PITCH_TYPES.length,
+			PITCH_NAMES.indexOf(parsedInput.pitchName as typeof PITCH_NAMES[0]),
+			PITCH_NAMES.length,
 		)
 		.dataSync();
 

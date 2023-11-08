@@ -48,6 +48,10 @@ export default class GameSimLog implements OGameSimObserver {
 				console.info("out");
 				break;
 			}
+			case "pitch": {
+				console.info("pitch");
+				break;
+			}
 			default:
 				assertExhaustive(input);
 		}

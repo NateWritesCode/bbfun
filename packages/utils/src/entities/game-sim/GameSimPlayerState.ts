@@ -13,6 +13,10 @@ class GamePlayerState implements OGameSimObserver {
 	// Stats
 	hr: number;
 	lob: number;
+	pitchesThrown: number;
+	pitchesThrownBalls: number;
+	pitchesThrownInPlay: number;
+	pitchesThrownStrikes: number;
 	outs: number;
 	runs: number;
 
@@ -23,6 +27,10 @@ class GamePlayerState implements OGameSimObserver {
 		this.id = input.id;
 		this.hr = 0;
 		this.lob = 0;
+		this.pitchesThrown = 0;
+		this.pitchesThrownBalls = 0;
+		this.pitchesThrownInPlay = 0;
+		this.pitchesThrownStrikes = 0;
 		this.outs = 0;
 		this.runs = 0;
 	}
@@ -83,6 +91,34 @@ class GamePlayerState implements OGameSimObserver {
 
 					if (r3) {
 						this.lob++;
+					}
+				}
+
+				break;
+			}
+			case "pitch": {
+				const { p, pitchOutcome } = input.data;
+
+				if (p.id === this.id) {
+					this.pitchesThrown++;
+
+					switch (pitchOutcome) {
+						case "B": {
+							this.pitchesThrownBalls++;
+							break;
+						}
+						case "S": {
+							this.pitchesThrownStrikes++;
+							break;
+						}
+						case "X": {
+							this.pitchesThrownInPlay++;
+							break;
+						}
+						default: {
+							const exhaustiveCheck: never = pitchOutcome;
+							throw new Error(exhaustiveCheck);
+						}
 					}
 				}
 

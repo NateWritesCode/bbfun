@@ -1,3 +1,4 @@
+import { PITCH_NAMES, PITCH_OUTCOMES } from "src";
 import { z } from "zod";
 import { ZInputStringNumber, ZInputStringNumberNullable, ZRegexDate } from ".";
 
@@ -313,7 +314,7 @@ export const ZRowInputPitchFx = z.object({
 	// tfsDeprecated: z.string().transform((x) => (x === "" ? null : x)),
 	// tfsZuluDeprecated: z.string().transform((x) => (x === "" ? null : x)),
 	// thirdBase: ZPlayerIdNotNull,
-	type: z.enum(["B", "S", "X"]),
+	pitchOutcome: z.enum([...PITCH_OUTCOMES]),
 	// umpire: z.string().transform((x) => (x === "" ? null : x)),
 	// wobaDenom: ZInputStringNumber.nullable(),
 	// wobaValue: ZInputStringNumber.nullable(),
@@ -405,25 +406,7 @@ export const ZRowOutputPitchFx = z.object({
 	outs: z.number(),
 	pfxX: z.number(),
 	pfxZ: z.number(),
-	pitchName: z
-		.enum([
-			"fastball",
-			"sinker",
-			"cutter",
-			"splitter",
-			"knucklecurve",
-			"knuckleball",
-			"curveball",
-			"slider",
-			"changeup",
-			"forkball",
-			"screwball",
-			"eephus",
-			"pitchout",
-			"intentionalBall",
-			"other",
-		])
-		.nullable(),
+	pitchName: z.enum([...PITCH_NAMES]).nullable(),
 	pitchNumber: z.number(),
 	pitchType: z.enum([
 		"CH",
@@ -444,6 +427,7 @@ export const ZRowOutputPitchFx = z.object({
 		"SL",
 	]),
 	pitcherId: z.string(),
+	pitchOutcome: z.enum([...PITCH_OUTCOMES]),
 	plateX: z.number(),
 	plateZ: z.number(),
 	playerName: z.string(),
@@ -463,7 +447,6 @@ export const ZRowOutputPitchFx = z.object({
 	svId: z.string(),
 	szBot: z.number(),
 	szTop: z.number(),
-	type: z.enum(["B", "S", "X"]),
 	vx0: z.number(),
 	vy0: z.number(),
 	vz0: z.number(),
