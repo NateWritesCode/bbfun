@@ -2,7 +2,7 @@
 
 ## About
 
-Baseball Fun is an open-source (MIT) baseball simulator.
+Baseball Fun is an open-source baseball simulator.
 
 🚧 This simulator is under active development 🚧
 
