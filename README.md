@@ -41,6 +41,7 @@ Baseball Fun is an open-source baseball simulator.
 - [faker](https://fakerjs.dev/) to generate fake data
 - [MessagePack](https://msgpack.org/index.html) to serialize data
 - [lodash](https://lodash.com/) for utility functions
+- [TensorFlowJS](https://www.tensorflow.org/js) for machine learning
 - [zod](https://zod.dev/) for validating data
 
 
