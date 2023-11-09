@@ -1,12 +1,17 @@
 import {
-	PITCH_TYPES,
-	PITCH_TYPES_LIST,
+	PITCH_IN_PLAY_EVENTS,
+	PITCH_NAMES,
+	PITCH_OUTCOMES,
+	TInputWrangleXPitchInPlay,
 	TInputWrangleXPitchLocater,
 	TInputWrangleXPitchOutcome,
 	TInputWrangleXPitchPicker,
+	ZInputWrangleXPitchInPlay,
 	ZInputWrangleXPitchLocater,
+	ZInputWrangleXPitchOutcome,
 	ZInputWrangleXPitchPicker,
 	wranglePredictPitchLocater,
+	wrangleXPitchInPlay,
 	wrangleXPitchOutcome,
 } from "@bbfun/utils";
 import { wrangleXPitchLocater, wrangleXPitchPicker } from "@bbfun/utils";
@@ -35,23 +40,36 @@ class ModelClient {
 		console.info("Models loaded");
 	};
 
-	public predictPitchInPlay = () => {
+	public predictPitchInPlay = (input: TInputWrangleXPitchInPlay) => {
 		if (!this.pitchInPlay) {
 			throw new Error("Model not loaded");
 		}
+		const parsedInput = ZInputWrangleXPitchInPlay.parse(input);
+
+		const tensor = tf.tensor2d([wrangleXPitchInPlay(parsedInput)]);
+
+		const predictResult = this.pitchInPlay.predict(tensor) as tf.Tensor;
+
+		const maxIndex = predictResult.argMax(1).dataSync()[0];
+
+		const predictedInPlayEvent = PITCH_IN_PLAY_EVENTS[maxIndex];
+
+		return predictedInPlayEvent;
 	};
 	public predictPitchOutcome = (input: TInputWrangleXPitchOutcome) => {
 		if (!this.pitchOutcome) {
 			throw new Error("Model not loaded");
 		}
 
-		const tensor = tf.tensor2d([wrangleXPitchOutcome(input)]);
+		const parsedInput = ZInputWrangleXPitchOutcome.parse(input);
+
+		const tensor = tf.tensor2d([wrangleXPitchOutcome(parsedInput)]);
 
 		const predictResult = this.pitchOutcome.predict(tensor) as tf.Tensor;
 
 		const maxIndex = predictResult.argMax(1).dataSync()[0];
 
-		const predictedPitchType = PITCH_TYPES_LIST[maxIndex];
+		const predictedPitchType = PITCH_OUTCOMES[maxIndex];
 
 		return predictedPitchType;
 	};
@@ -59,15 +77,15 @@ class ModelClient {
 		if (!this.pitchPicker) {
 			throw new Error("Model not loaded");
 		}
-		ZInputWrangleXPitchPicker.parse(input);
+		const parsedInput = ZInputWrangleXPitchPicker.parse(input);
 
-		const tensor = tf.tensor2d([wrangleXPitchPicker(input)]);
+		const tensor = tf.tensor2d([wrangleXPitchPicker(parsedInput)]);
 
 		const predictResult = this.pitchPicker.predict(tensor) as tf.Tensor;
 
 		const maxIndex = predictResult.argMax(1).dataSync()[0];
 
-		const predictedPitchType = PITCH_TYPES[maxIndex];
+		const predictedPitchType = PITCH_NAMES[maxIndex];
 
 		return predictedPitchType;
 	};
@@ -76,9 +94,9 @@ class ModelClient {
 			throw new Error("Model not loaded");
 		}
 
-		ZInputWrangleXPitchLocater.parse(input);
+		const parsedInput = ZInputWrangleXPitchLocater.parse(input);
 
-		const tensor = tf.tensor2d([wrangleXPitchLocater(input)]);
+		const tensor = tf.tensor2d([wrangleXPitchLocater(parsedInput)]);
 		const predictResult = this.pitchLocater.predict(tensor) as tf.Tensor;
 		const predictResultArray = predictResult.arraySync() as number[];
 

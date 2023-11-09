@@ -40,6 +40,9 @@ export default class GameSimEventStore implements OGameSimObserver {
 			case "out": {
 				break;
 			}
+			case "pitch": {
+				break;
+			}
 			default:
 				assertExhaustive(input);
 		}

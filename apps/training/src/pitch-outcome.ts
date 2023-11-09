@@ -1,7 +1,7 @@
 import {
 	PATH_MODEL_ROOT,
 	PATH_OUTPUT_ROOT,
-	PITCH_TYPES_LIST,
+	PITCH_OUTCOMES,
 	wrangleXPitchOutcome,
 } from "@bbfun/utils";
 import {
@@ -97,12 +97,12 @@ const getYs = (rows: typeof wrangledData) => {
 	const pitchTypes: number[] = [];
 
 	for (const row of rows) {
-		pitchTypes.push(PITCH_TYPES_LIST.indexOf(row.type));
+		pitchTypes.push(PITCH_OUTCOMES.indexOf(row.type));
 	}
 
 	const pitchTypesTensor = tf.tensor1d(pitchTypes, "int32");
 
-	const ys = tf.oneHot(pitchTypesTensor, PITCH_TYPES_LIST.length);
+	const ys = tf.oneHot(pitchTypesTensor, PITCH_OUTCOMES.length);
 
 	return ys;
 };
@@ -119,7 +119,7 @@ model.add(tf.layers.dense({ units: 175, activation: "relu" }));
 model.add(tf.layers.dense({ units: 150, activation: "relu" }));
 model.add(
 	tf.layers.dense({
-		units: PITCH_TYPES_LIST.length,
+		units: PITCH_OUTCOMES.length,
 		activation: "softmax",
 	}),
 );
@@ -146,7 +146,7 @@ model.compile({
 
 		const maxIndex = predictResult.argMax(1).dataSync()[0];
 
-		const predictedPitchType = PITCH_TYPES_LIST[maxIndex];
+		const predictedPitchType = PITCH_OUTCOMES[maxIndex];
 		const actualPitchType = row.type;
 
 		if (predictedPitchType === actualPitchType) {

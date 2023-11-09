@@ -204,45 +204,8 @@ export default class GameSim {
 		let isAtBatOver = false;
 
 		while (!isAtBatOver) {
-			this._simulatePitch();
-			this.outs++;
-
-			const _isAtBatOver = this._checkIsAtBatOver();
+			const _isAtBatOver = this._simulatePitch();
 			isAtBatOver = _isAtBatOver;
-
-			// const isHomeRun = faker.datatype.boolean();
-
-			// if (isHomeRun) {
-			//   this.notifyObservers({
-			//     data: {
-			//       d: this._getTeamId({ teamIndex: this.d }),
-			//       h: this._getCurrentHitter({ teamIndex: this.o }),
-			//       o: this._getTeamId({ teamIndex: this.d }),
-			//       r1: this.r1,
-			//       r2: this.r2,
-			//       r3: this.r3,
-			//     },
-			//     gameEvent: "homeRun",
-			//   });
-			// } else {
-			//   this.notifyObservers({
-			//     data: {
-			//       d: this._getTeamId({ teamIndex: this.d }),
-			//       h: this._getCurrentHitter({
-			//         teamIndex: this.o,
-			//       }),
-			//       o: this._getTeamId({ teamIndex: this.d }),
-			//       r1: this.r1,
-			//       r2: this.r2,
-			//       r3: this.r3,
-			//     },
-			//     gameEvent: "out",
-			//   });
-			//   this.outs++;
-			// }
-
-			// const _isAtBatOver = this._checkIsAtBatOver();
-			// isAtBatOver = _isAtBatOver;
 		}
 
 		this._endAtBat();
@@ -250,6 +213,56 @@ export default class GameSim {
 		this.notifyObservers({
 			gameEvent: "atBatEnd",
 		});
+	};
+
+	_handleRunnerAdvanceAutomatic = () => {
+		const r1Current = this.r1;
+		const r2Current = this.r2;
+		const r3Current = this.r3;
+
+		if (r1Current && r2Current && r3Current) {
+			this.r3 = r2Current;
+			this.r2 = r1Current;
+			// Bases loaded
+		} else if (r1Current && r2Current) {
+			// Runners on first and second
+			this.r3 = r2Current;
+			this.r2 = r1Current;
+		} else if (r1Current) {
+			this.r2 = r1Current;
+		}
+	};
+
+	_handleRunnerAdvanceAutomaticIncludingHitter = () => {
+		this._handleRunnerAdvanceAutomatic();
+
+		this.r1 = this._getCurrentHitter({
+			teamIndex: this.o,
+		});
+	};
+
+	_handleOut = () => {
+		this.outs++;
+	};
+
+	_handleSingle = () => {};
+
+	_handleDouble = () => {};
+
+	_handleTriple = () => {};
+
+	_handleHomeRun = () => {};
+
+	_handleHitByPitch = () => {
+		this._handleRunnerAdvanceAutomaticIncludingHitter();
+	};
+
+	_handleStrikeout = () => {
+		this.outs++;
+	};
+
+	_handleWalk = () => {
+		this._handleRunnerAdvanceAutomaticIncludingHitter();
 	};
 
 	private _simulateHalfInning = () => {
@@ -279,6 +292,7 @@ export default class GameSim {
 	};
 
 	private _simulatePitch = () => {
+		let isAtBatOver = false;
 		const pitcher = this._getCurrentPitcher({
 			teamIndex: this.d,
 		});
@@ -297,7 +311,7 @@ export default class GameSim {
 			control: pitcher.ratings.pitching.control,
 			movement: pitcher.ratings.pitching.movement,
 			pitchName,
-			pitchNumber: 1,
+			pitchNumber: pitcher.pitchesThrown,
 			pitchRating: pitcher.ratings.pitching.pitches[pitchName],
 			stuff: pitcher.ratings.pitching.stuff,
 		});
@@ -311,14 +325,119 @@ export default class GameSim {
 			...pitchLocation,
 		});
 
+		this.notifyObservers({
+			data: {
+				d: this.teamStates[this.d],
+				h: hitter,
+				o: this.teamStates[this.o],
+				p: pitcher,
+				pitchLocation,
+				pitchName,
+				pitchOutcome,
+			},
+			gameEvent: "pitch",
+		});
+
 		switch (pitchOutcome) {
 			case "B": {
+				this.balls++;
+
+				if (this.balls === 4) {
+					this._handleWalk();
+					isAtBatOver = true;
+				}
+
 				break;
 			}
 			case "S": {
+				this.strikes++;
+
+				if (this.strikes === 3) {
+					this._handleStrikeout();
+
+					isAtBatOver = true;
+				}
+
 				break;
 			}
 			case "X": {
+				const eventsWeCanHandleNow = [
+					"double",
+					"doublePlay",
+					"fieldOut",
+					"forceOut",
+					"groundedIntoDoublePlay",
+					"hitByPitch",
+					"homeRun",
+					"otherOut",
+					"single",
+					"triple",
+				] as const;
+
+				let pitchInPlayEvent: typeof eventsWeCanHandleNow[number] | null = null;
+
+				while (!pitchInPlayEvent) {
+					const _pitchInPlayEvent = this.modelClient.predictPitchInPlay({
+						...pitchLocation,
+						contact: hitter.ratings.batting.contact,
+						gap: hitter.ratings.batting.gap,
+						power: hitter.ratings.batting.power,
+					});
+
+					if (
+						eventsWeCanHandleNow.includes(
+							_pitchInPlayEvent as typeof eventsWeCanHandleNow[number],
+						)
+					) {
+						pitchInPlayEvent =
+							_pitchInPlayEvent as typeof eventsWeCanHandleNow[number];
+					}
+				}
+
+				if (!pitchInPlayEvent) {
+					throw new Error("pitchInPlayEvent is null");
+				}
+
+				switch (pitchInPlayEvent) {
+					case "double": {
+						this._handleDouble();
+						break;
+					}
+
+					case "forceOut":
+					case "fieldOut":
+					case "groundedIntoDoublePlay":
+					case "otherOut":
+					case "doublePlay": {
+						this._handleOut();
+						break;
+					}
+
+					case "hitByPitch": {
+						this._handleHitByPitch();
+						break;
+					}
+					case "homeRun": {
+						this._handleHomeRun();
+						break;
+					}
+					case "single": {
+						this._handleSingle();
+						break;
+					}
+					case "triple": {
+						this._handleTriple();
+						break;
+					}
+
+					default: {
+						const exhaustiveCheck: never = pitchInPlayEvent;
+						throw new Error(exhaustiveCheck);
+					}
+				}
+
+				isAtBatOver = true;
+
 				break;
 			}
 			default: {
@@ -327,14 +446,7 @@ export default class GameSim {
 			}
 		}
 
-		// const pitchLocation = this.modelClient.predictPitchLocater({
-		// 	control: pitcher.ratings.pitching.control,
-		// 	movement: pitcher.ratings.pitching.movement,
-		// 	pitchName,
-		// 	stuff: pitcher.ratings.pitching.stuff,
-		// 	pitchRating: pitcher.ratings.pitching.pitches[pitchName],
-		// 	pitchNumber: 1,
-		// });
+		return isAtBatOver;
 	};
 
 	public start() {

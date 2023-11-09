@@ -1,7 +1,11 @@
 import tf from "@tensorflow/tfjs";
 import { z } from "zod";
 
-import { PATH_MODEL_ROOT, PATH_OUTPUT_ROOT } from "@bbfun/utils";
+import {
+	PATH_MODEL_ROOT,
+	PATH_OUTPUT_ROOT,
+	PITCH_IN_PLAY_EVENTS,
+} from "@bbfun/utils";
 import {
 	TRowOotp,
 	TRowOutputPitchFx,
@@ -24,34 +28,6 @@ const MODEL_NAME = "pitch-in-play";
 const PATH_OUTPUT = `${PATH_MODEL_ROOT}/${MODEL_NAME}`;
 
 createFolderPathIfNeeded(PATH_OUTPUT);
-
-const PITCH_OUTCOMES_LIST = [
-	"FIELD_OUT",
-	"HOME_RUN",
-	"WALK",
-	"SINGLE",
-	"STRIKEOUT",
-	"GROUNDED_INTO_DOUBLE_PLAY",
-	"FIELD_ERROR",
-	"HIT_BY_PITCH",
-	"DOUBLE",
-	"SAC_BUNT",
-	"FORCE_OUT",
-	"TRIPLE",
-	"INTENTIONAL_WALK",
-	"CAUGHT_STEALING_2B",
-	"SAC_FLY",
-	"FIELDERS_CHOICE_OUT",
-	"PICKOFF_2B",
-	"STRIKEOUT_DOUBLE_PLAY",
-	"DOUBLE_PLAY",
-	"TRIPLE_PLAY",
-	"FIELDERS_CHOICE",
-	"PICKOFF_1B",
-	"RUNNER_DOUBLE_PLAY",
-	"OTHER_OUT",
-	"WILD_PITCH",
-];
 
 const wrangledData = battingData
 	.filter((pitch) => {
@@ -148,12 +124,12 @@ const getYs = (rows: typeof wrangledData) => {
 	const pitchOutcomes: number[] = [];
 
 	for (const row of rows) {
-		pitchOutcomes.push(PITCH_OUTCOMES_LIST.indexOf(row.events));
+		pitchOutcomes.push(PITCH_IN_PLAY_EVENTS.indexOf(row.events));
 	}
 
 	const pitchOutcomesTensor = tf.tensor1d(pitchOutcomes, "int32");
 
-	const ys = tf.oneHot(pitchOutcomesTensor, PITCH_OUTCOMES_LIST.length);
+	const ys = tf.oneHot(pitchOutcomesTensor, PITCH_IN_PLAY_EVENTS.length);
 
 	return ys;
 };
@@ -170,7 +146,7 @@ model.add(tf.layers.dense({ units: 175, activation: "relu" }));
 model.add(tf.layers.dense({ units: 150, activation: "relu" }));
 model.add(
 	tf.layers.dense({
-		units: PITCH_OUTCOMES_LIST.length,
+		units: PITCH_IN_PLAY_EVENTS.length,
 		activation: "softmax",
 	}),
 );
@@ -219,7 +195,7 @@ model.compile({
 
 		const maxIndex = predictResult.argMax(1).dataSync()[0];
 
-		const predictedOutcome = PITCH_OUTCOMES_LIST[maxIndex];
+		const predictedOutcome = PITCH_IN_PLAY_EVENTS[maxIndex];
 		const actualOutcome = row.events;
 
 		if (predictedOutcome === actualOutcome) {

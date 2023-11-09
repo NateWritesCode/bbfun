@@ -1,0 +1,1 @@
+How do I get the biome checker to lint all typescript errors? Switch exhaustive for example
