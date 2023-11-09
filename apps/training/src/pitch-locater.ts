@@ -76,8 +76,7 @@ const wrangledData = pitchingData
 			movement: player.movement,
 			pitchName: pitch.pitchName,
 			pitchNumber: pitch.pitchNumber,
-			pitchRating:
-				player.pitches[pitch.pitchName as keyof typeof player.pitches],
+			pitchRating: player.pitches[pitch.pitchName as keyof typeof player.pitches],
 			stuff: player.stuff,
 		};
 	});

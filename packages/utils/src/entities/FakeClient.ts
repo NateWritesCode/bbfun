@@ -267,9 +267,7 @@ class FakeClient {
 		];
 		const nicknames = [this._getRandomNickname()];
 
-		const firstName = faker.person.firstName(
-			isGenderCisMale ? "male" : "female",
-		);
+		const firstName = faker.person.firstName(isGenderCisMale ? "male" : "female");
 		const lastName = faker.person.lastName();
 		const birthdate = dayjs(
 			faker.date.birthdate({

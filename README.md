@@ -33,6 +33,7 @@ Baseball Fun is an open-source (MIT) baseball simulator.
 
 ## Libraries currently used
 
+- [biomejs](https://biomejs.dev) for linting and formatting code
 - [Bun runtime](https://bun.sh/) to run Typescript code
 - [csv-string](https://github.com/Inist-CNRS/node-csv-string) to parse CSV files
 - [dayjs](https://github.com/Inist-CNRS/node-csv-string) to parse CSV files

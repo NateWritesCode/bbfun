@@ -49,15 +49,10 @@ const filesHelper: {
 				);
 
 				if (!fileToSaveContents || !fileToSaveContents.data) {
-					throw new Error(
-						`Could not find file ${fileToSave.path} in ${destFile}`,
-					);
+					throw new Error(`Could not find file ${fileToSave.path} in ${destFile}`);
 				}
 
-				fs.writeFileSync(
-					`${destPath}/${fileToSave.key}`,
-					fileToSaveContents.data,
-				);
+				fs.writeFileSync(`${destPath}/${fileToSave.key}`, fileToSaveContents.data);
 			}
 
 			fs.unlinkSync(`${destPath}/${destFile}`);

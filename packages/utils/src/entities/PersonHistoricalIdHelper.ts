@@ -51,8 +51,7 @@ class PersonHistoricalIdHelper {
 				arr,
 			) => {
 				const isDuplicate = arr.some(
-					(otherObj, otherIndex) =>
-						otherIndex !== index && otherObj.id === obj.id,
+					(otherObj, otherIndex) => otherIndex !== index && otherObj.id === obj.id,
 				);
 				if (isDuplicate) {
 					acc.duplicates.push(obj);
@@ -80,9 +79,7 @@ class PersonHistoricalIdHelper {
 			console.info("LOADING HISTORICAL DATA FROM MSGPACK");
 
 			if (persons && Array.isArray(persons)) {
-				this._initPersons(
-					persons.map((person) => ZPersonHistorical.parse(person)),
-				);
+				this._initPersons(persons.map((person) => ZPersonHistorical.parse(person)));
 			} else {
 				throw new Error("Invalid persons data");
 			}
