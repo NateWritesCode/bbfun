@@ -3,11 +3,17 @@ import {
 	TConstructorGameSimTeamState,
 	TEGamePositions,
 	TGameSimEvent,
-	TGameTeamPlayers,
 	ZConstructorGameSimTeamState,
 } from "@bbfun/utils";
 import { assertExhaustive } from "@bbfun/utils";
+import GamePlayerState from "./GameSimPlayerState";
 import GameSimUtils from "./GameSimUtils";
+
+type TStatistics = {
+	hr: number;
+	lob: number;
+	runs: number;
+};
 
 export default class GameTeamState
 	extends GameSimUtils
@@ -16,7 +22,7 @@ export default class GameTeamState
 	id: string;
 	lineupIndex: number;
 	lineup: string[];
-	players: TGameTeamPlayers;
+	players: GamePlayerState[];
 	positions: {
 		p: string;
 		c: string;
@@ -30,9 +36,7 @@ export default class GameTeamState
 	};
 
 	// Stats
-	hr: number;
-	lob: number;
-	runs: number;
+	statistics: TStatistics;
 
 	constructor(input: TConstructorGameSimTeamState) {
 		super();
@@ -69,9 +73,11 @@ export default class GameTeamState
 		};
 
 		// Stats
-		this.hr = 0;
-		this.lob = 0;
-		this.runs = 0;
+		this.statistics = {
+			hr: 0,
+			lob: 0,
+			runs: 0,
+		};
 	}
 
 	advanceLineupIndex(): void {
@@ -114,15 +120,7 @@ export default class GameTeamState
 					input.data;
 
 				if (teamOffense.id === this.id) {
-					this.hr++;
-
-					const numRunners = this.getNumRunnersOnBase({
-						playerRunner1,
-						playerRunner2,
-						playerRunner3,
-					});
-
-					this.runs += 1 + numRunners;
+					this.statistics.hr++;
 				}
 
 				break;
@@ -134,6 +132,11 @@ export default class GameTeamState
 				break;
 			}
 			case "run": {
+				const { teamOffense } = input.data;
+
+				if (teamOffense.id === this.id) {
+					this.statistics.runs++;
+				}
 				break;
 			}
 			case "single": {

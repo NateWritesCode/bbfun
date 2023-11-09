@@ -45,7 +45,7 @@ export type TConstructorGameSim = z.infer<typeof ZConstructorGameSim>;
 
 export const ZConstructorGameSimTeamState = z.object({
 	id: ZRegexSlug,
-	players: ZGameTeamPlayers,
+	players: z.array(z.instanceof(GameSimPlayerState)),
 });
 export type TConstructorGameSimTeamState = z.infer<
 	typeof ZConstructorGameSimTeamState
@@ -53,6 +53,7 @@ export type TConstructorGameSimTeamState = z.infer<
 
 export const ZConstructorGameSimPlayerState = z.object({
 	id: ZRegexSlug,
+	position: ZEGamePositions,
 	ratings: ZPlayerRatings,
 });
 export type TConstructorGameSimPlayerState = z.infer<

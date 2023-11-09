@@ -78,18 +78,21 @@ export default class GameSim {
 		for (const team of this.teams) {
 			const teamState = new GameSimTeamState({
 				id: team.id,
-				players: team.players,
+				players: team.players.map((player) => {
+					const playerState = new GameSimPlayerState({
+						id: player.id,
+						position: player.position,
+						ratings: player.ratings,
+					});
+
+					this.playerStates[playerState.id] = playerState;
+					this.observers.push(playerState);
+
+					return playerState;
+				}),
 			});
 			this.teamStates[team.id] = teamState;
 			this.observers.push(teamState);
-			for (const player of team.players) {
-				const playerState = new GameSimPlayerState({
-					id: player.id,
-					ratings: player.ratings,
-				});
-				this.playerStates[player.id] = playerState;
-				this.observers.push(playerState);
-			}
 		}
 
 		// Init other observers
@@ -116,8 +119,8 @@ export default class GameSim {
 	private _checkIsGameOver = () => {
 		const team0 = this.teams[0];
 		const team1 = this.teams[1];
-		const team0Runs = this.teamStates[team0.id].runs;
-		const team1Runs = this.teamStates[team1.id].runs;
+		const team0Runs = this.teamStates[team0.id].statistics.runs;
+		const team1Runs = this.teamStates[team1.id].statistics.runs;
 
 		if (this.inning > this.numInningsInGame) {
 			// if (this.inning > this.numInningsInGame && team0Runs !== team1Runs) {
@@ -218,20 +221,23 @@ export default class GameSim {
 	};
 
 	_handleRunnerAdvanceAutomatic = () => {
-		const r1Current = this.playerRunner1;
-		const r2Current = this.playerRunner2;
-		const r3Current = this.playerRunner3;
+		const playerRunner1Current = this.playerRunner1;
+		const playerRunner2Current = this.playerRunner2;
+		const playerRunner3Current = this.playerRunner3;
 
-		if (r1Current && r2Current && r3Current) {
-			this.playerRunner3 = r2Current;
-			this.playerRunner2 = r1Current;
+		if (playerRunner1Current && playerRunner2Current && playerRunner3Current) {
+			this.playerRunner3 = playerRunner2Current;
+			this.playerRunner2 = playerRunner1Current;
+			this._handleRun({
+				playerRunner: playerRunner3Current,
+			});
 			// Bases loaded
-		} else if (r1Current && r2Current) {
+		} else if (playerRunner1Current && playerRunner2Current) {
 			// Runners on first and second
-			this.playerRunner3 = r2Current;
-			this.playerRunner2 = r1Current;
-		} else if (r1Current) {
-			this.playerRunner2 = r1Current;
+			this.playerRunner3 = playerRunner2Current;
+			this.playerRunner2 = playerRunner1Current;
+		} else if (playerRunner1Current) {
+			this.playerRunner2 = playerRunner1Current;
 		}
 	};
 
@@ -355,7 +361,7 @@ export default class GameSim {
 			control: pitcher.ratings.pitching.control,
 			movement: pitcher.ratings.pitching.movement,
 			pitchName,
-			pitchNumber: pitcher.pitchesThrown,
+			pitchNumber: pitcher.statistics.pitchesThrown,
 			pitchRating: pitcher.ratings.pitching.pitches[pitchName],
 			stuff: pitcher.ratings.pitching.stuff,
 		});

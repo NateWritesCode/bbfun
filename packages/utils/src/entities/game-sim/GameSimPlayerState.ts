@@ -18,15 +18,17 @@ type TStatistics = {
 	runs: number;
 };
 
-class GamePlayerState implements OGameSimObserver {
+class GameSimPlayerState implements OGameSimObserver {
 	id: string;
+	position: string;
 	ratings: TPlayerRatings;
 	statistics: TStatistics;
 	// Stats
 
 	constructor(input: TConstructorGameSimPlayerState) {
-		ZConstructorGameSimPlayerState.parse(input);
-		this.ratings = input.ratings;
+		const parsedInput = ZConstructorGameSimPlayerState.parse(input);
+		this.position = parsedInput.position;
+		this.ratings = parsedInput.ratings;
 		this.statistics = {
 			hr: 0,
 			lob: 0,
@@ -38,7 +40,7 @@ class GamePlayerState implements OGameSimObserver {
 			runs: 0,
 		};
 
-		this.id = input.id;
+		this.id = parsedInput.id;
 	}
 
 	notifyGameEvent(input: TGameSimEvent): void {
@@ -91,17 +93,17 @@ class GamePlayerState implements OGameSimObserver {
 					input.data;
 
 				if (playerHitter.id === this.id) {
-					this.outs++;
+					this.statistics.outs++;
 					if (playerRunner1) {
-						this.lob++;
+						this.statistics.lob++;
 					}
 
 					if (playerRunner2) {
-						this.lob++;
+						this.statistics.lob++;
 					}
 
 					if (playerRunner3) {
-						this.lob++;
+						this.statistics.lob++;
 					}
 				}
 
@@ -111,19 +113,19 @@ class GamePlayerState implements OGameSimObserver {
 				const { playerPitcher, pitchOutcome } = input.data;
 
 				if (playerPitcher.id === this.id) {
-					this.pitchesThrown++;
+					this.statistics.pitchesThrown++;
 
 					switch (pitchOutcome) {
 						case "B": {
-							this.pitchesThrownBalls++;
+							this.statistics.pitchesThrownBalls++;
 							break;
 						}
 						case "S": {
-							this.pitchesThrownStrikes++;
+							this.statistics.pitchesThrownStrikes++;
 							break;
 						}
 						case "X": {
-							this.pitchesThrownInPlay++;
+							this.statistics.pitchesThrownInPlay++;
 							break;
 						}
 						default: {
@@ -157,4 +159,4 @@ class GamePlayerState implements OGameSimObserver {
 	}
 }
 
-export default GamePlayerState;
+export default GameSimPlayerState;

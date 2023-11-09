@@ -7,7 +7,7 @@ import {
 	POSITIONS,
 } from "../constants";
 
-export const ZEGamePositions = z.enum(POSITIONS);
+export const ZEGamePositions = z.enum([...POSITIONS]);
 
 export type TEGamePositions = z.infer<typeof ZEGamePositions>;
 
