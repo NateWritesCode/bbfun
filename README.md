@@ -17,7 +17,7 @@ Baseball Fun is an open-source (MIT) baseball simulator.
 ## How to run
 
 - Install packages with `bun install` at the root folder
-- Run tasks by pressing `Ctrl+Shift+P` and typing `Tasks: Run Task`
+- In VSCode, run tasks by pressing `Ctrl+Shift+P` and typing `Tasks: Run Task`
 - Run task `dev-server` to start the dev server
 
 ## General Project goals
