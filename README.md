@@ -52,6 +52,8 @@ Baseball Fun is an open-source (MIT) baseball simulator.
 
 The main reason I'm creating this simulator is to learn.  If you have any feedback, comments, or questions please reach out.  I'm open to any suggestions and ideas.
 
+Click the `Discussions` at the top of this repo to reach out.
+
 
 
 
