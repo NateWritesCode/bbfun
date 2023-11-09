@@ -98,9 +98,9 @@ export type TGameSimEventHalfInningStart = z.infer<
 
 const ZGameSimEventHalfInningEnd = z.object({
 	data: z.object({
-		r1: z.instanceof(GameSimPlayerState).nullable(),
-		r2: z.instanceof(GameSimPlayerState).nullable(),
-		r3: z.instanceof(GameSimPlayerState).nullable(),
+		playerRunner1: z.instanceof(GameSimPlayerState).nullable(),
+		playerRunner2: z.instanceof(GameSimPlayerState).nullable(),
+		playerRunner3: z.instanceof(GameSimPlayerState).nullable(),
 	}),
 
 	gameEvent: z.literal("halfInningEnd"),
@@ -121,25 +121,65 @@ export type TGameSimEventAtBatEnd = z.infer<typeof ZGameSimEventAtBatEnd>;
 
 const ZGameSimEventHomeRun = z.object({
 	data: z.object({
-		d: ZRegexSlug,
-		h: z.instanceof(GameSimPlayerState),
-		o: ZRegexSlug,
-		r1: z.instanceof(GameSimPlayerState).nullable(),
-		r2: z.instanceof(GameSimPlayerState).nullable(),
-		r3: z.instanceof(GameSimPlayerState).nullable(),
+		playerHitter: z.instanceof(GameSimPlayerState),
+		playerPitcher: z.instanceof(GameSimPlayerState),
+		playerRunner1: z.instanceof(GameSimPlayerState).nullable(),
+		playerRunner2: z.instanceof(GameSimPlayerState).nullable(),
+		playerRunner3: z.instanceof(GameSimPlayerState).nullable(),
+		teamDefense: z.instanceof(GameSimTeamState),
+		teamOffense: z.instanceof(GameSimTeamState),
 	}),
 	gameEvent: z.literal("homeRun"),
 });
 export type TGameSimEventHomeRun = z.infer<typeof ZGameSimEventHomeRun>;
+const ZGameSimEventSingle = z.object({
+	data: z.object({
+		playerHitter: z.instanceof(GameSimPlayerState),
+		playerPitcher: z.instanceof(GameSimPlayerState),
+		playerRunner1: z.instanceof(GameSimPlayerState).nullable(),
+		playerRunner2: z.instanceof(GameSimPlayerState).nullable(),
+		playerRunner3: z.instanceof(GameSimPlayerState).nullable(),
+		teamDefense: z.instanceof(GameSimTeamState),
+		teamOffense: z.instanceof(GameSimTeamState),
+	}),
+	gameEvent: z.literal("single"),
+});
+export type TGameSimEventSingle = z.infer<typeof ZGameSimEventSingle>;
+const ZGameSimEventDouble = z.object({
+	data: z.object({
+		playerHitter: z.instanceof(GameSimPlayerState),
+		playerPitcher: z.instanceof(GameSimPlayerState),
+		playerRunner1: z.instanceof(GameSimPlayerState).nullable(),
+		playerRunner2: z.instanceof(GameSimPlayerState).nullable(),
+		playerRunner3: z.instanceof(GameSimPlayerState).nullable(),
+		teamDefense: z.instanceof(GameSimTeamState),
+		teamOffense: z.instanceof(GameSimTeamState),
+	}),
+	gameEvent: z.literal("double"),
+});
+export type TGameSimEventDouble = z.infer<typeof ZGameSimEventDouble>;
+const ZGameSimEventTriple = z.object({
+	data: z.object({
+		playerHitter: z.instanceof(GameSimPlayerState),
+		playerPitcher: z.instanceof(GameSimPlayerState),
+		playerRunner1: z.instanceof(GameSimPlayerState).nullable(),
+		playerRunner2: z.instanceof(GameSimPlayerState).nullable(),
+		playerRunner3: z.instanceof(GameSimPlayerState).nullable(),
+		teamDefense: z.instanceof(GameSimTeamState),
+		teamOffense: z.instanceof(GameSimTeamState),
+	}),
+	gameEvent: z.literal("triple"),
+});
+export type TGameSimEventTriple = z.infer<typeof ZGameSimEventTriple>;
 
 const ZGameSimEventOut = z.object({
 	data: z.object({
-		d: ZRegexSlug,
-		h: z.instanceof(GameSimPlayerState),
-		o: ZRegexSlug,
-		r1: z.instanceof(GameSimPlayerState).nullable(),
-		r2: z.instanceof(GameSimPlayerState).nullable(),
-		r3: z.instanceof(GameSimPlayerState).nullable(),
+		playerHitter: z.instanceof(GameSimPlayerState),
+		playerRunner1: z.instanceof(GameSimPlayerState).nullable(),
+		playerRunner2: z.instanceof(GameSimPlayerState).nullable(),
+		playerRunner3: z.instanceof(GameSimPlayerState).nullable(),
+		teamDefense: z.instanceof(GameSimTeamState),
+		teamOffense: z.instanceof(GameSimTeamState),
 	}),
 	gameEvent: z.literal("out"),
 });
@@ -147,17 +187,51 @@ export type TGameSimEventOut = z.infer<typeof ZGameSimEventOut>;
 
 const ZGameSimEventPitch = z.object({
 	data: z.object({
-		d: z.instanceof(GameSimTeamState),
-		h: z.instanceof(GameSimPlayerState),
-		o: z.instanceof(GameSimTeamState),
-		p: z.instanceof(GameSimPlayerState),
+		playerHitter: z.instanceof(GameSimPlayerState),
+		playerPitcher: z.instanceof(GameSimPlayerState),
 		pitchLocation: ZInputWrangleYPitchLocater,
 		pitchName: z.enum(PITCH_NAMES),
 		pitchOutcome: z.enum(PITCH_OUTCOMES),
+		teamDefense: z.instanceof(GameSimTeamState),
+		teamOffense: z.instanceof(GameSimTeamState),
 	}),
 	gameEvent: z.literal("pitch"),
 });
 export type TGameSimEventPitch = z.infer<typeof ZGameSimEventPitch>;
+
+const ZGameSimEventRun = z.object({
+	data: z.object({
+		playerHitter: z.instanceof(GameSimPlayerState),
+		playerPitcher: z.instanceof(GameSimPlayerState),
+		playerRunner: z.instanceof(GameSimPlayerState),
+		teamDefense: z.instanceof(GameSimTeamState),
+		teamOffense: z.instanceof(GameSimTeamState),
+	}),
+	gameEvent: z.literal("run"),
+});
+export type TGameSimEventRun = z.infer<typeof ZGameSimEventRun>;
+
+const ZGameSimEventStrikeout = z.object({
+	data: z.object({
+		playerHitter: z.instanceof(GameSimPlayerState),
+		playerPitcher: z.instanceof(GameSimPlayerState),
+		teamDefense: z.instanceof(GameSimTeamState),
+		teamOffense: z.instanceof(GameSimTeamState),
+	}),
+	gameEvent: z.literal("strikeout"),
+});
+export type TGameSimEventStrikeout = z.infer<typeof ZGameSimEventStrikeout>;
+
+const ZGameSimEventWalk = z.object({
+	data: z.object({
+		playerHitter: z.instanceof(GameSimPlayerState),
+		playerPitcher: z.instanceof(GameSimPlayerState),
+		teamOffense: z.instanceof(GameSimTeamState),
+		teamDefense: z.instanceof(GameSimTeamState),
+	}),
+	gameEvent: z.literal("walk"),
+});
+export type TGameSimEventWalk = z.infer<typeof ZGameSimEventWalk>;
 
 const ZGameSimEvent = z.discriminatedUnion("gameEvent", [
 	ZGameSimEventGameEnd,
@@ -166,9 +240,15 @@ const ZGameSimEvent = z.discriminatedUnion("gameEvent", [
 	ZGameSimEventHalfInningStart,
 	ZGameSimEventAtBatStart,
 	ZGameSimEventAtBatEnd,
+	ZGameSimEventDouble,
 	ZGameSimEventHomeRun,
 	ZGameSimEventOut,
 	ZGameSimEventPitch,
+	ZGameSimEventRun,
+	ZGameSimEventSingle,
+	ZGameSimEventStrikeout,
+	ZGameSimEventTriple,
+	ZGameSimEventWalk,
 ]);
 
 export type TGameSimEvent = z.infer<typeof ZGameSimEvent>;
@@ -179,6 +259,11 @@ export const ZInputNotifyGameEvent = z.object({});
 export interface OGameSimObserver {
 	notifyGameEvent(input: TGameSimEvent): void;
 }
+
+export const ZInputGameSimHandleRun = z.object({
+	playerRunner: z.instanceof(GameSimPlayerState),
+});
+export type TInputGameSimHandleRun = z.infer<typeof ZInputGameSimHandleRun>;
 
 export const ZInputGameSimGetCurrentHitter = z.object({
 	teamIndex: z.literal(0).or(z.literal(1)),

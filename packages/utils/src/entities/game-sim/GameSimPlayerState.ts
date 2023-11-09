@@ -7,10 +7,7 @@ import {
 } from "@bbfun/utils";
 import { assertExhaustive } from "@bbfun/utils";
 
-class GamePlayerState implements OGameSimObserver {
-	id: string;
-	ratings: TPlayerRatings;
-	// Stats
+type TStatistics = {
 	hr: number;
 	lob: number;
 	pitchesThrown: number;
@@ -19,20 +16,29 @@ class GamePlayerState implements OGameSimObserver {
 	pitchesThrownStrikes: number;
 	outs: number;
 	runs: number;
+};
+
+class GamePlayerState implements OGameSimObserver {
+	id: string;
+	ratings: TPlayerRatings;
+	statistics: TStatistics;
+	// Stats
 
 	constructor(input: TConstructorGameSimPlayerState) {
 		ZConstructorGameSimPlayerState.parse(input);
 		this.ratings = input.ratings;
+		this.statistics = {
+			hr: 0,
+			lob: 0,
+			pitchesThrown: 0,
+			pitchesThrownBalls: 0,
+			pitchesThrownInPlay: 0,
+			pitchesThrownStrikes: 0,
+			outs: 0,
+			runs: 0,
+		};
 
 		this.id = input.id;
-		this.hr = 0;
-		this.lob = 0;
-		this.pitchesThrown = 0;
-		this.pitchesThrownBalls = 0;
-		this.pitchesThrownInPlay = 0;
-		this.pitchesThrownStrikes = 0;
-		this.outs = 0;
-		this.runs = 0;
 	}
 
 	notifyGameEvent(input: TGameSimEvent): void {
@@ -41,6 +47,9 @@ class GamePlayerState implements OGameSimObserver {
 				break;
 			}
 			case "atBatStart": {
+				break;
+			}
+			case "double": {
 				break;
 			}
 			case "gameEnd": {
@@ -56,40 +65,42 @@ class GamePlayerState implements OGameSimObserver {
 				break;
 			}
 			case "homeRun": {
-				const { h, r1, r2, r3 } = input.data;
+				const { playerHitter, playerRunner1, playerRunner2, playerRunner3 } =
+					input.data;
 
-				if (h.id === this.id) {
-					this.runs++;
+				if (playerHitter.id === this.id) {
+					this.statistics.runs++;
 				} else {
-					if (r1?.id === this.id) {
-						this.runs++;
+					if (playerRunner1?.id === this.id) {
+						this.statistics.runs++;
 					}
 
-					if (r2?.id === this.id) {
-						this.runs++;
+					if (playerRunner2?.id === this.id) {
+						this.statistics.runs++;
 					}
 
-					if (r3?.id === this.id) {
-						this.runs++;
+					if (playerRunner3?.id === this.id) {
+						this.statistics.runs++;
 					}
 				}
 
 				break;
 			}
 			case "out": {
-				const { h, r1, r2, r3 } = input.data;
+				const { playerHitter, playerRunner1, playerRunner2, playerRunner3 } =
+					input.data;
 
-				if (h.id === this.id) {
+				if (playerHitter.id === this.id) {
 					this.outs++;
-					if (r1) {
+					if (playerRunner1) {
 						this.lob++;
 					}
 
-					if (r2) {
+					if (playerRunner2) {
 						this.lob++;
 					}
 
-					if (r3) {
+					if (playerRunner3) {
 						this.lob++;
 					}
 				}
@@ -97,9 +108,9 @@ class GamePlayerState implements OGameSimObserver {
 				break;
 			}
 			case "pitch": {
-				const { p, pitchOutcome } = input.data;
+				const { playerPitcher, pitchOutcome } = input.data;
 
-				if (p.id === this.id) {
+				if (playerPitcher.id === this.id) {
 					this.pitchesThrown++;
 
 					switch (pitchOutcome) {
@@ -122,6 +133,22 @@ class GamePlayerState implements OGameSimObserver {
 					}
 				}
 
+				break;
+			}
+			case "run": {
+				break;
+			}
+			case "single": {
+				break;
+			}
+
+			case "strikeout": {
+				break;
+			}
+			case "triple": {
+				break;
+			}
+			case "walk": {
 				break;
 			}
 			default:

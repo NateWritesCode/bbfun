@@ -5,19 +5,20 @@ import {
 
 export default class GameSimUtils {
 	protected getNumRunnersOnBase(input: TInputGetNumRunnersOnBase): number {
-		const { r1, r2, r3 } = ZInputGetNumRunnersOnBase.parse(input);
+		const { playerRunner1, playerRunner2, playerRunner3 } =
+			ZInputGetNumRunnersOnBase.parse(input);
 
 		let counter = 0;
 
-		if (r1) {
+		if (playerRunner1) {
 			counter++;
 		}
 
-		if (r2) {
+		if (playerRunner2) {
 			counter++;
 		}
 
-		if (r3) {
+		if (playerRunner3) {
 			counter++;
 		}
 

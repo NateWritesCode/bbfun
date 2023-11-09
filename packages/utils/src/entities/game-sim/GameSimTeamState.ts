@@ -94,6 +94,9 @@ export default class GameTeamState
 			case "atBatStart": {
 				break;
 			}
+			case "double": {
+				break;
+			}
 			case "gameEnd": {
 				break;
 			}
@@ -107,15 +110,16 @@ export default class GameTeamState
 				break;
 			}
 			case "homeRun": {
-				const { o, r1, r2, r3 } = input.data;
+				const { teamOffense, playerRunner1, playerRunner2, playerRunner3 } =
+					input.data;
 
-				if (o === this.id) {
+				if (teamOffense.id === this.id) {
 					this.hr++;
 
 					const numRunners = this.getNumRunnersOnBase({
-						r1,
-						r2,
-						r3,
+						playerRunner1,
+						playerRunner2,
+						playerRunner3,
 					});
 
 					this.runs += 1 + numRunners;
@@ -127,6 +131,21 @@ export default class GameTeamState
 				break;
 			}
 			case "pitch": {
+				break;
+			}
+			case "run": {
+				break;
+			}
+			case "single": {
+				break;
+			}
+			case "strikeout": {
+				break;
+			}
+			case "triple": {
+				break;
+			}
+			case "walk": {
 				break;
 			}
 			default:

@@ -8,7 +8,7 @@ Baseball Fun is an open-source baseball simulator.
 
 ## Goals currently working on (in order)
 
-- Simulate a baseball game (`packages/utils/src/entities/game-sim/GameSim.ts` is where this lives)
+- Simulate a simplistic baseball game (`packages/utils/src/entities/game-sim/GameSim.ts` is where this lives)
 - Save the simulated game results 
 - Build a view to show the statistics/logs of a game
 - Train data from the 2011 MLB season to build models for simulation (2011, because Cardinals!)

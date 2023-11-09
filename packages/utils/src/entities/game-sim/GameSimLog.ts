@@ -24,6 +24,10 @@ export default class GameSimLog implements OGameSimObserver {
 				console.info("atBatStart");
 				break;
 			}
+			case "double": {
+				console.info("double");
+				break;
+			}
 			case "gameEnd": {
 				console.info("gameEnd");
 				break;
@@ -50,6 +54,26 @@ export default class GameSimLog implements OGameSimObserver {
 			}
 			case "pitch": {
 				console.info("pitch");
+				break;
+			}
+			case "run": {
+				console.info("run");
+				break;
+			}
+			case "single": {
+				console.info("single");
+				break;
+			}
+			case "strikeout": {
+				console.info("strikeout");
+				break;
+			}
+			case "triple": {
+				console.info("triple");
+				break;
+			}
+			case "walk": {
+				console.info("walk");
 				break;
 			}
 			default:

@@ -4,6 +4,8 @@ import {
 	GameSimPlayerState,
 	GameSimTeamState,
 	ModelClient,
+	TInputGameSimHandleRun,
+	ZInputGameSimHandleRun,
 } from "@bbfun/utils";
 import {
 	OGameSimObserver,
@@ -26,9 +28,9 @@ import {
 
 export default class GameSim {
 	balls: number;
-	d: 0 | 1;
+	numTeamDefense: 0 | 1;
 	modelClient: ModelClient;
-	o: 0 | 1;
+	numTeamOffense: 0 | 1;
 	inning: 1;
 	isNeutralVenue: boolean;
 	isTopHalfInning: boolean;
@@ -44,9 +46,9 @@ export default class GameSim {
 	// Offense and Defense Player States
 
 	// Offense
-	r1: GameSimPlayerState | null;
-	r2: GameSimPlayerState | null;
-	r3: GameSimPlayerState | null;
+	playerRunner1: GameSimPlayerState | null;
+	playerRunner2: GameSimPlayerState | null;
+	playerRunner3: GameSimPlayerState | null;
 
 	// Defense
 	// defense: TDefense = {};
@@ -65,12 +67,12 @@ export default class GameSim {
 		this.isTopHalfInning = true;
 		this.observers = [];
 		this.outs = 0;
-		this.r1 = null;
-		this.r2 = null;
-		this.r3 = null;
+		this.playerRunner1 = null;
+		this.playerRunner2 = null;
+		this.playerRunner3 = null;
 		this.strikes = 0;
-		this.o = 1;
-		this.d = 0;
+		this.numTeamOffense = 1;
+		this.numTeamDefense = 0;
 
 		// Manipulation
 		for (const team of this.teams) {
@@ -141,7 +143,7 @@ export default class GameSim {
 		const teamStateOffense =
 			this.teamStates[
 				this._getTeamId({
-					teamIndex: this.o,
+					teamIndex: this.numTeamOffense,
 				})
 			];
 		teamStateOffense.advanceLineupIndex();
@@ -152,9 +154,9 @@ export default class GameSim {
 
 	private _endHalfInning = () => {
 		//Swap offense/defense team with the Bitwise XOR Operator: https://dmitripavlutin.com/swap-variables-javascript/#4-bitwise-xor-operator
-		this.o = (this.o ^ this.d) as 0 | 1;
-		this.d = (this.o ^ this.d) as 0 | 1;
-		this.o = (this.o ^ this.d) as 0 | 1;
+		this.numTeamOffense = (this.numTeamOffense ^ this.numTeamDefense) as 0 | 1;
+		this.numTeamDefense = (this.numTeamOffense ^ this.numTeamDefense) as 0 | 1;
+		this.numTeamOffense = (this.numTeamOffense ^ this.numTeamDefense) as 0 | 1;
 
 		const isBottomHalfOfInning = !this.isTopHalfInning;
 
@@ -165,9 +167,9 @@ export default class GameSim {
 		this.isTopHalfInning = !this.isTopHalfInning;
 
 		this.outs = 0;
-		this.r1 = null;
-		this.r2 = null;
-		this.r3 = null;
+		this.playerRunner1 = null;
+		this.playerRunner2 = null;
+		this.playerRunner3 = null;
 	};
 
 	private _getCurrentHitter = (input: TInputGameSimGetCurrentHitter) => {
@@ -216,33 +218,57 @@ export default class GameSim {
 	};
 
 	_handleRunnerAdvanceAutomatic = () => {
-		const r1Current = this.r1;
-		const r2Current = this.r2;
-		const r3Current = this.r3;
+		const r1Current = this.playerRunner1;
+		const r2Current = this.playerRunner2;
+		const r3Current = this.playerRunner3;
 
 		if (r1Current && r2Current && r3Current) {
-			this.r3 = r2Current;
-			this.r2 = r1Current;
+			this.playerRunner3 = r2Current;
+			this.playerRunner2 = r1Current;
 			// Bases loaded
 		} else if (r1Current && r2Current) {
 			// Runners on first and second
-			this.r3 = r2Current;
-			this.r2 = r1Current;
+			this.playerRunner3 = r2Current;
+			this.playerRunner2 = r1Current;
 		} else if (r1Current) {
-			this.r2 = r1Current;
+			this.playerRunner2 = r1Current;
 		}
 	};
 
 	_handleRunnerAdvanceAutomaticIncludingHitter = () => {
 		this._handleRunnerAdvanceAutomatic();
 
-		this.r1 = this._getCurrentHitter({
-			teamIndex: this.o,
+		this.playerRunner1 = this._getCurrentHitter({
+			teamIndex: this.numTeamOffense,
 		});
 	};
 
 	_handleOut = () => {
 		this.outs++;
+	};
+
+	_handleRun = (input: TInputGameSimHandleRun) => {
+		const parsedInput = ZInputGameSimHandleRun.parse(input);
+
+		const playerHitter = this._getCurrentHitter({
+			teamIndex: this.numTeamOffense,
+		});
+		const playerPitcher = this._getCurrentPitcher({
+			teamIndex: this.numTeamDefense,
+		});
+		const teamDefense = this.teamStates[this.numTeamDefense];
+		const teamOffense = this.teamStates[this.numTeamOffense];
+
+		this.notifyObservers({
+			gameEvent: "run",
+			data: {
+				playerHitter,
+				playerPitcher,
+				playerRunner: parsedInput.playerRunner,
+				teamDefense,
+				teamOffense,
+			},
+		});
 	};
 
 	_handleSingle = () => {};
@@ -258,6 +284,24 @@ export default class GameSim {
 	};
 
 	_handleStrikeout = () => {
+		const playerHitter = this._getCurrentHitter({
+			teamIndex: this.numTeamOffense,
+		});
+		const playerPitcher = this._getCurrentPitcher({
+			teamIndex: this.numTeamDefense,
+		});
+		const teamDefense = this.teamStates[this.numTeamDefense];
+		const teamOffense = this.teamStates[this.numTeamOffense];
+		this.notifyObservers({
+			gameEvent: "strikeout",
+			data: {
+				playerHitter,
+				playerPitcher,
+				teamDefense,
+				teamOffense,
+			},
+		});
+
 		this.outs++;
 	};
 
@@ -283,9 +327,9 @@ export default class GameSim {
 
 		this.notifyObservers({
 			data: {
-				r1: this.r1,
-				r2: this.r2,
-				r3: this.r3,
+				playerRunner1: this.playerRunner1,
+				playerRunner2: this.playerRunner2,
+				playerRunner3: this.playerRunner3,
 			},
 			gameEvent: "halfInningEnd",
 		});
@@ -294,10 +338,10 @@ export default class GameSim {
 	private _simulatePitch = () => {
 		let isAtBatOver = false;
 		const pitcher = this._getCurrentPitcher({
-			teamIndex: this.d,
+			teamIndex: this.numTeamDefense,
 		});
 		const hitter = this._getCurrentHitter({
-			teamIndex: this.o,
+			teamIndex: this.numTeamOffense,
 		});
 
 		const pitchName = this.modelClient.predictPitchPicker({
@@ -327,13 +371,13 @@ export default class GameSim {
 
 		this.notifyObservers({
 			data: {
-				d: this.teamStates[this.d],
-				h: hitter,
-				o: this.teamStates[this.o],
-				p: pitcher,
+				playerHitter: hitter,
 				pitchLocation,
 				pitchName,
 				pitchOutcome,
+				playerPitcher: pitcher,
+				teamDefense: this.teamStates[this.numTeamDefense],
+				teamOffense: this.teamStates[this.numTeamOffense],
 			},
 			gameEvent: "pitch",
 		});

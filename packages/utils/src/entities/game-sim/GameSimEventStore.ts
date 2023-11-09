@@ -22,6 +22,9 @@ export default class GameSimEventStore implements OGameSimObserver {
 			case "atBatStart": {
 				break;
 			}
+			case "double": {
+				break;
+			}
 			case "gameEnd": {
 				break;
 			}
@@ -43,8 +46,24 @@ export default class GameSimEventStore implements OGameSimObserver {
 			case "pitch": {
 				break;
 			}
-			default:
+			case "run": {
+				break;
+			}
+			case "single": {
+				break;
+			}
+			case "strikeout": {
+				break;
+			}
+			case "triple": {
+				break;
+			}
+			case "walk": {
+				break;
+			}
+			default: {
 				assertExhaustive(input);
+			}
 		}
 	}
 }
