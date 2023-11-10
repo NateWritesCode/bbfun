@@ -10,7 +10,13 @@ import {
 } from "@bbfun/utils";
 import { createFolderPathIfNeeded, getJsonData } from "@bbfun/utils";
 import tf from "@tensorflow/tfjs";
+import invariant from "tiny-invariant";
 import { z } from "zod";
+
+const epochs = Bun.env.NUM_EPOCHS && Number(Bun.env.NUM_EPOCHS);
+invariant(epochs, "epochs is undefined");
+
+console.info("epochs", epochs);
 
 const MODEL_NAME = "pitch-picker";
 const PATH_OUTPUT = `${PATH_MODEL_ROOT}/${MODEL_NAME}`;
@@ -124,7 +130,7 @@ model.compile({
 (async () => {
 	console.info(`Fitting model ${MODEL_NAME}...`);
 	await model.fit(getXs(trainingData), getYs(trainingData), {
-		epochs: 1,
+		epochs,
 		validationSplit: 0.1,
 	});
 	console.info(`Finished fitting model ${MODEL_NAME}...`);
@@ -152,5 +158,7 @@ model.compile({
 
 	console.info("numRight", numRight);
 	console.info("accuracy", numRight / testingData.length);
+	console.info("Saving model");
 	await model.save(`http://localhost:3000/uploadModel/${MODEL_NAME}`);
+	console.info("Finished saving model");
 })();

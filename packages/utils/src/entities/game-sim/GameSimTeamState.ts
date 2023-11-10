@@ -9,10 +9,42 @@ import { assertExhaustive } from "@bbfun/utils";
 import GamePlayerState from "./GameSimPlayerState";
 import GameSimUtils from "./GameSimUtils";
 
-type TStatistics = {
+type TBattingStatistics = {
+	bb: number;
+	doubles: number;
+	h: number;
 	hr: number;
+	k: number;
 	lob: number;
+	outs: number;
+	rbi: number;
 	runs: number;
+	singles: number;
+	triples: number;
+};
+
+type TPitchingStatistics = {
+	battersFaced: number;
+	bb: number;
+	doublesAllowed: number;
+	k: number;
+	pitchesThrown: number;
+	pitchesThrownBalls: number;
+	pitchesThrownInPlay: number;
+	pitchesThrownStrikes: number;
+	hitsAllowed: number;
+	hrsAllowed: number;
+	lob: number;
+	outs: number;
+	runsAllowed: number;
+	runsEarned: number;
+	singlesAllowed: number;
+	triplesAllowed: number;
+};
+
+type TStatistics = {
+	batting: TBattingStatistics;
+	pitching: TPitchingStatistics;
 };
 
 export default class GameTeamState
@@ -74,9 +106,37 @@ export default class GameTeamState
 
 		// Stats
 		this.statistics = {
-			hr: 0,
-			lob: 0,
-			runs: 0,
+			batting: {
+				bb: 0,
+				doubles: 0,
+				h: 0,
+				hr: 0,
+				k: 0,
+				lob: 0,
+				outs: 0,
+				rbi: 0,
+				runs: 0,
+				singles: 0,
+				triples: 0,
+			},
+			pitching: {
+				battersFaced: 0,
+				bb: 0,
+				doublesAllowed: 0,
+				hitsAllowed: 0,
+				hrsAllowed: 0,
+				k: 0,
+				lob: 0,
+				outs: 0,
+				pitchesThrown: 0,
+				pitchesThrownBalls: 0,
+				pitchesThrownInPlay: 0,
+				pitchesThrownStrikes: 0,
+				runsAllowed: 0,
+				runsEarned: 0,
+				singlesAllowed: 0,
+				triplesAllowed: 0,
+			},
 		};
 	}
 
@@ -116,11 +176,20 @@ export default class GameTeamState
 				break;
 			}
 			case "homeRun": {
-				const { teamOffense, playerRunner1, playerRunner2, playerRunner3 } =
-					input.data;
+				const {
+					teamDefense,
+					teamOffense,
+					playerRunner1,
+					playerRunner2,
+					playerRunner3,
+				} = input.data;
 
 				if (teamOffense.id === this.id) {
-					this.statistics.hr++;
+					this.statistics.batting.hr++;
+				}
+
+				if (teamDefense.id === this.id) {
+					this.statistics.pitching.hrsAllowed++;
 				}
 
 				break;
@@ -132,10 +201,14 @@ export default class GameTeamState
 				break;
 			}
 			case "run": {
-				const { teamOffense } = input.data;
+				const { teamDefense, teamOffense } = input.data;
 
 				if (teamOffense.id === this.id) {
-					this.statistics.runs++;
+					this.statistics.batting.runs++;
+				}
+
+				if (teamDefense.id === this.id) {
+					this.statistics.pitching.runsAllowed++;
 				}
 				break;
 			}

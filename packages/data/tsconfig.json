@@ -3,5 +3,5 @@
 	"compilerOptions": {
 		"resolveJsonModule": true
 	},
-	"include": ["src/**/*", "src/data/**/*.json", "test/**/*.test.ts", "db"]
+	"include": ["src/**/*", "src/data/geography/**/*.json", "test/**/*.test.ts", "db"],
 }

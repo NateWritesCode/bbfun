@@ -1,2 +1,2 @@
 cd apps/server; 
-bun dev
+pm2 stop pm2.config.cjs && bun dev

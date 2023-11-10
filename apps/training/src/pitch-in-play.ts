@@ -5,6 +5,7 @@ import {
 	PATH_MODEL_ROOT,
 	PATH_OUTPUT_ROOT,
 	PITCH_IN_PLAY_EVENTS,
+	wrangleXPitchInPlay,
 } from "@bbfun/utils";
 import {
 	TRowOotp,
@@ -13,6 +14,12 @@ import {
 	ZRowOutputPitchFx,
 } from "@bbfun/utils";
 import { createFolderPathIfNeeded, getJsonData } from "@bbfun/utils";
+import invariant from "tiny-invariant";
+
+const epochs = Bun.env.NUM_EPOCHS && Number(Bun.env.NUM_EPOCHS);
+invariant(epochs, "epochs is undefined");
+
+console.info("epochs", epochs);
 
 const battingData = getJsonData<TRowOutputPitchFx[]>({
 	path: `${PATH_OUTPUT_ROOT}/historical/pitchfx/2011/batting.json`,
@@ -90,27 +97,7 @@ const getXs = (rows: typeof wrangledData) => {
 	const pitchInputs: number[][] = [];
 
 	for (const row of rows) {
-		const input = [
-			row.ax,
-			row.ay,
-			row.az,
-			row.pfxX,
-			row.pfxZ,
-			row.plateX,
-			row.plateZ,
-			row.releaseSpeed,
-			row.releasePosX,
-			row.releasePosY,
-			row.releasePosZ,
-			row.szBot,
-			row.szTop,
-			row.vx0,
-			row.vy0,
-			row.vz0,
-			row.contact,
-			row.gap,
-			row.power,
-		];
+		const input = wrangleXPitchInPlay(row);
 
 		pitchInputs.push(input);
 	}
@@ -159,7 +146,7 @@ model.compile({
 (async () => {
 	console.info(`Fitting model ${MODEL_NAME}...`);
 	await model.fit(getXs(trainingData), getYs(trainingData), {
-		epochs: 1,
+		epochs,
 		validationSplit: 0.1,
 	});
 	console.info(`Finished fitting model ${MODEL_NAME}...`);
@@ -167,29 +154,7 @@ model.compile({
 	let numRight = 0;
 
 	for (const row of testingData) {
-		const tensor = tf.tensor2d([
-			[
-				row.ax,
-				row.ay,
-				row.az,
-				row.pfxX,
-				row.pfxZ,
-				row.plateX,
-				row.plateZ,
-				row.releaseSpeed,
-				row.releasePosX,
-				row.releasePosY,
-				row.releasePosZ,
-				row.szBot,
-				row.szTop,
-				row.vx0,
-				row.vy0,
-				row.vz0,
-				row.contact,
-				row.gap,
-				row.power,
-			],
-		]);
+		const tensor = tf.tensor2d([wrangleXPitchInPlay(row)]);
 
 		const predictResult = model.predict(tensor) as tf.Tensor;
 

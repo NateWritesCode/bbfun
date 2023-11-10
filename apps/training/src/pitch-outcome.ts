@@ -12,7 +12,12 @@ import {
 } from "@bbfun/utils";
 import { createFolderPathIfNeeded, getJsonData } from "@bbfun/utils";
 import tf from "@tensorflow/tfjs";
+import invariant from "tiny-invariant";
 import { z } from "zod";
+
+const epochs = Bun.env.NUM_EPOCHS && Number(Bun.env.NUM_EPOCHS);
+invariant(epochs, "epochs is undefined");
+console.info("epochs", epochs);
 
 const MODEL_NAME = "pitch-outcome";
 const PATH_OUTPUT = `${PATH_MODEL_ROOT}/${MODEL_NAME}`;
@@ -70,7 +75,7 @@ const wrangledData = battingData
 			eye: player.eye,
 			gap: player.gap,
 			power: player.power,
-			type: pitch.type,
+			pitchOutcome: pitch.pitchOutcome as typeof PITCH_OUTCOMES[number],
 		};
 	});
 
@@ -97,7 +102,7 @@ const getYs = (rows: typeof wrangledData) => {
 	const pitchTypes: number[] = [];
 
 	for (const row of rows) {
-		pitchTypes.push(PITCH_OUTCOMES.indexOf(row.type));
+		pitchTypes.push(PITCH_OUTCOMES.indexOf(row.pitchOutcome));
 	}
 
 	const pitchTypesTensor = tf.tensor1d(pitchTypes, "int32");
@@ -132,7 +137,7 @@ model.compile({
 (async () => {
 	console.info(`Fitting model ${MODEL_NAME}...`);
 	await model.fit(getXs(trainingData), getYs(trainingData), {
-		epochs: 1,
+		epochs,
 		validationSplit: 0.1,
 	});
 	console.info(`Finished fitting model ${MODEL_NAME}...`);
@@ -147,7 +152,7 @@ model.compile({
 		const maxIndex = predictResult.argMax(1).dataSync()[0];
 
 		const predictedPitchType = PITCH_OUTCOMES[maxIndex];
-		const actualPitchType = row.type;
+		const actualPitchType = row.pitchOutcome;
 
 		if (predictedPitchType === actualPitchType) {
 			numRight++;

@@ -5,7 +5,9 @@ import {
 	GameSimTeamState,
 	ModelClient,
 	TInputGameSimHandleRun,
+	TInputGameSimHandleRunnersAdvanceXBases,
 	ZInputGameSimHandleRun,
+	ZInputGameSimHandleRunnersAdvanceXBases,
 } from "@bbfun/utils";
 import {
 	OGameSimObserver,
@@ -119,19 +121,15 @@ export default class GameSim {
 	private _checkIsGameOver = () => {
 		const team0 = this.teams[0];
 		const team1 = this.teams[1];
-		const team0Runs = this.teamStates[team0.id].statistics.runs;
-		const team1Runs = this.teamStates[team1.id].statistics.runs;
+		const team0Runs = this.teamStates[team0.id].statistics.batting.runs;
+		const team1Runs = this.teamStates[team1.id].statistics.batting.runs;
 
-		if (this.inning > this.numInningsInGame) {
-			// if (this.inning > this.numInningsInGame && team0Runs !== team1Runs) {
+		// if (this.inning > this.numInningsInGame) {
+		if (this.inning > this.numInningsInGame && team0Runs !== team1Runs) {
 			return true;
 		}
 
 		return false;
-	};
-
-	private _checkIsAtBatOver = () => {
-		return true;
 	};
 
 	private _checkIsHalfInningOver = () => {
@@ -201,6 +199,16 @@ export default class GameSim {
 		return this.teams[teamIndex].id;
 	};
 
+	private _getTeamDefense = () => {
+		const teamDefense = this.teamStates[this.teams[this.numTeamDefense].id];
+		return teamDefense;
+	};
+
+	private _getTeamOffense = () => {
+		const teamOffense = this.teamStates[this.teams[this.numTeamOffense].id];
+		return teamOffense;
+	};
+
 	_simulateAtBat = () => {
 		this.notifyObservers({
 			gameEvent: "atBatStart",
@@ -250,7 +258,106 @@ export default class GameSim {
 	};
 
 	_handleOut = () => {
+		const playerHitter = this._getCurrentHitter({
+			teamIndex: this.numTeamOffense,
+		});
+		const playerPitcher = this._getCurrentPitcher({
+			teamIndex: this.numTeamDefense,
+		});
+		const teamDefense = this._getTeamDefense();
+		const teamOffense = this._getTeamOffense();
+		const playerRunner1 = this.playerRunner1;
+		const playerRunner2 = this.playerRunner2;
+		const playerRunner3 = this.playerRunner3;
+
 		this.outs++;
+
+		this.notifyObservers({
+			gameEvent: "out",
+			data: {
+				playerHitter,
+				playerPitcher,
+				teamDefense,
+				teamOffense,
+				playerRunner1,
+				playerRunner2,
+				playerRunner3,
+			},
+		});
+	};
+
+	_handleRunnersAdvanceXBases = (
+		input: TInputGameSimHandleRunnersAdvanceXBases,
+	) => {
+		const { numBases } = ZInputGameSimHandleRunnersAdvanceXBases.parse(input);
+
+		const playerRunner1Current = this.playerRunner1;
+		const playerRunner2Current = this.playerRunner2;
+		const playerRunner3Current = this.playerRunner3;
+
+		switch (numBases) {
+			case 1: {
+				if (playerRunner3Current) {
+					this._handleRun({
+						playerRunner: playerRunner3Current,
+					});
+				}
+
+				if (playerRunner2Current) {
+					this.playerRunner3 = playerRunner2Current;
+				}
+
+				if (playerRunner1Current) {
+					this.playerRunner2 = playerRunner1Current;
+				}
+
+				break;
+			}
+			case 2: {
+				if (playerRunner3Current) {
+					this._handleRun({
+						playerRunner: playerRunner3Current,
+					});
+				}
+
+				if (playerRunner2Current) {
+					this._handleRun({
+						playerRunner: playerRunner2Current,
+					});
+				}
+
+				if (playerRunner1Current) {
+					this.playerRunner3 = playerRunner1Current;
+				}
+
+				break;
+			}
+			case 3: {
+				if (playerRunner3Current) {
+					this._handleRun({
+						playerRunner: playerRunner3Current,
+					});
+				}
+
+				if (playerRunner2Current) {
+					this._handleRun({
+						playerRunner: playerRunner2Current,
+					});
+				}
+
+				if (playerRunner1Current) {
+					this._handleRun({
+						playerRunner: playerRunner1Current,
+					});
+				}
+
+				break;
+			}
+			default: {
+				const exhaustiveCheck: never = numBases;
+				throw new Error(exhaustiveCheck);
+			}
+		}
 	};
 
 	_handleRun = (input: TInputGameSimHandleRun) => {
@@ -262,8 +369,8 @@ export default class GameSim {
 		const playerPitcher = this._getCurrentPitcher({
 			teamIndex: this.numTeamDefense,
 		});
-		const teamDefense = this.teamStates[this.numTeamDefense];
-		const teamOffense = this.teamStates[this.numTeamOffense];
+		const teamDefense = this._getTeamDefense();
+		const teamOffense = this._getTeamOffense();
 
 		this.notifyObservers({
 			gameEvent: "run",
@@ -277,13 +384,137 @@ export default class GameSim {
 		});
 	};
 
-	_handleSingle = () => {};
+	_handleSingle = () => {
+		const playerHitter = this._getCurrentHitter({
+			teamIndex: this.numTeamOffense,
+		});
+		const playerPitcher = this._getCurrentPitcher({
+			teamIndex: this.numTeamDefense,
+		});
+		const playerRunner1 = this.playerRunner1;
+		const playerRunner2 = this.playerRunner2;
+		const playerRunner3 = this.playerRunner3;
+		const teamDefense = this._getTeamDefense();
+		const teamOffense = this._getTeamOffense();
+		this._handleRunnersAdvanceXBases({
+			numBases: 1,
+		});
 
-	_handleDouble = () => {};
+		this.playerRunner1 = playerHitter;
 
-	_handleTriple = () => {};
+		this.notifyObservers({
+			data: {
+				playerHitter,
+				playerPitcher,
+				teamDefense,
+				teamOffense,
+				playerRunner1,
+				playerRunner2,
+				playerRunner3,
+			},
+			gameEvent: "single",
+		});
+	};
 
-	_handleHomeRun = () => {};
+	_handleDouble = () => {
+		const playerHitter = this._getCurrentHitter({
+			teamIndex: this.numTeamOffense,
+		});
+		const playerPitcher = this._getCurrentPitcher({
+			teamIndex: this.numTeamDefense,
+		});
+		const playerRunner1 = this.playerRunner1;
+		const playerRunner2 = this.playerRunner2;
+		const playerRunner3 = this.playerRunner3;
+		const teamDefense = this._getTeamDefense();
+		const teamOffense = this._getTeamOffense();
+		this._handleRunnersAdvanceXBases({
+			numBases: 2,
+		});
+
+		this.playerRunner1 = playerHitter;
+
+		this.notifyObservers({
+			data: {
+				playerHitter,
+				playerPitcher,
+				teamDefense,
+				teamOffense,
+				playerRunner1,
+				playerRunner2,
+				playerRunner3,
+			},
+			gameEvent: "double",
+		});
+	};
+
+	_handleTriple = () => {
+		const playerHitter = this._getCurrentHitter({
+			teamIndex: this.numTeamOffense,
+		});
+		const playerPitcher = this._getCurrentPitcher({
+			teamIndex: this.numTeamDefense,
+		});
+		const playerRunner1 = this.playerRunner1;
+		const playerRunner2 = this.playerRunner2;
+		const playerRunner3 = this.playerRunner3;
+		const teamDefense = this._getTeamDefense();
+		const teamOffense = this._getTeamOffense();
+		this._handleRunnersAdvanceXBases({
+			numBases: 3,
+		});
+
+		this.playerRunner1 = playerHitter;
+
+		this.notifyObservers({
+			data: {
+				playerHitter,
+				playerPitcher,
+				teamDefense,
+				teamOffense,
+				playerRunner1,
+				playerRunner2,
+				playerRunner3,
+			},
+			gameEvent: "triple",
+		});
+	};
+
+	_handleHomeRun = () => {
+		const playerHitter = this._getCurrentHitter({
+			teamIndex: this.numTeamOffense,
+		});
+		const playerPitcher = this._getCurrentPitcher({
+			teamIndex: this.numTeamDefense,
+		});
+		const playerRunner1 = this.playerRunner1;
+		const playerRunner2 = this.playerRunner2;
+		const playerRunner3 = this.playerRunner3;
+		const teamDefense = this._getTeamDefense();
+		const teamOffense = this._getTeamOffense();
+		this._handleRunnersAdvanceXBases({
+			numBases: 3,
+		});
+
+		this.playerRunner1 = playerHitter;
+
+		this.notifyObservers({
+			data: {
+				playerHitter,
+				playerPitcher,
+				teamDefense,
+				teamOffense,
+				playerRunner1,
+				playerRunner2,
+				playerRunner3,
+			},
+			gameEvent: "homeRun",
+		});
+
+		this._handleRun({
+			playerRunner: playerHitter,
+		});
+	};
 
 	_handleHitByPitch = () => {
 		this._handleRunnerAdvanceAutomaticIncludingHitter();
@@ -296,8 +527,8 @@ export default class GameSim {
 		const playerPitcher = this._getCurrentPitcher({
 			teamIndex: this.numTeamDefense,
 		});
-		const teamDefense = this.teamStates[this.numTeamDefense];
-		const teamOffense = this.teamStates[this.numTeamOffense];
+		const teamDefense = this._getTeamDefense();
+		const teamOffense = this._getTeamOffense();
 		this.notifyObservers({
 			gameEvent: "strikeout",
 			data: {
@@ -312,6 +543,23 @@ export default class GameSim {
 	};
 
 	_handleWalk = () => {
+		const playerHitter = this._getCurrentHitter({
+			teamIndex: this.numTeamOffense,
+		});
+		const playerPitcher = this._getCurrentPitcher({
+			teamIndex: this.numTeamDefense,
+		});
+		const teamDefense = this._getTeamDefense();
+		const teamOffense = this._getTeamOffense();
+		this.notifyObservers({
+			gameEvent: "walk",
+			data: {
+				playerHitter,
+				playerPitcher,
+				teamDefense,
+				teamOffense,
+			},
+		});
 		this._handleRunnerAdvanceAutomaticIncludingHitter();
 	};
 
@@ -361,7 +609,7 @@ export default class GameSim {
 			control: pitcher.ratings.pitching.control,
 			movement: pitcher.ratings.pitching.movement,
 			pitchName,
-			pitchNumber: pitcher.statistics.pitchesThrown,
+			pitchNumber: pitcher.statistics.pitching.pitchesThrown,
 			pitchRating: pitcher.ratings.pitching.pitches[pitchName],
 			stuff: pitcher.ratings.pitching.stuff,
 		});

@@ -1,13 +1,10 @@
-import {
-	GameSimPlayerState,
-	GameSimTeamState,
-	ModelClient,
-	PITCH_NAMES,
-	PITCH_OUTCOMES,
-	ZInputWrangleYPitchLocater,
-} from "@bbfun/utils";
 import { z } from "zod";
+import { PITCH_NAMES, PITCH_OUTCOMES } from "../constants/cBaseball";
+import ModelClient from "../entities/ModelClient";
+import GameSimPlayerState from "../entities/game-sim/GameSimPlayerState";
+import GameSimTeamState from "../entities/game-sim/GameSimTeamState";
 import { ZEGamePositions } from "./tEnums";
+import { ZInputWrangleYPitchLocater } from "./tModels";
 import { ZPerson } from "./tPerson";
 import { ZPlayer, ZPlayerRatings } from "./tPlayer";
 import { ZRegexSlug } from "./tRegex";
@@ -176,6 +173,7 @@ export type TGameSimEventTriple = z.infer<typeof ZGameSimEventTriple>;
 const ZGameSimEventOut = z.object({
 	data: z.object({
 		playerHitter: z.instanceof(GameSimPlayerState),
+		playerPitcher: z.instanceof(GameSimPlayerState),
 		playerRunner1: z.instanceof(GameSimPlayerState).nullable(),
 		playerRunner2: z.instanceof(GameSimPlayerState).nullable(),
 		playerRunner3: z.instanceof(GameSimPlayerState).nullable(),
@@ -265,6 +263,13 @@ export const ZInputGameSimHandleRun = z.object({
 	playerRunner: z.instanceof(GameSimPlayerState),
 });
 export type TInputGameSimHandleRun = z.infer<typeof ZInputGameSimHandleRun>;
+
+export const ZInputGameSimHandleRunnersAdvanceXBases = z.object({
+	numBases: z.literal(1).or(z.literal(2).or(z.literal(3))),
+});
+export type TInputGameSimHandleRunnersAdvanceXBases = z.infer<
+	typeof ZInputGameSimHandleRunnersAdvanceXBases
+>;
 
 export const ZInputGameSimGetCurrentHitter = z.object({
 	teamIndex: z.literal(0).or(z.literal(1)),

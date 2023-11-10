@@ -53,7 +53,7 @@ export const ZRowInputPitchFx = z.object({
 		.enum([
 			"",
 			"field_out",
-			"homeRun",
+			"home_run",
 			"walk",
 			"single",
 			"strikeout",
@@ -85,7 +85,7 @@ export const ZRowInputPitchFx = z.object({
 				case "field_out": {
 					return "fieldOut";
 				}
-				case "homeRun": {
+				case "home_run": {
 					return "homeRun";
 				}
 				case "walk": {
@@ -406,7 +406,25 @@ export const ZRowOutputPitchFx = z.object({
 	outs: z.number(),
 	pfxX: z.number(),
 	pfxZ: z.number(),
-	pitchName: z.enum([...PITCH_NAMES]).nullable(),
+	pitchName: z
+		.enum([
+			"changeup",
+			"cutter",
+			"curveball",
+			"eephus",
+			"fastball",
+			"forkball",
+			"intentionalBall",
+			"knuckleball",
+			"knucklecurve",
+			"other",
+			"pitchout",
+			"screwball",
+			"sinker",
+			"slider",
+			"splitter",
+		])
+		.nullable(),
 	pitchNumber: z.number(),
 	pitchType: z.enum([
 		"CH",

@@ -50,11 +50,21 @@ class ModelClient {
 
 		const predictResult = this.pitchInPlay.predict(tensor) as tf.Tensor;
 
-		const maxIndex = predictResult.argMax(1).dataSync()[0];
+		const arr = predictResult.arraySync();
 
-		const predictedInPlayEvent = PITCH_IN_PLAY_EVENTS[maxIndex];
+		if (Array.isArray(arr) && arr.length === 1) {
+			const values = arr[0] as number[];
+			const tensor = tf.tensor2d([values]);
 
-		return predictedInPlayEvent;
+			const sampledIndexTensor = tf.multinomial(tensor, 1);
+			const sampledIndex = sampledIndexTensor.dataSync()[0];
+
+			const predictedInPlayEvent = PITCH_IN_PLAY_EVENTS[sampledIndex];
+
+			return predictedInPlayEvent;
+		}
+
+		throw new Error("Predict result should be an array of length 2");
 	};
 	public predictPitchOutcome = (input: TInputWrangleXPitchOutcome) => {
 		if (!this.pitchOutcome) {
