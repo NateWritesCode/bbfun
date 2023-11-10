@@ -26,6 +26,18 @@ export const POSITIONS = [
 	"rf",
 ] as const;
 
+export const POSITION_MAPPING = {
+	"1": "p",
+	"2": "c",
+	"3": "1b",
+	"4": "2b",
+	"5": "3b",
+	"6": "ss",
+	"7": "lf",
+	"8": "cf",
+	"9": "rf",
+};
+
 export const PITCH_OUTCOMES = ["B", "S", "X"] as const;
 
 export const PITCH_IN_PLAY_EVENTS = [
