@@ -12,7 +12,7 @@ Baseball Fun is an open-source baseball simulator.
 - Save the simulated game results 
 - Build a view to show the statistics/logs of a game
 - Train data from the 2011 MLB season to build models for simulation (2011, because Cardinals!)
-- Simulate a fictional version of the 2011 MLB season using fictional players and teams
+- Website to simulate 2011 MLB season and display league leaders, standings, etc.
 
 ## How to run
 
