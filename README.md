@@ -57,10 +57,10 @@ Baseball Fun is an open-source baseball simulator.
 The utils package hosts the constants, entities, functions, and types that are shared across the project.
 
 The file names are prefixed with an abbreviation of the type of file for easier searchability within VSCode.
-c = constants
-e = entities
-f = functions
-t = types
+`c = constants`
+`e = entities`
+`f = functions`
+`t = types`
 
 ## Current Bun limitations
 
