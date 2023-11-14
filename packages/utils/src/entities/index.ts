@@ -1,5 +1,5 @@
-export { default as PersonHistoricalIdHelper } from "./PersonHistoricalIdHelper";
-export { default as FakeClient } from "./FakeClient";
-export { default as ModelClient } from "./ModelClient";
+export { default as PersonHistoricalIdHelper } from "./ePersonHistoricalIdHelper";
+export { default as FakeClient } from "./eFakeClient";
+export { default as ModelClient } from "./eModelClient";
 
 export * from "./game-sim";

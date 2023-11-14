@@ -1,6 +1,6 @@
 import { POSITIONS } from "src";
 import { z } from "zod";
-import { ZRegexColor, ZRegexSlug } from ".";
+import { ZRegexColor, ZRegexDate, ZRegexSlug } from ".";
 
 const ZRowOotpPlayerRatingsPitches = z.object({
 	changeup: z.number(),
@@ -71,8 +71,51 @@ const ZRowOotpPlayerRatingsRunning = z.object({
 	stealing: z.number(),
 });
 
+const ZRowOotpPlayerRatingsFieldingCatcher = z.object({
+	ability: z.number(),
+	arm: z.number(),
+});
+
+const ZRowOotpPlayerRatingsFieldingInfield = z.object({
+	arm: z.number(),
+	doublePlay: z.number(),
+	error: z.number(),
+	range: z.number(),
+});
+
+const ZRowOotpPlayerRatingsFieldingOutfield = z.object({
+	arm: z.number(),
+	error: z.number(),
+	range: z.number(),
+});
+
+const ZRowOotpPlayerRatingsFieldingPositionRating = z.object({
+	experience: z.number(),
+	rating: z.number(),
+});
+
+const ZRowOotpPlayerRatingsFieldingPosition = z.object({
+	p: ZRowOotpPlayerRatingsFieldingPositionRating,
+	c: ZRowOotpPlayerRatingsFieldingPositionRating,
+	"1b": ZRowOotpPlayerRatingsFieldingPositionRating,
+	"2b": ZRowOotpPlayerRatingsFieldingPositionRating,
+	"3b": ZRowOotpPlayerRatingsFieldingPositionRating,
+	ss: ZRowOotpPlayerRatingsFieldingPositionRating,
+	lf: ZRowOotpPlayerRatingsFieldingPositionRating,
+	cf: ZRowOotpPlayerRatingsFieldingPositionRating,
+	rf: ZRowOotpPlayerRatingsFieldingPositionRating,
+});
+
+const ZRowOotpPlayerRatingsFielding = z.object({
+	catcher: ZRowOotpPlayerRatingsFieldingCatcher,
+	infield: ZRowOotpPlayerRatingsFieldingInfield,
+	outfield: ZRowOotpPlayerRatingsFieldingOutfield,
+	position: ZRowOotpPlayerRatingsFieldingPosition,
+});
+
 const ZRowOotpPlayerRatings = z.object({
 	batting: ZRowOotpPlayerRatingsBatting,
+	fielding: ZRowOotpPlayerRatingsFielding,
 	pitching: ZRowOotpPlayerRatingsPitching,
 	running: ZRowOotpPlayerRatingsRunning,
 });
@@ -230,3 +273,15 @@ export const ZRowOotpTeam = z.object({
 	textColor: ZRegexColor,
 });
 export type TRowOotpTeam = z.infer<typeof ZRowOotpTeam>;
+
+export const ZRowOotpGame = z.object({
+	date: ZRegexDate,
+	id: ZRegexSlug,
+	leagueId: ZRegexSlug,
+	teamIdAway: ZRegexSlug,
+	teamIdHome: ZRegexSlug,
+	ootpId: z.string(),
+	time: z.number().max(2359),
+});
+
+export type TRowOotpGame = z.infer<typeof ZRowOotpGame>;

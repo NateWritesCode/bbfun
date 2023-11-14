@@ -1,1 +1,1 @@
-export { default as getJsonData } from "./getJsonData";
+export { default as getJsonData } from "./fGetJsonData";

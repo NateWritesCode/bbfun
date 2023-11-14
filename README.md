@@ -51,6 +51,17 @@ Baseball Fun is an open-source baseball simulator.
 - [Out of the Park Baseball](https://www.ootpdevelopments.com/out-of-the-park-baseball-home/) for player ratings
 - [PitchFx](https://baseballsavant.mlb.com/statcast_search) for pitch data
 
+
+## Conventions
+
+The utils package hosts the constants, entities, functions, and types that are shared across the project.
+
+The file names are prefixed with an abbreviation of the type of file for easier searchability within VSCode.
+c = constants
+e = entities
+f = functions
+t = types
+
 ## Current Bun limitations
 
 - Haven't been able to find a Node.js machine learning library that works in Bun. I'm currently using TensorFlowJS, but it's not ideal. Training is slow and need to save/access the models via upload and download the models to/from the server.

@@ -1,8 +1,8 @@
 import { z } from "zod";
 import { PITCH_NAMES, PITCH_OUTCOMES } from "../constants/cBaseball";
-import ModelClient from "../entities/ModelClient";
-import GameSimPlayerState from "../entities/game-sim/GameSimPlayerState";
-import GameSimTeamState from "../entities/game-sim/GameSimTeamState";
+import ModelClient from "../entities/eModelClient";
+import GameSimPlayerState from "../entities/game-sim/eGameSimPlayerState";
+import GameSimTeamState from "../entities/game-sim/eGameSimTeamState";
 import { ZEGamePositions } from "./tEnums";
 import { ZInputWrangleYPitchLocater } from "./tModels";
 import { ZPerson } from "./tPerson";

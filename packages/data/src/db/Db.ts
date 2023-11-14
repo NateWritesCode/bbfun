@@ -1,15 +1,56 @@
-// import {
-// 	TPersons,
-// 	TPlayers,
-// 	TTeams,
-// 	TVenues,
-// 	ZPersons,
-// 	ZPlayers,
-// 	ZTeams,
-// 	ZVenues,
-// } from "@bbfun/utils";
+import { Database } from "bun:sqlite";
+import {
+	PATH_OUTPUT_ROOT,
+	TRowOotpDivision,
+	TRowOotpLeague,
+	ZRowOotpDivision,
+	ZRowOotpLeague,
+	getJsonData,
+} from "@bbfun/utils";
+import { PATH_DB_ROOT } from "@bbfun/utils";
+import { drizzle } from "drizzle-orm/bun-sqlite";
+import { migrate } from "drizzle-orm/bun-sqlite/migrator";
+import { z } from "zod";
+import {
+	schemaDivisions,
+	schemaInsertManyDivision,
+	schemaInsertManyLeague,
+	schemaLeagues,
+} from "./schema";
+
+const db = new Database(`${PATH_DB_ROOT}/db.sqlite`);
 
 class Db {
+	db = drizzle(db);
+
+	constructor() {
+		migrate(this.db, { migrationsFolder: `${PATH_DB_ROOT}/migrations` });
+	}
+
+	public seed() {
+		try {
+			const leagues = getJsonData<TRowOotpLeague[]>({
+				path: `${PATH_OUTPUT_ROOT}/ootp/2011/leagues.json`,
+				zodParser: z.array(ZRowOotpLeague),
+			});
+
+			const parsedLeagues = schemaInsertManyLeague.parse(leagues);
+
+			this.db.insert(schemaLeagues).values(parsedLeagues).execute();
+
+			const divisions = getJsonData<TRowOotpDivision[]>({
+				path: `${PATH_OUTPUT_ROOT}/ootp/2011/divisions.json`,
+				zodParser: z.array(ZRowOotpDivision),
+			});
+
+			const parsedDivisions = schemaInsertManyDivision.parse(divisions);
+
+			this.db.insert(schemaDivisions).values(parsedDivisions).execute();
+		} catch (_error) {
+			console.info("Database already seeded");
+		}
+	}
+
 	// private dbRoot = open({ name: "db", path: "./src/db" });
 	// private dbPerson = this.dbRoot.openDB({ name: "person" });
 	// private dbPlayer = this.dbRoot.openDB({ name: "player" });

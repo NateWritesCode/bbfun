@@ -1,6 +1,6 @@
-export { default as GameSim } from "./GameSim";
-export { default as GameSimEventStore } from "./GameSimEventStore";
-export { default as GameSimLog } from "./GameSimLog";
-export { default as GameSimPlayerState } from "./GameSimPlayerState";
-export { default as GameSimTeamState } from "./GameSimTeamState";
-export { default as GameSimUtils } from "./GameSimUtils";
+export { default as GameSim } from "./eGameSim";
+export { default as GameSimEventStore } from "./eGameSimEventStore";
+export { default as GameSimLog } from "./eGameSimLog";
+export { default as GameSimPlayerState } from "./eGameSimPlayerState";
+export { default as GameSimTeamState } from "./eGameSimTeamState";
+export { default as GameSimUtils } from "./eGameSimUtils";

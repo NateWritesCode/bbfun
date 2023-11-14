@@ -3,10 +3,12 @@ import {
 	PATH_OUTPUT_ROOT,
 	POSITION_MAPPING,
 	TRowOotpDivision,
+	TRowOotpGame,
 	TRowOotpPark,
 	TRowOotpSubLeague,
 	TRowOotpTeam,
 	ZRowOotpDivision,
+	ZRowOotpGame,
 	ZRowOotpPark,
 	ZRowOotpSubLeague,
 	ZRowOotpTeam,
@@ -23,6 +25,7 @@ import {
 	ZRowOotpLeague,
 	ZRowOotpPlayer,
 } from "@bbfun/utils";
+import dayjs from "dayjs";
 import { kebabCase } from "lodash";
 
 const PATH_INPUT = `${PATH_INPUT_ROOT}/ootp/2011`;
@@ -83,12 +86,43 @@ const teamsText = await Bun.file(teamsCsv).text();
 const teamsRows = CSV.parse(teamsText);
 teamsRows.shift();
 
+const games: TRowOotpGame[] = [];
 const leagues: TRowOotpLeague[] = [];
 const subLeagues: TRowOotpSubLeague[] = [];
 const divisions: TRowOotpDivision[] = [];
 const teams: TRowOotpTeam[] = [];
 const parks: TRowOotpPark[] = [];
 const players: TRowOotpPlayer[] = [];
+
+const parseGames = async () => {
+	for (const [iterGame, game] of gamesRows.entries()) {
+		console.info(`Processing game ${iterGame + 1} of ${gamesRows.length}`);
+
+		const ootpId = game[0];
+		const leagueId = leagues.find((league) => league.ootpId === game[1])?.id;
+		const teamIdHome = teams.find((team) => team.ootpId === game[2])?.id;
+		const teamIdAway = teams.find((team) => team.ootpId === game[3])?.id;
+		const date = dayjs(game[5]).format("YYYY-MM-DD");
+		const time = Number(game[6]);
+		const id = `${date}-${time}-${leagueId}-${teamIdHome}-${teamIdAway}`;
+
+		const parseObj = {
+			date,
+			id,
+			leagueId,
+			ootpId,
+			teamIdAway,
+			teamIdHome,
+			time,
+		};
+
+		const row = ZRowOotpGame.parse(parseObj);
+
+		games.push(row);
+	}
+
+	await Bun.write(`${PATH_OUTPUT}/games.json`, JSON.stringify(games, null, 0));
+};
 
 const parseLeagues = async () => {
 	for (const [iterLeague, league] of leaguesRows.entries()) {
@@ -126,18 +160,18 @@ const parseSubLeagues = async () => {
 		const abbrev = subLeague[3];
 		const name = subLeague[2];
 		const slug = kebabCase(name);
-		const id = slug;
 		const ootpLeagueId = subLeague[0];
 		const leagueId = leagues.find((league) => league.ootpId === ootpLeagueId)?.id;
 		const ootpId = subLeague[1];
 
+		const id = `${leagueId}-${slug}`;
 		const row = ZRowOotpSubLeague.parse({
 			abbrev,
 			id,
 			leagueId,
 			name,
 			ootpId,
-			slug,
+			slug: id,
 		});
 
 		subLeagues.push(row);
@@ -156,22 +190,22 @@ const parseDivisions = async () => {
 		);
 
 		const name = division[3];
-		const slug = kebabCase(name);
-		const id = slug;
 		const ootpLeagueId = division[0];
 		const ootpSubLeagueId = division[1];
 		const leagueId = leagues.find((league) => league.ootpId === ootpLeagueId)?.id;
 		const subLeagueId = subLeagues.find(
 			(subLeague) => subLeague.ootpId === ootpSubLeagueId,
 		)?.id;
+		const slug = kebabCase(name);
 		const ootpId = division[2];
+		const id = `${subLeagueId}-${slug}`;
 
 		const row = ZRowOotpDivision.parse({
 			id,
 			leagueId,
 			name,
 			ootpId,
-			slug,
+			slug: id,
 			subLeagueId,
 		});
 
@@ -473,11 +507,31 @@ const parsePlayers = async () => {
 		const avoidKs = Number(batterRatings[8]);
 		const power = Number(batterRatings[10]);
 
+		// Batting splits
+
+		const battingLContact = Number(batterRatings[19]);
+		const battingLGap = Number(batterRatings[20]);
+		const battingLEye = Number(batterRatings[21]);
+		const battingLAvoidKs = Number(batterRatings[22]);
+		const battingLPower = Number(batterRatings[24]);
+
+		const battingRContact = Number(batterRatings[12]);
+		const battingRGap = Number(batterRatings[13]);
+		const battingREye = Number(batterRatings[14]);
+		const battingRAvoidKs = Number(batterRatings[15]);
+		const battingRPower = Number(batterRatings[17]);
+
 		// Get necessary data from players_pitching.csv
 		const pitcherRatings = playersPitchingRows[iterPlayer];
 		const stuff = Number(pitcherRatings[5]);
 		const control = Number(pitcherRatings[6]);
 		const movement = Number(pitcherRatings[7]);
+		const balk = Number(pitcherRatings[8]);
+		const hold = Number(pitcherRatings[57]);
+		const stamina = Number(pitcherRatings[55]);
+		const velocity = Number(pitcherRatings[53]);
+		const wildPitch = Number(pitcherRatings[10]);
+
 		// Individual pitches
 		const fastball = Number(pitcherRatings[29]);
 		const slider = Number(pitcherRatings[30]);
@@ -492,39 +546,186 @@ const parsePlayers = async () => {
 		const circlechange = Number(pitcherRatings[39]);
 		const knucklecurve = Number(pitcherRatings[40]);
 
-		const row = ZRowOotpPlayer.parse({
+		// Pitching splits
+
+		const pitchingRStuff = Number(pitcherRatings[11]);
+		const pitchingRControl = Number(pitcherRatings[12]);
+		const pitchingRMovement = Number(pitcherRatings[13]);
+		const pitchingRBalk = Number(pitcherRatings[14]);
+		const pitchingRWildPitch = Number(pitcherRatings[16]);
+
+		const pitchingLStuff = Number(pitcherRatings[17]);
+		const pitchingLControl = Number(pitcherRatings[18]);
+		const pitchingLMovement = Number(pitcherRatings[19]);
+		const pitchingLBalk = Number(pitcherRatings[20]);
+		const pitchingLWildPitch = Number(pitcherRatings[22]);
+
+		// Get necessary data from players_fielding.csv
+
+		const fieldingRatings = playersFieldingRows[iterPlayer];
+		const infieldRange = Number(fieldingRatings[5]);
+		const infieldArm = Number(fieldingRatings[6]);
+		const infieldDoublePlay = Number(fieldingRatings[7]);
+		const outfieldRange = Number(fieldingRatings[8]);
+		const outfieldArm = Number(fieldingRatings[9]);
+		const catcherArm = Number(fieldingRatings[10]);
+		const catcherAbility = Number(fieldingRatings[11]);
+		const infieldError = Number(fieldingRatings[12]);
+		const outfieldError = Number(fieldingRatings[13]);
+		// const position0Experience = Number(fieldingRatings[14]); // TODO: Is this DH?
+		const position1Experience = Number(fieldingRatings[15]);
+		const position2Experience = Number(fieldingRatings[16]);
+		const position3Experience = Number(fieldingRatings[17]);
+		const position4Experience = Number(fieldingRatings[18]);
+		const position5Experience = Number(fieldingRatings[19]);
+		const position6Experience = Number(fieldingRatings[20]);
+		const position7Experience = Number(fieldingRatings[21]);
+		const position8Experience = Number(fieldingRatings[22]);
+		const position9Experience = Number(fieldingRatings[23]);
+
+		const position1Rating = Number(fieldingRatings[24]);
+		const position2Rating = Number(fieldingRatings[25]);
+		const position3Rating = Number(fieldingRatings[26]);
+		const position4Rating = Number(fieldingRatings[27]);
+		const position5Rating = Number(fieldingRatings[28]);
+		const position6Rating = Number(fieldingRatings[29]);
+		const position7Rating = Number(fieldingRatings[30]);
+		const position8Rating = Number(fieldingRatings[31]);
+		const position9Rating = Number(fieldingRatings[32]);
+
+		const parseObj: TRowOotpPlayer = {
 			bbRefId,
 			id,
 			ootpId,
 			position,
 			ratings: {
-				avoidKs,
-				baserunning,
-				contact,
-				control,
-				eye,
-				gap,
-				movement,
-				power,
-				speed,
-				stealing,
-				stuff,
-				pitches: {
-					changeup,
-					circlechange,
-					cutter,
-					curveball,
-					fastball,
-					forkball,
-					knuckleball,
-					knucklecurve,
-					screwball,
-					sinker,
-					slider,
-					splitter,
+				batting: {
+					avoidKs,
+					contact,
+					eye,
+					gap,
+					power,
+					splits: {
+						l: {
+							avoidKs: battingLAvoidKs,
+							contact: battingLContact,
+							eye: battingLEye,
+							gap: battingLGap,
+							power: battingLPower,
+						},
+						r: {
+							avoidKs: battingRAvoidKs,
+							contact: battingRContact,
+							eye: battingREye,
+							gap: battingRGap,
+							power: battingRPower,
+						},
+					},
+				},
+				fielding: {
+					catcher: {
+						ability: catcherAbility,
+						arm: catcherArm,
+					},
+					infield: {
+						arm: infieldArm,
+						doublePlay: infieldDoublePlay,
+						error: infieldError,
+						range: infieldRange,
+					},
+					outfield: {
+						arm: outfieldArm,
+						error: outfieldError,
+						range: outfieldRange,
+					},
+					position: {
+						p: {
+							experience: position1Experience,
+							rating: position1Rating,
+						},
+						c: {
+							experience: position2Experience,
+							rating: position2Rating,
+						},
+						"1b": {
+							experience: position3Experience,
+							rating: position3Rating,
+						},
+						"2b": {
+							experience: position4Experience,
+							rating: position4Rating,
+						},
+						"3b": {
+							experience: position5Experience,
+							rating: position5Rating,
+						},
+						ss: {
+							experience: position6Experience,
+							rating: position6Rating,
+						},
+						lf: {
+							experience: position7Experience,
+							rating: position7Rating,
+						},
+						cf: {
+							experience: position8Experience,
+							rating: position8Rating,
+						},
+						rf: {
+							experience: position9Experience,
+							rating: position9Rating,
+						},
+					},
+				},
+				pitching: {
+					balk,
+					control,
+					hold,
+					movement,
+					pitches: {
+						changeup,
+						circlechange,
+						cutter,
+						curveball,
+						fastball,
+						forkball,
+						knuckleball,
+						knucklecurve,
+						screwball,
+						sinker,
+						slider,
+						splitter,
+					},
+					stamina,
+					stuff,
+					velocity,
+					wildPitch,
+					splits: {
+						l: {
+							balk: pitchingLBalk,
+							control: pitchingLControl,
+							movement: pitchingLMovement,
+							stuff: pitchingLStuff,
+							wildPitch: pitchingLWildPitch,
+						},
+						r: {
+							balk: pitchingRBalk,
+							control: pitchingRControl,
+							movement: pitchingRMovement,
+							stuff: pitchingRStuff,
+							wildPitch: pitchingRWildPitch,
+						},
+					},
+				},
+				running: {
+					baserunning,
+					speed,
+					stealing,
 				},
 			},
-		});
+		};
+
+		const row = ZRowOotpPlayer.parse(parseObj);
 
 		players.push(row);
 	}
@@ -541,3 +742,4 @@ await parseDivisions();
 await parseParks();
 await parseTeams();
 await parsePlayers();
+await parseGames();

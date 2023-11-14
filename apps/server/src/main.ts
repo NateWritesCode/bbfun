@@ -50,69 +50,71 @@ Bun.serve({
 
 console.info(`Server running at http://localhost:${port}`);
 
-const { modelClient } = await initServer();
+// const { modelClient } = await initServer();
 
-const fakeClient = new FakeClient();
+// const fakeClient = new FakeClient();
 
 const db = new Db();
 
-const personsTeam0 = new Array(9)
-	.fill(0)
-	.map((_, i) => fakeClient.createPerson());
-const personsTeam1 = new Array(9)
-	.fill(0)
-	.map((_, i) => fakeClient.createPerson());
-const playersTeam0 = personsTeam0.map((person, i) =>
-	fakeClient.createPlayer({ personId: person.id }),
-);
-const playersTeam1 = personsTeam1.map((person, i) =>
-	fakeClient.createPlayer({ personId: person.id }),
-);
+db.seed();
 
-db.seedPersons({ persons: [...personsTeam0, ...personsTeam1] });
-db.seedPlayers({ players: [...playersTeam0, ...playersTeam1] });
+// const personsTeam0 = new Array(9)
+// 	.fill(0)
+// 	.map((_, i) => fakeClient.createPerson());
+// const personsTeam1 = new Array(9)
+// 	.fill(0)
+// 	.map((_, i) => fakeClient.createPerson());
+// const playersTeam0 = personsTeam0.map((person, i) =>
+// 	fakeClient.createPlayer({ personId: person.id }),
+// );
+// const playersTeam1 = personsTeam1.map((person, i) =>
+// 	fakeClient.createPlayer({ personId: person.id }),
+// );
 
-const venues = new Array(2).fill(0).map((_, i) => fakeClient.createVenue());
-db.seedVenues({ venues });
+// db.seedPersons({ persons: [...personsTeam0, ...personsTeam1] });
+// db.seedPlayers({ players: [...playersTeam0, ...playersTeam1] });
 
-const teams = new Array(2).fill(0).map((_, i) =>
-	fakeClient.createTeam({
-		cityId: venues[i].cityId,
-		venueId: venues[i].slug,
-	}),
-);
+// const venues = new Array(2).fill(0).map((_, i) => fakeClient.createVenue());
+// db.seedVenues({ venues });
 
-db.seedTeams({ teams });
+// const teams = new Array(2).fill(0).map((_, i) =>
+// 	fakeClient.createTeam({
+// 		cityId: venues[i].cityId,
+// 		venueId: venues[i].slug,
+// 	}),
+// );
 
-const today = dayjs();
+// db.seedTeams({ teams });
 
-const game = new GameSim({
-	id: `${teams[0].id}-${teams[1].id}-${today.format("YYYY-MM-DD")}-0`,
-	modelClient,
-	teams: [
-		{
-			id: teams[0].id,
-			players: new Array(9).fill(0).map((_, i) => ({
-				id: playersTeam0[i].personId,
-				ratings: playersTeam0[i].ratings,
-				person: personsTeam0[i],
-				position: POSITIONS[i],
-			})),
-		},
-		{
-			id: teams[1].id,
-			players: new Array(9).fill(0).map((_, i) => ({
-				id: playersTeam1[i].personId,
-				ratings: playersTeam1[i].ratings,
-				person: personsTeam1[i],
-				position: POSITIONS[i],
-			})),
-		},
-	],
+// const today = dayjs();
 
-	venue: venues[0],
-});
+// const game = new GameSim({
+// 	id: `${teams[0].id}-${teams[1].id}-${today.format("YYYY-MM-DD")}-0`,
+// 	modelClient,
+// 	teams: [
+// 		{
+// 			id: teams[0].id,
+// 			players: new Array(9).fill(0).map((_, i) => ({
+// 				id: playersTeam0[i].personId,
+// 				ratings: playersTeam0[i].ratings,
+// 				person: personsTeam0[i],
+// 				position: POSITIONS[i],
+// 			})),
+// 		},
+// 		{
+// 			id: teams[1].id,
+// 			players: new Array(9).fill(0).map((_, i) => ({
+// 				id: playersTeam1[i].personId,
+// 				ratings: playersTeam1[i].ratings,
+// 				person: personsTeam1[i],
+// 				position: POSITIONS[i],
+// 			})),
+// 		},
+// 	],
 
-console.info("Starting game...");
+// 	venue: venues[0],
+// });
 
-game.start();
+// console.info("Starting game...");
+
+// game.start();
