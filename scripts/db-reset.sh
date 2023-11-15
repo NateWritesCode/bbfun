@@ -1,3 +1,3 @@
 cd packages/data/src/db;
 
-sudo rm -rf ./migrations && bunx drizzle-kit generate:sqlite;   
+rm -rf ./migrations && rm db.sqlite && touch db.sqlite && bunx drizzle-kit generate:sqlite;   

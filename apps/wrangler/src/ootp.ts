@@ -598,6 +598,7 @@ const parsePlayers = async () => {
 			id,
 			ootpId,
 			position,
+			slug: id,
 			ratings: {
 				batting: {
 					avoidKs,

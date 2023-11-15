@@ -2,9 +2,19 @@ import { Database } from "bun:sqlite";
 import {
 	PATH_OUTPUT_ROOT,
 	TRowOotpDivision,
+	TRowOotpGame,
 	TRowOotpLeague,
+	TRowOotpPark,
+	TRowOotpPlayer,
+	TRowOotpSubLeague,
+	TRowOotpTeam,
 	ZRowOotpDivision,
+	ZRowOotpGame,
 	ZRowOotpLeague,
+	ZRowOotpPark,
+	ZRowOotpPlayer,
+	ZRowOotpSubLeague,
+	ZRowOotpTeam,
 	getJsonData,
 } from "@bbfun/utils";
 import { PATH_DB_ROOT } from "@bbfun/utils";
@@ -13,9 +23,19 @@ import { migrate } from "drizzle-orm/bun-sqlite/migrator";
 import { z } from "zod";
 import {
 	schemaDivisions,
-	schemaInsertManyDivision,
-	schemaInsertManyLeague,
+	schemaGames,
+	schemaInsertManyDivisions,
+	schemaInsertManyGames,
+	schemaInsertManyLeagues,
+	schemaInsertManyParks,
+	schemaInsertManyPlayers,
+	schemaInsertManySubLeagues,
+	schemaInsertManyTeams,
 	schemaLeagues,
+	schemaParks,
+	schemaPlayers,
+	schemaSubLeagues,
+	schemaTeams,
 } from "./schema";
 
 const db = new Database(`${PATH_DB_ROOT}/db.sqlite`);
@@ -28,27 +48,76 @@ class Db {
 	}
 
 	public seed() {
-		try {
-			const leagues = getJsonData<TRowOotpLeague[]>({
-				path: `${PATH_OUTPUT_ROOT}/ootp/2011/leagues.json`,
-				zodParser: z.array(ZRowOotpLeague),
-			});
+		const leagues = getJsonData<TRowOotpLeague[]>({
+			path: `${PATH_OUTPUT_ROOT}/ootp/2011/leagues.json`,
+			zodParser: z.array(ZRowOotpLeague),
+		});
 
-			const parsedLeagues = schemaInsertManyLeague.parse(leagues);
+		const parsedLeagues = schemaInsertManyLeagues.parse(leagues);
 
-			this.db.insert(schemaLeagues).values(parsedLeagues).execute();
+		this.db.insert(schemaLeagues).values(parsedLeagues).execute();
 
-			const divisions = getJsonData<TRowOotpDivision[]>({
-				path: `${PATH_OUTPUT_ROOT}/ootp/2011/divisions.json`,
-				zodParser: z.array(ZRowOotpDivision),
-			});
+		const subLeagues = getJsonData<TRowOotpSubLeague[]>({
+			path: `${PATH_OUTPUT_ROOT}/ootp/2011/subLeagues.json`,
+			zodParser: z.array(ZRowOotpSubLeague),
+		});
 
-			const parsedDivisions = schemaInsertManyDivision.parse(divisions);
+		const parsedSubLeagues = schemaInsertManySubLeagues.parse(subLeagues);
 
-			this.db.insert(schemaDivisions).values(parsedDivisions).execute();
-		} catch (_error) {
-			console.info("Database already seeded");
-		}
+		this.db.insert(schemaSubLeagues).values(parsedSubLeagues).execute();
+
+		const divisions = getJsonData<TRowOotpDivision[]>({
+			path: `${PATH_OUTPUT_ROOT}/ootp/2011/divisions.json`,
+			zodParser: z.array(ZRowOotpDivision),
+		});
+
+		const parsedDivisions = schemaInsertManyDivisions.parse(divisions);
+
+		this.db.insert(schemaDivisions).values(parsedDivisions).execute();
+
+		const games = getJsonData<TRowOotpGame[]>({
+			path: `${PATH_OUTPUT_ROOT}/ootp/2011/games.json`,
+			zodParser: z.array(ZRowOotpGame),
+		}).map((game) => ({
+			...game,
+			date: new Date(game.date),
+		}));
+
+		const parsedGames = schemaInsertManyGames.parse(games);
+
+		this.db.insert(schemaGames).values(parsedGames).execute();
+
+		const parks = getJsonData<TRowOotpPark[]>({
+			path: `${PATH_OUTPUT_ROOT}/ootp/2011/parks.json`,
+			zodParser: z.array(ZRowOotpPark),
+		});
+
+		const parsedParks = schemaInsertManyParks.parse(parks);
+
+		this.db.insert(schemaParks).values(parsedParks).execute();
+
+		const teams = getJsonData<TRowOotpTeam[]>({
+			path: `${PATH_OUTPUT_ROOT}/ootp/2011/teams.json`,
+			zodParser: z.array(ZRowOotpTeam),
+		});
+
+		const parsedTeams = schemaInsertManyTeams.parse(teams);
+
+		this.db.insert(schemaTeams).values(parsedTeams).execute();
+
+		let players = getJsonData<TRowOotpPlayer[]>({
+			path: `${PATH_OUTPUT_ROOT}/ootp/2011/players.json`,
+			zodParser: z.array(ZRowOotpPlayer),
+		});
+
+		// TODO: Remove duplicates check
+		players = players.filter(
+			(player, index, self) => index === self.findIndex((p) => p.id === player.id),
+		);
+
+		const parsedPlayers = schemaInsertManyPlayers.parse(players);
+
+		this.db.insert(schemaPlayers).values(parsedPlayers).execute();
 	}
 
 	// private dbRoot = open({ name: "db", path: "./src/db" });

@@ -126,6 +126,7 @@ export const ZRowOotpPlayer = z.object({
 	ootpId: z.string(),
 	position: z.enum([...POSITIONS]),
 	ratings: ZRowOotpPlayerRatings,
+	slug: ZRegexSlug,
 });
 export type TRowOotpPlayer = z.infer<typeof ZRowOotpPlayer>;
 
