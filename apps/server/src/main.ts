@@ -56,7 +56,7 @@ console.info(`Server running at http://localhost:${port}`);
 
 const db = new Db();
 
-db.seed();
+const games = db.getGamesForDay("2011-03-31");
 
 // const personsTeam0 = new Array(9)
 // 	.fill(0)

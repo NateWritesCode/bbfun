@@ -15,7 +15,9 @@ CREATE TABLE `games` (
 	`teamIdAway` text NOT NULL,
 	`teamIdHome` text NOT NULL,
 	`time` integer NOT NULL,
-	FOREIGN KEY (`leagueId`) REFERENCES `leagues`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`leagueId`) REFERENCES `leagues`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`teamIdAway`) REFERENCES `teams`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`teamIdHome`) REFERENCES `teams`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `leagues` (

@@ -143,8 +143,12 @@ export const schemaGames = sqliteTable("games", {
 	leagueId: text("leagueId")
 		.notNull()
 		.references(() => schemaLeagues.id),
-	teamIdAway: text("teamIdAway").notNull(),
-	teamIdHome: text("teamIdHome").notNull(),
+	teamIdAway: text("teamIdAway")
+		.notNull()
+		.references(() => schemaTeams.id),
+	teamIdHome: text("teamIdHome")
+		.notNull()
+		.references(() => schemaTeams.id),
 	time: integer("time").notNull(),
 });
 

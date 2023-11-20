@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "1236ffbd-ad34-4ae4-ab1b-ec86075e7faf",
+  "id": "e37c6106-4f8b-4e62-b09c-cb40153e2b1e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "divisions": {
@@ -129,6 +129,32 @@
           "tableTo": "leagues",
           "columnsFrom": [
             "leagueId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "games_teamIdAway_teams_id_fk": {
+          "name": "games_teamIdAway_teams_id_fk",
+          "tableFrom": "games",
+          "tableTo": "teams",
+          "columnsFrom": [
+            "teamIdAway"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "games_teamIdHome_teams_id_fk": {
+          "name": "games_teamIdHome_teams_id_fk",
+          "tableFrom": "games",
+          "tableTo": "teams",
+          "columnsFrom": [
+            "teamIdHome"
           ],
           "columnsTo": [
             "id"

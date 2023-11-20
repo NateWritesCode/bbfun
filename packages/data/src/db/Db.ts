@@ -18,8 +18,10 @@ import {
 	getJsonData,
 } from "@bbfun/utils";
 import { PATH_DB_ROOT } from "@bbfun/utils";
+import { eq, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/bun-sqlite";
 import { migrate } from "drizzle-orm/bun-sqlite/migrator";
+import { alias } from "drizzle-orm/sqlite-core";
 import { z } from "zod";
 import {
 	schemaDivisions,
@@ -46,6 +48,34 @@ class Db {
 	constructor() {
 		migrate(this.db, { migrationsFolder: `${PATH_DB_ROOT}/migrations` });
 	}
+
+	public getGamesForDay = (date: string) => {
+		const statement = sql`
+			select 	
+				*
+			from 
+				games
+			where
+				${eq(schemaGames.date, new Date(date))}
+			;
+		`;
+
+		console.log("statement", statement);
+
+		const res: unknown[] = this.db.all(statement);
+
+		console.log("res", res);
+
+		// const games = this.db
+		// 	.select()
+		// 	.from(schemaGames)
+		// 	.where(eq(schemaGames.date, new Date(date)))
+		// 	.leftJoin(aliasTeamAway, eq(aliasTeamAway.id, schemaGames.teamIdAway))
+		// 	.leftJoin(aliasTeamHome, eq(aliasTeamHome.id, schemaGames.teamIdHome))
+		// 	.all();
+
+		// console.log("games", games);
+	};
 
 	public seed() {
 		const leagues = getJsonData<TRowOotpLeague[]>({
