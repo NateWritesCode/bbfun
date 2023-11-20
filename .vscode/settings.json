@@ -27,7 +27,8 @@
 	},
 	"search.exclude": {
 		"**/model.json": true,
-		"**/weights.bin": true
+		"**/weights.bin": true,
+		"**/*.csv": true
 	},
 	"bun.debugTerminal.stopOnEntry": true
 }

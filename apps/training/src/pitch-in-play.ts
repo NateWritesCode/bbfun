@@ -8,9 +8,9 @@ import {
 	wrangleXPitchInPlay,
 } from "@bbfun/utils";
 import {
-	TRowOotp,
+	TRowOotpPlayer,
 	TRowOutputPitchFx,
-	ZRowOotp,
+	ZRowOotpPlayer,
 	ZRowOutputPitchFx,
 } from "@bbfun/utils";
 import { createFolderPathIfNeeded, getJsonData } from "@bbfun/utils";
@@ -26,9 +26,9 @@ const battingData = getJsonData<TRowOutputPitchFx[]>({
 	zodParser: z.array(ZRowOutputPitchFx),
 });
 
-const ootp = getJsonData<TRowOotp[]>({
+const ootp = getJsonData<TRowOotpPlayer[]>({
 	path: `${PATH_OUTPUT_ROOT}/ootp/2011/players.json`,
-	zodParser: z.array(ZRowOotp),
+	zodParser: z.array(ZRowOotpPlayer),
 });
 
 const MODEL_NAME = "pitch-in-play";
@@ -80,10 +80,10 @@ const wrangledData = battingData
 			vx0: pitch.vx0,
 			vy0: pitch.vy0,
 			vz0: pitch.vz0,
-			contact: player.contact,
+			contact: player.ratings.batting.contact,
 			events: pitch.events,
-			gap: player.gap,
-			power: player.power,
+			gap: player.ratings.batting.gap,
+			power: player.ratings.batting.power,
 		};
 	});
 

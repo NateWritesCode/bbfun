@@ -2,9 +2,9 @@ import {
 	PATH_MODEL_ROOT,
 	PATH_OUTPUT_ROOT,
 	PITCH_NAMES,
-	TRowOotp,
+	TRowOotpPlayer,
 	TRowOutputPitchFx,
-	ZRowOotp,
+	ZRowOotpPlayer,
 	ZRowOutputPitchFx,
 	wrangleXPitchPicker,
 } from "@bbfun/utils";
@@ -28,9 +28,9 @@ const pitchingData = getJsonData<TRowOutputPitchFx[]>({
 	zodParser: z.array(ZRowOutputPitchFx),
 });
 
-const ootp = getJsonData<TRowOotp[]>({
+const ootp = getJsonData<TRowOotpPlayer[]>({
 	path: `${PATH_OUTPUT_ROOT}/ootp/2011/players.json`,
-	zodParser: z.array(ZRowOotp),
+	zodParser: z.array(ZRowOotpPlayer),
 });
 
 const wrangledData = pitchingData
@@ -43,8 +43,10 @@ const wrangledData = pitchingData
 		}
 
 		if (
-			!player.pitches ||
-			!player.pitches[pitch.pitchName as keyof typeof player.pitches]
+			!player.ratings.pitching.pitches ||
+			!player.ratings.pitching.pitches[
+				pitch.pitchName as keyof typeof player.ratings.pitching.pitches
+			]
 		) {
 			return false;
 		}
@@ -64,7 +66,7 @@ const wrangledData = pitchingData
 			outs: pitch.outs,
 			pitchName: pitch.pitchName,
 			strikes: pitch.strikes,
-			...player.pitches,
+			...player.ratings.pitching.pitches,
 		};
 	});
 
