@@ -9,7 +9,7 @@ import {
 	wrangleXPitchPicker,
 } from "@bbfun/utils";
 import { createFolderPathIfNeeded, getJsonData } from "@bbfun/utils";
-import tf from "@tensorflow/tfjs";
+import tf from "@tensorflow/tfjs-node";
 import invariant from "tiny-invariant";
 import { z } from "zod";
 

@@ -42,6 +42,7 @@ import {
 
 const db = new Database(`${PATH_DB_ROOT}/db.sqlite`);
 
+
 class Db {
 	db = drizzle(db);
 

@@ -1,4 +1,4 @@
-import tf from "@tensorflow/tfjs";
+import tf from "@tensorflow/tfjs-node";
 import { z } from "zod";
 
 import {

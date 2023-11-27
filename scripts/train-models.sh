@@ -1,6 +1,6 @@
 server_dir=$(pwd)/apps/server
 training_dir=$(pwd)/apps/training
-export NUM_EPOCHS=25
+export NUM_EPOCHS=1
 
 cd $server_dir;
 
