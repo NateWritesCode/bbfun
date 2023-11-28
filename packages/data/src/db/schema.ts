@@ -1,4 +1,10 @@
-import { integer, real, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import {
+   integer,
+   primaryKey,
+   real,
+   sqliteTable,
+   text,
+} from "drizzle-orm/sqlite-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -40,6 +46,22 @@ export const schemaDivisions = sqliteTable("divisions", {
 
 export const schemaInsertManyDivisions = z.array(
    createInsertSchema(schemaDivisions),
+);
+
+export const schemaGameGroups = sqliteTable("gameGroups", {
+   endDate: integer("endDate", { mode: "timestamp" }).notNull(),
+   hasPlayoffs: integer("hasPlayoffs", { mode: "boolean" }).notNull(),
+   id: text("id").primaryKey(),
+   leagueId: text("leagueId")
+      .notNull()
+      .references(() => schemaLeagues.id),
+   name: text("name").notNull(),
+   slug: text("slug").notNull(),
+   startDate: integer("startDate", { mode: "timestamp" }).notNull(),
+});
+
+export const schemaInsertManyGameGroups = z.array(
+   createInsertSchema(schemaGameGroups),
 );
 
 export const schemaParks = sqliteTable("parks", {
@@ -139,6 +161,9 @@ export const schemaInsertManyParks = z.array(createInsertSchema(schemaParks));
 
 export const schemaGames = sqliteTable("games", {
    date: integer("date", { mode: "timestamp" }).notNull(),
+   gameGroupId: text("gameGroupId")
+      .notNull()
+      .references(() => schemaGameGroups.id),
    id: text("id").primaryKey(),
    leagueId: text("leagueId")
       .notNull()
@@ -199,4 +224,243 @@ export const schemaPlayers = sqliteTable("players", {
 
 export const schemaInsertManyPlayers = z.array(
    createInsertSchema(schemaPlayers),
+);
+
+export const schemaStatsBattingTeamGame = sqliteTable(
+   "statsBattingTeamGame",
+   {
+      gameGroupId: text("gameGroupId")
+         .notNull()
+         .references(() => schemaGameGroups.id),
+      gameId: text("gameId").notNull(),
+      leagueId: text("leagueId")
+         .notNull()
+         .references(() => schemaLeagues.id),
+      teamId: text("teamId")
+         .notNull()
+         .references(() => schemaTeams.id),
+      runs: integer("runs").notNull(),
+   },
+   (table) => {
+      return {
+         pk: primaryKey({
+            columns: [table.gameId, table.gameGroupId, table.teamId],
+         }),
+      };
+   },
+);
+
+export const schemaInsertManyStatsBattingTeamGame = z.array(
+   createInsertSchema(schemaStatsBattingTeamGame),
+);
+export type TSchemaInsertManyStatsBattingTeamGame = z.infer<
+   typeof schemaInsertManyStatsBattingTeamGame
+>;
+
+export const schemaStatsBattingTeamGameGroup = sqliteTable(
+   "statsBattingTeamGameGroup",
+   {
+      gameGroupId: text("gameGroupId").notNull(),
+      leagueId: text("leagueId")
+         .notNull()
+         .references(() => schemaLeagues.id),
+      teamId: text("teamId")
+         .notNull()
+         .references(() => schemaTeams.id),
+      runs: integer("runs").notNull(),
+   },
+   (table) => {
+      return {
+         pk: primaryKey({
+            columns: [table.gameGroupId, table.teamId],
+         }),
+      };
+   },
+);
+
+export const schemaInsertManyStatsBattingTeamGameGroup = z.array(
+   createInsertSchema(schemaStatsBattingTeamGameGroup),
+);
+
+export const schemaStatsBattingPlayerGame = sqliteTable(
+   "statsBattingPlayerGame",
+   {
+      gameGroupId: text("gameGroupId")
+         .notNull()
+         .references(() => schemaGameGroups.id),
+      gameId: text("gameId").notNull(),
+      leagueId: text("leagueId")
+         .notNull()
+         .references(() => schemaLeagues.id),
+      playerId: text("playerId")
+         .notNull()
+         .references(() => schemaPlayers.id),
+      teamId: text("teamId")
+         .notNull()
+         .references(() => schemaTeams.id),
+      runs: integer("runs").notNull(),
+   },
+   (table) => {
+      return {
+         pk: primaryKey({
+            columns: [table.gameId, table.gameGroupId, table.playerId],
+         }),
+      };
+   },
+);
+
+export const schemaInsertManyStatsBattingPlayerGame = z.array(
+   createInsertSchema(schemaStatsBattingPlayerGame),
+);
+
+export type TSchemaInsertManyStatsBattingPlayerGame = z.infer<
+   typeof schemaInsertManyStatsBattingPlayerGame
+>;
+
+export const schemaStatsBattingPlayerGameGroup = sqliteTable(
+   "statsBattingPlayerGameGroup",
+   {
+      gameGroupId: text("gameGroupId").notNull(),
+      leagueId: text("leagueId")
+         .notNull()
+         .references(() => schemaLeagues.id),
+      playerId: text("playerId")
+         .notNull()
+         .references(() => schemaPlayers.id),
+      teamId: text("teamId")
+         .notNull()
+         .references(() => schemaTeams.id),
+      runs: integer("runs").notNull(),
+   },
+   (table) => {
+      return {
+         pk: primaryKey({
+            columns: [table.gameGroupId, table.teamId],
+         }),
+      };
+   },
+);
+
+export const schemaInsertManyStatsBattingPlayerGameGroup = z.array(
+   createInsertSchema(schemaStatsBattingPlayerGameGroup),
+);
+
+export const schemaStatsPitchingTeamGame = sqliteTable(
+   "statsPitchingTeamGame",
+   {
+      gameGroupId: text("gameGroupId")
+         .notNull()
+         .references(() => schemaGameGroups.id),
+      gameId: text("gameId").notNull(),
+      leagueId: text("leagueId")
+         .notNull()
+         .references(() => schemaLeagues.id),
+      teamId: text("teamId")
+         .notNull()
+         .references(() => schemaTeams.id),
+      runs: integer("runs").notNull(),
+   },
+   (table) => {
+      return {
+         pk: primaryKey({
+            columns: [table.gameId, table.gameGroupId, table.teamId],
+         }),
+      };
+   },
+);
+
+export const schemaInsertManyStatsPitchingTeamGame = z.array(
+   createInsertSchema(schemaStatsPitchingTeamGame),
+);
+
+export type TSchemaInsertManyStatsPitchingTeamGame = z.infer<
+   typeof schemaInsertManyStatsPitchingTeamGame
+>;
+
+export const schemaStatsPitchingTeamGameGroup = sqliteTable(
+   "statsPitchingTeamGameGroup",
+   {
+      gameGroupId: text("gameGroupId").notNull(),
+      leagueId: text("leagueId")
+         .notNull()
+         .references(() => schemaLeagues.id),
+      teamId: text("teamId")
+         .notNull()
+         .references(() => schemaTeams.id),
+      runs: integer("runs").notNull(),
+   },
+   (table) => {
+      return {
+         pk: primaryKey({
+            columns: [table.gameGroupId, table.teamId],
+         }),
+      };
+   },
+);
+
+export const schemaInsertManyStatsPitchingTeamGameGroup = z.array(
+   createInsertSchema(schemaStatsPitchingTeamGameGroup),
+);
+
+export const schemaStatsPitchingPlayerGame = sqliteTable(
+   "statsPitchingPlayerGame",
+   {
+      gameGroupId: text("gameGroupId")
+         .notNull()
+         .references(() => schemaGameGroups.id),
+      gameId: text("gameId").notNull(),
+      leagueId: text("leagueId")
+         .notNull()
+         .references(() => schemaLeagues.id),
+      playerId: text("playerId")
+         .notNull()
+         .references(() => schemaPlayers.id),
+      teamId: text("teamId")
+         .notNull()
+         .references(() => schemaTeams.id),
+      runs: integer("runs").notNull(),
+   },
+   (table) => {
+      return {
+         pk: primaryKey({
+            columns: [table.gameId, table.gameGroupId, table.playerId],
+         }),
+      };
+   },
+);
+
+export const schemaInsertManyStatsPitchingPlayerGame = z.array(
+   createInsertSchema(schemaStatsPitchingPlayerGame),
+);
+
+export type TSchemaInsertManyStatsPitchingPlayerGame = z.infer<
+   typeof schemaInsertManyStatsPitchingPlayerGame
+>;
+
+export const schemaStatsPitchingPlayerGameGroup = sqliteTable(
+   "statsPitchingPlayerGameGroup",
+   {
+      gameGroupId: text("gameGroupId").notNull(),
+      leagueId: text("leagueId")
+         .notNull()
+         .references(() => schemaLeagues.id),
+      playerId: text("playerId")
+         .notNull()
+         .references(() => schemaPlayers.id),
+      teamId: text("teamId")
+         .notNull()
+         .references(() => schemaTeams.id),
+      runs: integer("runs").notNull(),
+   },
+   (table) => {
+      return {
+         pk: primaryKey({
+            columns: [table.gameGroupId, table.teamId],
+         }),
+      };
+   },
+);
+
+export const schemaInsertManyStatsPitchingPlayerGameGroup = z.array(
+   createInsertSchema(schemaStatsPitchingPlayerGameGroup),
 );

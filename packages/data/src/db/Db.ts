@@ -1,5 +1,6 @@
 import { Database } from "bun:sqlite";
 import {
+   GAME_GROUP,
    PATH_OUTPUT_ROOT,
    TRowOotpDivision,
    TRowOotpGame,
@@ -24,9 +25,15 @@ import { drizzle } from "drizzle-orm/bun-sqlite";
 import { migrate } from "drizzle-orm/bun-sqlite/migrator";
 import { z } from "zod";
 import {
+   TSchemaInsertManyStatsBattingPlayerGame,
+   TSchemaInsertManyStatsBattingTeamGame,
+   TSchemaInsertManyStatsPitchingPlayerGame,
+   TSchemaInsertManyStatsPitchingTeamGame,
    schemaDivisions,
+   schemaGameGroups,
    schemaGames,
    schemaInsertManyDivisions,
+   schemaInsertManyGameGroups,
    schemaInsertManyGames,
    schemaInsertManyLeagues,
    schemaInsertManyParks,
@@ -36,6 +43,10 @@ import {
    schemaLeagues,
    schemaParks,
    schemaPlayers,
+   schemaStatsBattingPlayerGame,
+   schemaStatsBattingTeamGame,
+   schemaStatsPitchingPlayerGame,
+   schemaStatsPitchingTeamGame,
    schemaSubLeagues,
    schemaTeams,
 } from "./schema";
@@ -174,8 +185,8 @@ class Db {
 					),
 					'teamHome', json_object(
 						'id', teamHome.id,
-						'name', teamAway.name,
-						'nickname', teamAway.nickname,
+						'name', teamHome.name,
+						'nickname', teamHome.nickname,
 						'players', 
 							(
 								select 
@@ -222,7 +233,35 @@ class Db {
       return res;
    };
 
+   public saveSimulationResults = (input: {
+      statsBattingPlayerGame: TSchemaInsertManyStatsBattingPlayerGame;
+      statsBattingTeamGame: TSchemaInsertManyStatsBattingTeamGame;
+      statsPitchingPlayerGame: TSchemaInsertManyStatsPitchingPlayerGame;
+      statsPitchingTeamGame: TSchemaInsertManyStatsPitchingTeamGame;
+   }) => {
+      this.db.transaction((trx) => {
+         //  trx.insert(schemaStatsBattingPlayerGame)
+         //     .values(input.statsBattingPlayerGame)
+         //     .execute();
+         trx.insert(schemaStatsPitchingPlayerGame)
+            .values(input.statsPitchingPlayerGame)
+            .execute();
+         //  trx.insert(schemaStatsBattingTeamGame)
+         //     .values(input.statsBattingTeamGame)
+         //     .execute();
+         //  trx.insert(schemaStatsPitchingTeamGame)
+         //     .values(input.statsPitchingTeamGame)
+         //     .execute();
+      });
+   };
+
    public seed() {
+      const doesDataExistAlready = this.db.select().from(schemaLeagues).all();
+
+      if (doesDataExistAlready.length > 0) {
+         return;
+      }
+
       const leagues = getJsonData<TRowOotpLeague[]>({
          path: `${PATH_OUTPUT_ROOT}/ootp/2011/leagues.json`,
          zodParser: z.array(ZRowOotpLeague),
@@ -250,12 +289,17 @@ class Db {
 
       this.db.insert(schemaDivisions).values(parsedDivisions).execute();
 
+      const parsedGameGroups = schemaInsertManyGameGroups.parse([GAME_GROUP]);
+
+      this.db.insert(schemaGameGroups).values(parsedGameGroups).execute();
+
       const games = getJsonData<TRowOotpGame[]>({
          path: `${PATH_OUTPUT_ROOT}/ootp/2011/games.json`,
          zodParser: z.array(ZRowOotpGame),
       }).map((game) => ({
          ...game,
          date: new Date(game.date),
+         gameGroupId: GAME_GROUP.id,
       }));
 
       const parsedGames = schemaInsertManyGames.parse(games);
@@ -300,51 +344,6 @@ class Db {
 
       this.db.insert(schemaPlayers).values(parsedPlayers).execute();
    }
-
-   // private dbRoot = open({ name: "db", path: "./src/db" });
-   // private dbPerson = this.dbRoot.openDB({ name: "person" });
-   // private dbPlayer = this.dbRoot.openDB({ name: "player" });
-   // private dbPlayerRating = this.dbRoot.openDB({
-   // 	name: "playerRating",
-   // });
-   // private dbTeam = this.dbRoot.openDB({ name: "team" });
-   // private dbVenue = this.dbRoot.openDB({ name: "venue" });
-   // constructor() {
-   // 	this.dbRoot.dropSync();
-   // }
-   // public seedPersons = ({ persons }: { persons: TPersons }) => {
-   // 	ZPersons.parse(persons);
-   // 	this.dbRoot.transactionSync(() => {
-   // 		for (const person of persons) {
-   // 			this.dbPerson.put(person.id, person);
-   // 		}
-   // 	});
-   // };
-   // public seedPlayers = ({ players }: { players: TPlayers }) => {
-   // 	ZPlayers.parse(players);
-   // 	this.dbRoot.transactionSync(() => {
-   // 		for (const player of players) {
-   // 			this.dbPlayer.put(player.personId, player);
-   // 		}
-   // 	});
-   // };
-   // public seedPlayerRatings = () => {};
-   // public seedTeams = ({ teams }: { teams: TTeams }) => {
-   // 	ZTeams.parse(teams);
-   // 	this.dbRoot.transactionSync(() => {
-   // 		for (const team of teams) {
-   // 			this.dbTeam.put(team.id, team);
-   // 		}
-   // 	});
-   // };
-   // public seedVenues = ({ venues }: { venues: TVenues }) => {
-   // 	ZVenues.parse(venues);
-   // 	this.dbRoot.transactionSync(() => {
-   // 		for (const venue of venues) {
-   // 			this.dbVenue.put(venue.id, venue);
-   // 		}
-   // 	});
-   // };
 }
 
 export default Db;

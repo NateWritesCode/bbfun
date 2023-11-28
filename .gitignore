@@ -1,7 +1,9 @@
 dist
 node_modules
-input
-output
 .venv
 
 db.sqlite
+
+packages/data/src/data/game-data/**/*
+packages/data/src/data/input/**/*
+packages/data/src/data/output/**/*

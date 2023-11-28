@@ -1,8 +1,9 @@
 {
-  "recommendations": [
-    "mechatroner.rainbow-csv",
-    "reditorsupport.r",
-    "oven.bun-vscode",
-    "biomejs.biome"
-  ]
+   "recommendations": [
+      "mechatroner.rainbow-csv",
+      "reditorsupport.r",
+      "oven.bun-vscode",
+      "biomejs.biome",
+      "thebearingedge.vscode-sql-lit"
+   ]
 }

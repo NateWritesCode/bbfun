@@ -1,14 +1,13 @@
 import { z } from "zod";
 import {
-	GENDER_CIS,
-	GENDER_IDENTITY,
-	HANDEDNESS,
-	PITCH_NAMES,
-	POSITIONS,
+   GENDER_CIS,
+   GENDER_IDENTITY,
+   HANDEDNESS,
+   PITCH_NAMES,
+   POSITIONS,
 } from "../constants";
 
 export const ZEGamePositions = z.enum([...POSITIONS]);
-
 export type TEGamePositions = z.infer<typeof ZEGamePositions>;
 
 export const ZEHandedness = z.enum(HANDEDNESS);

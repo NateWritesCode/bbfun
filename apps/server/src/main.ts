@@ -1,122 +1,100 @@
 import { Db } from "@bbfun/data";
+import {
+   TSchemaInsertManyStatsBattingPlayerGame,
+   TSchemaInsertManyStatsBattingTeamGame,
+   TSchemaInsertManyStatsPitchingPlayerGame,
+   TSchemaInsertManyStatsPitchingTeamGame,
+} from "@bbfun/data/src/db/schema";
 import { initServer } from "@bbfun/server/utils";
-import { POSITIONS } from "@bbfun/utils";
-import { FakeClient, GameSim } from "@bbfun/utils";
-import dayjs from "dayjs";
-
-// const port = 3000;
-
-// Bun.serve({
-// 	port,
-// 	async fetch(req) {
-// 		const url = new URL(req.url);
-
-// 		if (url.pathname.includes("uploadModel")) {
-// 			const [model] = url.pathname.split("uploadModel/").slice(1);
-
-// 			const formData = await req.formData();
-
-// 			const modelJson = formData.get("model.json");
-// 			const weightsBin = formData.get("model.weights.bin");
-
-// 			if (!modelJson || !weightsBin) {
-// 				return new Response(null, { status: 400 });
-// 			}
-
-// 			console.info("Uploading model", model);
-
-// 			await Bun.write(
-// 				`./src/models/${model}/model.json`,
-// 				modelJson as unknown as Blob,
-// 			);
-// 			await Bun.write(
-// 				`./src/models/${model}/model.weights.bin`,
-// 				weightsBin as unknown as Blob,
-// 			);
-
-// 			console.info("Finished uploading model", model);
-
-// 			return new Response(null, { status: 200 });
-// 		}
-
-// 		const filePath = `./src${url.pathname}`;
-// 		const file = Bun.file(filePath).stream();
-// 		return new Response(file);
-// 	},
-// 	error() {
-// 		return new Response(null, { status: 404 });
-// 	},
-// });
-
-// console.info(`Server running at http://localhost:${port}`);
+import { GAME_GROUP, GameSim } from "@bbfun/utils";
 
 const { modelClient } = await initServer();
 
-const fakeClient = new FakeClient();
-
 const db = new Db();
 
-// db.seed();
+db.seed();
 
-const games = db.getGamesForDay("2011-03-31");
+const daysToSim = ["2011-03-31"];
 
-// const personsTeam0 = new Array(9)
-// 	.fill(0)
-// 	.map((_, i) => fakeClient.createPerson());
-// const personsTeam1 = new Array(9)
-// 	.fill(0)
-// 	.map((_, i) => fakeClient.createPerson());
-// const playersTeam0 = personsTeam0.map((person, i) =>
-// 	fakeClient.createPlayer({ personId: person.id }),
-// );
-// const playersTeam1 = personsTeam1.map((person, i) =>
-// 	fakeClient.createPlayer({ personId: person.id }),
-// );
+for (const dayToSim of daysToSim) {
+   const rootResults: {
+      statsBattingPlayerGame: TSchemaInsertManyStatsBattingPlayerGame;
+      statsBattingTeamGame: TSchemaInsertManyStatsBattingTeamGame;
+      statsPitchingPlayerGame: TSchemaInsertManyStatsPitchingPlayerGame;
+      statsPitchingTeamGame: TSchemaInsertManyStatsPitchingTeamGame;
+   } = {
+      statsBattingPlayerGame: [],
+      statsBattingTeamGame: [],
+      statsPitchingPlayerGame: [],
+      statsPitchingTeamGame: [],
+   };
 
-// db.seedPersons({ persons: [...personsTeam0, ...personsTeam1] });
-// db.seedPlayers({ players: [...playersTeam0, ...playersTeam1] });
+   const gamesToSim = db.getGamesForDay(dayToSim);
 
-// const venues = new Array(2).fill(0).map((_, i) => fakeClient.createVenue());
-// db.seedVenues({ venues });
+   for (const gameToSim of gamesToSim) {
+      const game = new GameSim({
+         id: gameToSim.id,
+         metadata: {
+            date: gameToSim.date,
+            gameGroupId: GAME_GROUP.id,
+            leagueId: GAME_GROUP.leagueId,
+            teamHomeId: gameToSim.teamHome.id,
+            teamAwayId: gameToSim.teamAway.id,
+         },
+         modelClient,
+         park: gameToSim.park,
+         teams: [gameToSim.teamHome, gameToSim.teamAway],
+      });
+      const results = game.simulate();
 
-// const teams = new Array(2).fill(0).map((_, i) =>
-// 	fakeClient.createTeam({
-// 		cityId: venues[i].cityId,
-// 		venueId: venues[i].slug,
-// 	}),
-// );
+      for (const data of results.statsBattingPlayer) {
+         const { id: playerId, teamId, ...stats } = data;
 
-// db.seedTeams({ teams });
+         rootResults.statsBattingPlayerGame.push({
+            gameId: gameToSim.id,
+            gameGroupId: GAME_GROUP.id,
+            leagueId: GAME_GROUP.leagueId,
+            playerId,
+            teamId,
+            ...stats,
+         });
+      }
+      for (const data of results.statsPitchingPlayer) {
+         const { id: playerId, teamId, ...stats } = data;
 
-// const today = dayjs();
+         rootResults.statsPitchingPlayerGame.push({
+            gameId: gameToSim.id,
+            gameGroupId: GAME_GROUP.id,
+            leagueId: GAME_GROUP.leagueId,
+            playerId,
+            teamId,
+            ...stats,
+         });
+      }
 
-// const game = new GameSim({
-// 	id: `${teams[0].id}-${teams[1].id}-${today.format("YYYY-MM-DD")}-0`,
-// 	modelClient,
-// 	teams: [
-// 		{
-// 			id: teams[0].id,
-// 			players: new Array(9).fill(0).map((_, i) => ({
-// 				id: playersTeam0[i].personId,
-// 				ratings: playersTeam0[i].ratings,
-// 				person: personsTeam0[i],
-// 				position: POSITIONS[i],
-// 			})),
-// 		},
-// 		{
-// 			id: teams[1].id,
-// 			players: new Array(9).fill(0).map((_, i) => ({
-// 				id: playersTeam1[i].personId,
-// 				ratings: playersTeam1[i].ratings,
-// 				person: personsTeam1[i],
-// 				position: POSITIONS[i],
-// 			})),
-// 		},
-// 	],
+      for (const data of results.statsBattingTeam) {
+         const { id: teamId, ...stats } = data;
 
-// 	venue: venues[0],
-// });
+         rootResults.statsBattingTeamGame.push({
+            gameId: gameToSim.id,
+            gameGroupId: GAME_GROUP.id,
+            leagueId: GAME_GROUP.leagueId,
+            teamId,
+            ...stats,
+         });
+      }
+      for (const data of results.statsPitchingTeam) {
+         const { id: teamId, ...stats } = data;
 
-// console.info("Starting game...");
+         rootResults.statsPitchingTeamGame.push({
+            gameId: gameToSim.id,
+            gameGroupId: GAME_GROUP.id,
+            leagueId: GAME_GROUP.leagueId,
+            teamId,
+            ...stats,
+         });
+      }
+   }
 
-// game.start();
+   db.saveSimulationResults(rootResults);
+}

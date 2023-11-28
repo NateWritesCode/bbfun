@@ -1,6 +1,6 @@
-import { POSITIONS } from "src";
 import { z } from "zod";
-import { ZRegexColor, ZRegexDate, ZRegexSlug } from ".";
+import { ZEGamePositions } from "./tEnums";
+import { ZRegexColor, ZRegexDate, ZRegexSlug } from "./tRegex";
 
 const ZRowOotpPlayerRatingsPitches = z.object({
    changeup: z.number(),
@@ -128,7 +128,7 @@ export const ZRowOotpPlayer = z.object({
    lastName: z.string(),
    nickname: z.string().nullable(),
    ootpId: z.string(),
-   position: z.enum([...POSITIONS]),
+   position: ZEGamePositions,
    ratings: ZRowOotpPlayerRatings,
    slug: ZRegexSlug,
    teamId: ZRegexSlug.nullable(),

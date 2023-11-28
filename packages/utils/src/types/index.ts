@@ -11,4 +11,3 @@ export * from "./tPitchFx";
 export * from "./tPlayer";
 export * from "./tRegex";
 export * from "./tTeam";
-export * from "./tVenue";
