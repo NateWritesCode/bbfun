@@ -120,10 +120,16 @@ CREATE TABLE `parks` (
 --> statement-breakpoint
 CREATE TABLE `players` (
 	`bbRefId` text NOT NULL,
+	`date` integer NOT NULL,
+	`firstName` text NOT NULL,
+	`lastName` text NOT NULL,
 	`id` text PRIMARY KEY NOT NULL,
+	`nickname` text,
 	`position` text NOT NULL,
 	`ratings` text NOT NULL,
-	`slug` text NOT NULL
+	`slug` text NOT NULL,
+	`teamId` text NOT NULL,
+	FOREIGN KEY (`teamId`) REFERENCES `teams`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
 CREATE TABLE `subLeagues` (

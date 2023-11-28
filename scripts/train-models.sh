@@ -1,17 +1,15 @@
-server_dir=$(pwd)/apps/server
+start=$(date +%s)
 training_dir=$(pwd)/apps/training
-export NUM_EPOCHS=1
-
-cd $server_dir;
-
-pm2 stop pm2.config.cjs;
-pm2 start pm2.config.cjs;
+export NUM_EPOCHS=100
 
 cd $training_dir;
 bun run src/pitch-picker.ts;
-# bun run src/pitch-locater.ts;
-# bun run src/pitch-outcome.ts;
-# bun run src/pitch-in-play.ts;
+bun run src/pitch-locater.ts;
+bun run src/pitch-outcome.ts;
+bun run src/pitch-in-play.ts;
 
-cd $server_dir;
-pm2 stop pm2.config.cjs;
+end=$(date +%s)
+
+runtime=$((end-start))
+
+echo "Total execution time for traing all models: $runtime seconds"

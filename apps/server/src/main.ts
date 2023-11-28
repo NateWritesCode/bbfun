@@ -4,57 +4,59 @@ import { POSITIONS } from "@bbfun/utils";
 import { FakeClient, GameSim } from "@bbfun/utils";
 import dayjs from "dayjs";
 
-const port = 3000;
+// const port = 3000;
 
-Bun.serve({
-	port,
-	async fetch(req) {
-		const url = new URL(req.url);
+// Bun.serve({
+// 	port,
+// 	async fetch(req) {
+// 		const url = new URL(req.url);
 
-		if (url.pathname.includes("uploadModel")) {
-			const [model] = url.pathname.split("uploadModel/").slice(1);
+// 		if (url.pathname.includes("uploadModel")) {
+// 			const [model] = url.pathname.split("uploadModel/").slice(1);
 
-			const formData = await req.formData();
+// 			const formData = await req.formData();
 
-			const modelJson = formData.get("model.json");
-			const weightsBin = formData.get("model.weights.bin");
+// 			const modelJson = formData.get("model.json");
+// 			const weightsBin = formData.get("model.weights.bin");
 
-			if (!modelJson || !weightsBin) {
-				return new Response(null, { status: 400 });
-			}
+// 			if (!modelJson || !weightsBin) {
+// 				return new Response(null, { status: 400 });
+// 			}
 
-			console.info("Uploading model", model);
+// 			console.info("Uploading model", model);
 
-			await Bun.write(
-				`./src/models/${model}/model.json`,
-				modelJson as unknown as Blob,
-			);
-			await Bun.write(
-				`./src/models/${model}/model.weights.bin`,
-				weightsBin as unknown as Blob,
-			);
+// 			await Bun.write(
+// 				`./src/models/${model}/model.json`,
+// 				modelJson as unknown as Blob,
+// 			);
+// 			await Bun.write(
+// 				`./src/models/${model}/model.weights.bin`,
+// 				weightsBin as unknown as Blob,
+// 			);
 
-			console.info("Finished uploading model", model);
+// 			console.info("Finished uploading model", model);
 
-			return new Response(null, { status: 200 });
-		}
+// 			return new Response(null, { status: 200 });
+// 		}
 
-		const filePath = `./src${url.pathname}`;
-		const file = Bun.file(filePath).stream();
-		return new Response(file);
-	},
-	error() {
-		return new Response(null, { status: 404 });
-	},
-});
+// 		const filePath = `./src${url.pathname}`;
+// 		const file = Bun.file(filePath).stream();
+// 		return new Response(file);
+// 	},
+// 	error() {
+// 		return new Response(null, { status: 404 });
+// 	},
+// });
 
-console.info(`Server running at http://localhost:${port}`);
+// console.info(`Server running at http://localhost:${port}`);
 
-// const { modelClient } = await initServer();
+const { modelClient } = await initServer();
 
-// const fakeClient = new FakeClient();
+const fakeClient = new FakeClient();
 
 const db = new Db();
+
+// db.seed();
 
 const games = db.getGamesForDay("2011-03-31");
 

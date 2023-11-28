@@ -15,7 +15,8 @@ import {
 	wrangleXPitchOutcome,
 } from "@bbfun/utils";
 import { wrangleXPitchLocater, wrangleXPitchPicker } from "@bbfun/utils";
-import tf from "@tensorflow/tfjs";
+import { PATH_MODEL_ROOT } from "@bbfun/utils";
+import * as tf from "@tensorflow/tfjs-node";
 
 class ModelClient {
 	pitchInPlay: tf.LayersModel | null = null;
@@ -25,16 +26,16 @@ class ModelClient {
 
 	init = async () => {
 		this.pitchInPlay = await tf.loadLayersModel(
-			"http://localhost:3000/models/pitch-in-play/model.json",
+			`file://${PATH_MODEL_ROOT}/pitch-in-play/model.json`,
 		);
 		this.pitchLocater = await tf.loadLayersModel(
-			"http://localhost:3000/models/pitch-locater/model.json",
+			`file://${PATH_MODEL_ROOT}/pitch-locater/model.json`,
 		);
 		this.pitchOutcome = await tf.loadLayersModel(
-			"http://localhost:3000/models/pitch-outcome/model.json",
+			`file://${PATH_MODEL_ROOT}/pitch-outcome/model.json`,
 		);
 		this.pitchPicker = await tf.loadLayersModel(
-			"http://localhost:3000/models/pitch-picker/model.json",
+			`file://${PATH_MODEL_ROOT}/pitch-picker/model.json`,
 		);
 
 		console.info("Models loaded");

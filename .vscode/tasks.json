@@ -17,11 +17,6 @@
 			"command": "bash scripts/db-studio.sh"
 		},
 		{
-			"label": "dev-server",
-			"type": "shell",
-			"command": "bash scripts/dev-server.sh"
-		},
-		{
 			"label": "format",
 			"type": "shell",
 			"command": "bash scripts/format.sh"
@@ -32,14 +27,19 @@
 			"command": "bash scripts/lint.sh"
 		},
 		{
+			"label": "models:train-all",
+			"type": "shell",
+			"command": "bash scripts/train-models.sh"
+		},
+		{
+			"label": "server:dev",
+			"type": "shell",
+			"command": "bash scripts/server-dev.sh"
+		},
+		{
 			"label": "test",
 			"type": "shell",
 			"command": "bash scripts/test.sh"
-		},
-		{
-			"label": "train-models",
-			"type": "shell",
-			"command": "bash scripts/train-models.sh"
 		},
 		{
 			"label": "wrangle:ootp",

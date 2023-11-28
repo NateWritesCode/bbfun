@@ -1,4 +1,4 @@
-import tf from "@tensorflow/tfjs-node";
+import * as tf from "@tensorflow/tfjs-node";
 import { z } from "zod";
 
 import {
@@ -170,5 +170,5 @@ model.compile({
 
 	console.info("numRight", numRight);
 	console.info("accuracy", numRight / testingData.length);
-	await model.save(`http://localhost:3000/uploadModel/${MODEL_NAME}`);
+	await model.save(`file://${PATH_MODEL_ROOT}/${MODEL_NAME}`);
 })();

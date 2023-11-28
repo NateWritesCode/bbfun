@@ -24,7 +24,7 @@
     "@libsql/client": "^0.3.6",
     "@types/lodash": "^4.14.200",
     "bun-types": "latest",
-    "drizzle-kit": "^0.20.2",
+    "drizzle-kit": "latest",
     "typescript": "^5.2.2"
   }
 }

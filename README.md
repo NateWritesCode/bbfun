@@ -54,7 +54,9 @@ Baseball Fun is an open-source baseball simulator.
 
 ## Conventions
 
-The utils package hosts the constants, entities, functions, and types that are shared across the project.
+- Camel case everything
+
+- The utils package hosts the constants, entities, functions, and types that are shared across the project.
 
 The file names are prefixed with an abbreviation of the type of file for easier searchability within VSCode.
 - `cFILENAME = constants`
@@ -62,9 +64,11 @@ The file names are prefixed with an abbreviation of the type of file for easier 
 - `fFILENAME = functions`
 - `tFILENAME = types`
 
+
+
 ## Current Bun limitations
 
-- Haven't been able to find a Node.js machine learning library that works in Bun. I'm currently using TensorFlowJS, but it's not ideal. Training is slow and need to save/access the models via upload and download the models to/from the server.
+~~Haven't been able to find a Node.js machine learning library that works in Bun. I'm currently using TensorFlowJS, but it's not ideal. Training is slow and need to save/access the models via upload and download the models to/from the server.~~ TensorFlowJS Node is working in Bun!
 
 ## Feedback
 
