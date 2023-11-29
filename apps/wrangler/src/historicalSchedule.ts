@@ -26,60 +26,60 @@ let iterYear = FIRST_YEAR;
 // 12         Date of makeup if played in the form "yyyymmdd" (more detail below)
 
 while (iterYear <= LAST_YEAR) {
-	let filename = `${iterYear.toString()}SKED`;
+   let filename = `${iterYear.toString()}SKED`;
 
-	const is2020 = iterYear === 2020;
-	if (is2020) {
-		filename = `${iterYear.toString()}ORIG`;
-	}
+   const is2020 = iterYear === 2020;
+   if (is2020) {
+      filename = `${iterYear.toString()}ORIG`;
+   }
 
-	const filepath = `${PATH_INPUT}/${filename}.TXT`;
-	const foo = Bun.file(filepath);
-	const text = await foo.text();
-	const lines = text.trim().split("\n");
-	const holder = lines.map((line) => {
-		const [
-			date,
-			numOfGame,
-			dayOfWeek,
-			visitingTeamId,
-			visitingLeagueId,
-			visitingGameNumber,
-			homeTeamId,
-			homeLeagueId,
-			homeGameNumber,
-			timeOfDay,
-			scheduleChangeReason,
-			dateOfMakeup,
-		] = line
-			.split(",")
-			.map((x) => x.trim())
-			.map((x) => x.replace(/"/g, ""));
+   const filepath = `${PATH_INPUT}/${filename}.TXT`;
+   const foo = Bun.file(filepath);
+   const text = await foo.text();
+   const lines = text.trim().split("\n");
+   const holder = lines.map((line) => {
+      const [
+         date,
+         numOfGame,
+         dayOfWeek,
+         visitingTeamId,
+         visitingLeagueId,
+         visitingGameNumber,
+         homeTeamId,
+         homeLeagueId,
+         homeGameNumber,
+         timeOfDay,
+         scheduleChangeReason,
+         dateOfMakeup,
+      ] = line
+         .split(",")
+         .map((x) => x.trim())
+         .map((x) => x.replace(/"/g, ""));
 
-		return {
-			date: formatDate(date),
-			homeGameNumber: parseInt(homeGameNumber),
-			homeTeamId,
-			homeLeagueId,
-			numOfGame: parseInt(numOfGame),
-			visitingGameNumber: parseInt(visitingGameNumber),
-			visitingTeamId,
-			visitingLeagueId,
-		};
-	});
+      return {
+         date: formatDate(date),
+         homeGameNumber: parseInt(homeGameNumber),
+         homeTeamId,
+         homeLeagueId,
+         numOfGame: parseInt(numOfGame),
+         visitingGameNumber: parseInt(visitingGameNumber),
+         visitingTeamId,
+         visitingLeagueId,
+      };
+   });
 
-	createFolderPathIfNeeded(PATH_OUTPUT);
-	await Bun.write(
-		`${PATH_OUTPUT}/${iterYear}.json`,
-		JSON.stringify(holder, null, 2),
-	);
+   createFolderPathIfNeeded(PATH_OUTPUT);
+   await Bun.write(
+      `${PATH_OUTPUT}/${iterYear}.json`,
+      JSON.stringify(holder, null, 2),
+   );
 
-	iterYear += 1;
+   iterYear += 1;
 }
 
 function formatDate(dateString: string) {
-	const year = dateString.slice(0, 4);
-	const month = dateString.slice(4, 6);
-	const day = dateString.slice(6, 8);
-	return `${year}-${month}-${day}`;
+   const year = dateString.slice(0, 4);
+   const month = dateString.slice(4, 6);
+   const day = dateString.slice(6, 8);
+   return `${year}-${month}-${day}`;
 }

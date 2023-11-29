@@ -1,1981 +1,1805 @@
 {
-  "version": "5",
-  "dialect": "sqlite",
-  "id": "03efd9ab-284f-41d8-b493-8950c2a23129",
-  "prevId": "00000000-0000-0000-0000-000000000000",
-  "tables": {
-    "divisions": {
-      "name": "divisions",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "leagueId": {
-          "name": "leagueId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "slug": {
-          "name": "slug",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "subLeagueId": {
-          "name": "subLeagueId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "divisions_leagueId_leagues_id_fk": {
-          "name": "divisions_leagueId_leagues_id_fk",
-          "tableFrom": "divisions",
-          "tableTo": "leagues",
-          "columnsFrom": [
-            "leagueId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "divisions_subLeagueId_subLeagues_id_fk": {
-          "name": "divisions_subLeagueId_subLeagues_id_fk",
-          "tableFrom": "divisions",
-          "tableTo": "subLeagues",
-          "columnsFrom": [
-            "subLeagueId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "gameGroups": {
-      "name": "gameGroups",
-      "columns": {
-        "endDate": {
-          "name": "endDate",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "hasPlayoffs": {
-          "name": "hasPlayoffs",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "leagueId": {
-          "name": "leagueId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "slug": {
-          "name": "slug",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "startDate": {
-          "name": "startDate",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "gameGroups_leagueId_leagues_id_fk": {
-          "name": "gameGroups_leagueId_leagues_id_fk",
-          "tableFrom": "gameGroups",
-          "tableTo": "leagues",
-          "columnsFrom": [
-            "leagueId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "games": {
-      "name": "games",
-      "columns": {
-        "date": {
-          "name": "date",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "gameGroupId": {
-          "name": "gameGroupId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "leagueId": {
-          "name": "leagueId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "teamIdAway": {
-          "name": "teamIdAway",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "teamIdHome": {
-          "name": "teamIdHome",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "time": {
-          "name": "time",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "games_gameGroupId_gameGroups_id_fk": {
-          "name": "games_gameGroupId_gameGroups_id_fk",
-          "tableFrom": "games",
-          "tableTo": "gameGroups",
-          "columnsFrom": [
-            "gameGroupId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "games_leagueId_leagues_id_fk": {
-          "name": "games_leagueId_leagues_id_fk",
-          "tableFrom": "games",
-          "tableTo": "leagues",
-          "columnsFrom": [
-            "leagueId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "games_teamIdAway_teams_id_fk": {
-          "name": "games_teamIdAway_teams_id_fk",
-          "tableFrom": "games",
-          "tableTo": "teams",
-          "columnsFrom": [
-            "teamIdAway"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "games_teamIdHome_teams_id_fk": {
-          "name": "games_teamIdHome_teams_id_fk",
-          "tableFrom": "games",
-          "tableTo": "teams",
-          "columnsFrom": [
-            "teamIdHome"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "leagues": {
-      "name": "leagues",
-      "columns": {
-        "abbrev": {
-          "name": "abbrev",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "slug": {
-          "name": "slug",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "parks": {
-      "name": "parks",
-      "columns": {
-        "avg": {
-          "name": "avg",
-          "type": "real",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "avgL": {
-          "name": "avgL",
-          "type": "real",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "avgR": {
-          "name": "avgR",
-          "type": "real",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "basesX0": {
-          "name": "basesX0",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "basesX1": {
-          "name": "basesX1",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "basesX2": {
-          "name": "basesX2",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "basesY0": {
-          "name": "basesY0",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "basesY1": {
-          "name": "basesY1",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "basesY2": {
-          "name": "basesY2",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "batterLeftX": {
-          "name": "batterLeftX",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "batterLeftY": {
-          "name": "batterLeftY",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "batterRightX": {
-          "name": "batterRightX",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "batterRightY": {
-          "name": "batterRightY",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "capacity": {
-          "name": "capacity",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "d": {
-          "name": "d",
-          "type": "real",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "dimensionsX": {
-          "name": "dimensionsX",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "dimensionsY": {
-          "name": "dimensionsY",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "distances0": {
-          "name": "distances0",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "distances1": {
-          "name": "distances1",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "distances2": {
-          "name": "distances2",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "distances3": {
-          "name": "distances3",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "distances4": {
-          "name": "distances4",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "distances5": {
-          "name": "distances5",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "distances6": {
-          "name": "distances6",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "foulGround": {
-          "name": "foulGround",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "hr": {
-          "name": "hr",
-          "type": "real",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "hrL": {
-          "name": "hrL",
-          "type": "real",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "hrR": {
-          "name": "hrR",
-          "type": "real",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "isHomeTeamDugoutAtFirstBase": {
-          "name": "isHomeTeamDugoutAtFirstBase",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "positionsX0": {
-          "name": "positionsX0",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "positionsX1": {
-          "name": "positionsX1",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "positionsX2": {
-          "name": "positionsX2",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "positionsX3": {
-          "name": "positionsX3",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "positionsX4": {
-          "name": "positionsX4",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "positionsX5": {
-          "name": "positionsX5",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "positionsX6": {
-          "name": "positionsX6",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "positionsX7": {
-          "name": "positionsX7",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "positionsX8": {
-          "name": "positionsX8",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "positionsX9": {
-          "name": "positionsX9",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "positionsY0": {
-          "name": "positionsY0",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "positionsY1": {
-          "name": "positionsY1",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "positionsY2": {
-          "name": "positionsY2",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "positionsY3": {
-          "name": "positionsY3",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "positionsY4": {
-          "name": "positionsY4",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "positionsY5": {
-          "name": "positionsY5",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "positionsY6": {
-          "name": "positionsY6",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "positionsY7": {
-          "name": "positionsY7",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "positionsY8": {
-          "name": "positionsY8",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "positionsY9": {
-          "name": "positionsY9",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "rain0": {
-          "name": "rain0",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "rain1": {
-          "name": "rain1",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "rain2": {
-          "name": "rain2",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "rain3": {
-          "name": "rain3",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "rain4": {
-          "name": "rain4",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "rain5": {
-          "name": "rain5",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "rain6": {
-          "name": "rain6",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "rain7": {
-          "name": "rain7",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "rain8": {
-          "name": "rain8",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "rain9": {
-          "name": "rain9",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "rain10": {
-          "name": "rain10",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "rain11": {
-          "name": "rain11",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "slug": {
-          "name": "slug",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "t": {
-          "name": "t",
-          "type": "real",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "temperature0": {
-          "name": "temperature0",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "temperature1": {
-          "name": "temperature1",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "temperature2": {
-          "name": "temperature2",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "temperature3": {
-          "name": "temperature3",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "temperature4": {
-          "name": "temperature4",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "temperature5": {
-          "name": "temperature5",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "temperature6": {
-          "name": "temperature6",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "temperature7": {
-          "name": "temperature7",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "temperature8": {
-          "name": "temperature8",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "temperature9": {
-          "name": "temperature9",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "temperature10": {
-          "name": "temperature10",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "temperature11": {
-          "name": "temperature11",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "turf": {
-          "name": "turf",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "type": {
-          "name": "type",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "wallHeights0": {
-          "name": "wallHeights0",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "wallHeights1": {
-          "name": "wallHeights1",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "wallHeights2": {
-          "name": "wallHeights2",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "wallHeights3": {
-          "name": "wallHeights3",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "wallHeights4": {
-          "name": "wallHeights4",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "wallHeights5": {
-          "name": "wallHeights5",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "wallHeights6": {
-          "name": "wallHeights6",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "wind": {
-          "name": "wind",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "windDirection": {
-          "name": "windDirection",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "players": {
-      "name": "players",
-      "columns": {
-        "bbRefId": {
-          "name": "bbRefId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "date": {
-          "name": "date",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "firstName": {
-          "name": "firstName",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "lastName": {
-          "name": "lastName",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "nickname": {
-          "name": "nickname",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "position": {
-          "name": "position",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "ratings": {
-          "name": "ratings",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "slug": {
-          "name": "slug",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "teamId": {
-          "name": "teamId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "players_teamId_teams_id_fk": {
-          "name": "players_teamId_teams_id_fk",
-          "tableFrom": "players",
-          "tableTo": "teams",
-          "columnsFrom": [
-            "teamId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "statsBattingPlayerGame": {
-      "name": "statsBattingPlayerGame",
-      "columns": {
-        "gameGroupId": {
-          "name": "gameGroupId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "gameId": {
-          "name": "gameId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "leagueId": {
-          "name": "leagueId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "playerId": {
-          "name": "playerId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "teamId": {
-          "name": "teamId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "runs": {
-          "name": "runs",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "statsBattingPlayerGame_gameGroupId_gameGroups_id_fk": {
-          "name": "statsBattingPlayerGame_gameGroupId_gameGroups_id_fk",
-          "tableFrom": "statsBattingPlayerGame",
-          "tableTo": "gameGroups",
-          "columnsFrom": [
-            "gameGroupId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "statsBattingPlayerGame_leagueId_leagues_id_fk": {
-          "name": "statsBattingPlayerGame_leagueId_leagues_id_fk",
-          "tableFrom": "statsBattingPlayerGame",
-          "tableTo": "leagues",
-          "columnsFrom": [
-            "leagueId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "statsBattingPlayerGame_playerId_players_id_fk": {
-          "name": "statsBattingPlayerGame_playerId_players_id_fk",
-          "tableFrom": "statsBattingPlayerGame",
-          "tableTo": "players",
-          "columnsFrom": [
-            "playerId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "statsBattingPlayerGame_teamId_teams_id_fk": {
-          "name": "statsBattingPlayerGame_teamId_teams_id_fk",
-          "tableFrom": "statsBattingPlayerGame",
-          "tableTo": "teams",
-          "columnsFrom": [
-            "teamId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "statsBattingPlayerGame_gameId_gameGroupId_playerId_pk": {
-          "columns": [
-            "gameGroupId",
-            "gameId",
-            "playerId"
-          ],
-          "name": "statsBattingPlayerGame_gameId_gameGroupId_playerId_pk"
-        }
-      },
-      "uniqueConstraints": {}
-    },
-    "statsBattingPlayerGameGroup": {
-      "name": "statsBattingPlayerGameGroup",
-      "columns": {
-        "gameGroupId": {
-          "name": "gameGroupId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "leagueId": {
-          "name": "leagueId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "playerId": {
-          "name": "playerId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "teamId": {
-          "name": "teamId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "runs": {
-          "name": "runs",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "statsBattingPlayerGameGroup_leagueId_leagues_id_fk": {
-          "name": "statsBattingPlayerGameGroup_leagueId_leagues_id_fk",
-          "tableFrom": "statsBattingPlayerGameGroup",
-          "tableTo": "leagues",
-          "columnsFrom": [
-            "leagueId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "statsBattingPlayerGameGroup_playerId_players_id_fk": {
-          "name": "statsBattingPlayerGameGroup_playerId_players_id_fk",
-          "tableFrom": "statsBattingPlayerGameGroup",
-          "tableTo": "players",
-          "columnsFrom": [
-            "playerId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "statsBattingPlayerGameGroup_teamId_teams_id_fk": {
-          "name": "statsBattingPlayerGameGroup_teamId_teams_id_fk",
-          "tableFrom": "statsBattingPlayerGameGroup",
-          "tableTo": "teams",
-          "columnsFrom": [
-            "teamId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "statsBattingPlayerGameGroup_gameGroupId_teamId_pk": {
-          "columns": [
-            "gameGroupId",
-            "teamId"
-          ],
-          "name": "statsBattingPlayerGameGroup_gameGroupId_teamId_pk"
-        }
-      },
-      "uniqueConstraints": {}
-    },
-    "statsBattingTeamGame": {
-      "name": "statsBattingTeamGame",
-      "columns": {
-        "gameGroupId": {
-          "name": "gameGroupId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "gameId": {
-          "name": "gameId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "leagueId": {
-          "name": "leagueId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "teamId": {
-          "name": "teamId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "runs": {
-          "name": "runs",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "statsBattingTeamGame_gameGroupId_gameGroups_id_fk": {
-          "name": "statsBattingTeamGame_gameGroupId_gameGroups_id_fk",
-          "tableFrom": "statsBattingTeamGame",
-          "tableTo": "gameGroups",
-          "columnsFrom": [
-            "gameGroupId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "statsBattingTeamGame_leagueId_leagues_id_fk": {
-          "name": "statsBattingTeamGame_leagueId_leagues_id_fk",
-          "tableFrom": "statsBattingTeamGame",
-          "tableTo": "leagues",
-          "columnsFrom": [
-            "leagueId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "statsBattingTeamGame_teamId_teams_id_fk": {
-          "name": "statsBattingTeamGame_teamId_teams_id_fk",
-          "tableFrom": "statsBattingTeamGame",
-          "tableTo": "teams",
-          "columnsFrom": [
-            "teamId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "statsBattingTeamGame_gameId_gameGroupId_teamId_pk": {
-          "columns": [
-            "gameGroupId",
-            "gameId",
-            "teamId"
-          ],
-          "name": "statsBattingTeamGame_gameId_gameGroupId_teamId_pk"
-        }
-      },
-      "uniqueConstraints": {}
-    },
-    "statsBattingTeamGameGroup": {
-      "name": "statsBattingTeamGameGroup",
-      "columns": {
-        "gameGroupId": {
-          "name": "gameGroupId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "leagueId": {
-          "name": "leagueId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "teamId": {
-          "name": "teamId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "runs": {
-          "name": "runs",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "statsBattingTeamGameGroup_leagueId_leagues_id_fk": {
-          "name": "statsBattingTeamGameGroup_leagueId_leagues_id_fk",
-          "tableFrom": "statsBattingTeamGameGroup",
-          "tableTo": "leagues",
-          "columnsFrom": [
-            "leagueId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "statsBattingTeamGameGroup_teamId_teams_id_fk": {
-          "name": "statsBattingTeamGameGroup_teamId_teams_id_fk",
-          "tableFrom": "statsBattingTeamGameGroup",
-          "tableTo": "teams",
-          "columnsFrom": [
-            "teamId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "statsBattingTeamGameGroup_gameGroupId_teamId_pk": {
-          "columns": [
-            "gameGroupId",
-            "teamId"
-          ],
-          "name": "statsBattingTeamGameGroup_gameGroupId_teamId_pk"
-        }
-      },
-      "uniqueConstraints": {}
-    },
-    "statsPitchingPlayerGame": {
-      "name": "statsPitchingPlayerGame",
-      "columns": {
-        "gameGroupId": {
-          "name": "gameGroupId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "gameId": {
-          "name": "gameId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "leagueId": {
-          "name": "leagueId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "playerId": {
-          "name": "playerId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "teamId": {
-          "name": "teamId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "runs": {
-          "name": "runs",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "statsPitchingPlayerGame_gameGroupId_gameGroups_id_fk": {
-          "name": "statsPitchingPlayerGame_gameGroupId_gameGroups_id_fk",
-          "tableFrom": "statsPitchingPlayerGame",
-          "tableTo": "gameGroups",
-          "columnsFrom": [
-            "gameGroupId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "statsPitchingPlayerGame_leagueId_leagues_id_fk": {
-          "name": "statsPitchingPlayerGame_leagueId_leagues_id_fk",
-          "tableFrom": "statsPitchingPlayerGame",
-          "tableTo": "leagues",
-          "columnsFrom": [
-            "leagueId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "statsPitchingPlayerGame_playerId_players_id_fk": {
-          "name": "statsPitchingPlayerGame_playerId_players_id_fk",
-          "tableFrom": "statsPitchingPlayerGame",
-          "tableTo": "players",
-          "columnsFrom": [
-            "playerId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "statsPitchingPlayerGame_teamId_teams_id_fk": {
-          "name": "statsPitchingPlayerGame_teamId_teams_id_fk",
-          "tableFrom": "statsPitchingPlayerGame",
-          "tableTo": "teams",
-          "columnsFrom": [
-            "teamId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "statsPitchingPlayerGame_gameId_gameGroupId_playerId_pk": {
-          "columns": [
-            "gameGroupId",
-            "gameId",
-            "playerId"
-          ],
-          "name": "statsPitchingPlayerGame_gameId_gameGroupId_playerId_pk"
-        }
-      },
-      "uniqueConstraints": {}
-    },
-    "statsPitchingPlayerGameGroup": {
-      "name": "statsPitchingPlayerGameGroup",
-      "columns": {
-        "gameGroupId": {
-          "name": "gameGroupId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "leagueId": {
-          "name": "leagueId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "playerId": {
-          "name": "playerId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "teamId": {
-          "name": "teamId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "runs": {
-          "name": "runs",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "statsPitchingPlayerGameGroup_leagueId_leagues_id_fk": {
-          "name": "statsPitchingPlayerGameGroup_leagueId_leagues_id_fk",
-          "tableFrom": "statsPitchingPlayerGameGroup",
-          "tableTo": "leagues",
-          "columnsFrom": [
-            "leagueId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "statsPitchingPlayerGameGroup_playerId_players_id_fk": {
-          "name": "statsPitchingPlayerGameGroup_playerId_players_id_fk",
-          "tableFrom": "statsPitchingPlayerGameGroup",
-          "tableTo": "players",
-          "columnsFrom": [
-            "playerId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "statsPitchingPlayerGameGroup_teamId_teams_id_fk": {
-          "name": "statsPitchingPlayerGameGroup_teamId_teams_id_fk",
-          "tableFrom": "statsPitchingPlayerGameGroup",
-          "tableTo": "teams",
-          "columnsFrom": [
-            "teamId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "statsPitchingPlayerGameGroup_gameGroupId_teamId_pk": {
-          "columns": [
-            "gameGroupId",
-            "teamId"
-          ],
-          "name": "statsPitchingPlayerGameGroup_gameGroupId_teamId_pk"
-        }
-      },
-      "uniqueConstraints": {}
-    },
-    "statsPitchingTeamGame": {
-      "name": "statsPitchingTeamGame",
-      "columns": {
-        "gameGroupId": {
-          "name": "gameGroupId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "gameId": {
-          "name": "gameId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "leagueId": {
-          "name": "leagueId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "teamId": {
-          "name": "teamId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "runs": {
-          "name": "runs",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "statsPitchingTeamGame_gameGroupId_gameGroups_id_fk": {
-          "name": "statsPitchingTeamGame_gameGroupId_gameGroups_id_fk",
-          "tableFrom": "statsPitchingTeamGame",
-          "tableTo": "gameGroups",
-          "columnsFrom": [
-            "gameGroupId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "statsPitchingTeamGame_leagueId_leagues_id_fk": {
-          "name": "statsPitchingTeamGame_leagueId_leagues_id_fk",
-          "tableFrom": "statsPitchingTeamGame",
-          "tableTo": "leagues",
-          "columnsFrom": [
-            "leagueId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "statsPitchingTeamGame_teamId_teams_id_fk": {
-          "name": "statsPitchingTeamGame_teamId_teams_id_fk",
-          "tableFrom": "statsPitchingTeamGame",
-          "tableTo": "teams",
-          "columnsFrom": [
-            "teamId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "statsPitchingTeamGame_gameId_gameGroupId_teamId_pk": {
-          "columns": [
-            "gameGroupId",
-            "gameId",
-            "teamId"
-          ],
-          "name": "statsPitchingTeamGame_gameId_gameGroupId_teamId_pk"
-        }
-      },
-      "uniqueConstraints": {}
-    },
-    "statsPitchingTeamGameGroup": {
-      "name": "statsPitchingTeamGameGroup",
-      "columns": {
-        "gameGroupId": {
-          "name": "gameGroupId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "leagueId": {
-          "name": "leagueId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "teamId": {
-          "name": "teamId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "runs": {
-          "name": "runs",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "statsPitchingTeamGameGroup_leagueId_leagues_id_fk": {
-          "name": "statsPitchingTeamGameGroup_leagueId_leagues_id_fk",
-          "tableFrom": "statsPitchingTeamGameGroup",
-          "tableTo": "leagues",
-          "columnsFrom": [
-            "leagueId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "statsPitchingTeamGameGroup_teamId_teams_id_fk": {
-          "name": "statsPitchingTeamGameGroup_teamId_teams_id_fk",
-          "tableFrom": "statsPitchingTeamGameGroup",
-          "tableTo": "teams",
-          "columnsFrom": [
-            "teamId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "statsPitchingTeamGameGroup_gameGroupId_teamId_pk": {
-          "columns": [
-            "gameGroupId",
-            "teamId"
-          ],
-          "name": "statsPitchingTeamGameGroup_gameGroupId_teamId_pk"
-        }
-      },
-      "uniqueConstraints": {}
-    },
-    "subLeagues": {
-      "name": "subLeagues",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "leagueId": {
-          "name": "leagueId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "slug": {
-          "name": "slug",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "subLeagues_leagueId_leagues_id_fk": {
-          "name": "subLeagues_leagueId_leagues_id_fk",
-          "tableFrom": "subLeagues",
-          "tableTo": "leagues",
-          "columnsFrom": [
-            "leagueId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "teams": {
-      "name": "teams",
-      "columns": {
-        "abbrev": {
-          "name": "abbrev",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "backgroundColor": {
-          "name": "backgroundColor",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "divisionId": {
-          "name": "divisionId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "hatMainColor": {
-          "name": "hatMainColor",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "hatVisorColor": {
-          "name": "hatVisorColor",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "jerseyAwayColor": {
-          "name": "jerseyAwayColor",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "jerseyMainColor": {
-          "name": "jerseyMainColor",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "leagueId": {
-          "name": "leagueId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "nickname": {
-          "name": "nickname",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "slug": {
-          "name": "slug",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "subLeagueId": {
-          "name": "subLeagueId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "textColor": {
-          "name": "textColor",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "parkId": {
-          "name": "parkId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "teams_divisionId_divisions_id_fk": {
-          "name": "teams_divisionId_divisions_id_fk",
-          "tableFrom": "teams",
-          "tableTo": "divisions",
-          "columnsFrom": [
-            "divisionId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "teams_leagueId_leagues_id_fk": {
-          "name": "teams_leagueId_leagues_id_fk",
-          "tableFrom": "teams",
-          "tableTo": "leagues",
-          "columnsFrom": [
-            "leagueId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "teams_subLeagueId_subLeagues_id_fk": {
-          "name": "teams_subLeagueId_subLeagues_id_fk",
-          "tableFrom": "teams",
-          "tableTo": "subLeagues",
-          "columnsFrom": [
-            "subLeagueId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "teams_parkId_parks_id_fk": {
-          "name": "teams_parkId_parks_id_fk",
-          "tableFrom": "teams",
-          "tableTo": "parks",
-          "columnsFrom": [
-            "parkId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    }
-  },
-  "enums": {},
-  "_meta": {
-    "schemas": {},
-    "tables": {},
-    "columns": {}
-  }
+	"version": "5",
+	"dialect": "sqlite",
+	"id": "03efd9ab-284f-41d8-b493-8950c2a23129",
+	"prevId": "00000000-0000-0000-0000-000000000000",
+	"tables": {
+		"divisions": {
+			"name": "divisions",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "text",
+					"primaryKey": true,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"leagueId": {
+					"name": "leagueId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"name": {
+					"name": "name",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"slug": {
+					"name": "slug",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"subLeagueId": {
+					"name": "subLeagueId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"divisions_leagueId_leagues_id_fk": {
+					"name": "divisions_leagueId_leagues_id_fk",
+					"tableFrom": "divisions",
+					"tableTo": "leagues",
+					"columnsFrom": ["leagueId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				},
+				"divisions_subLeagueId_subLeagues_id_fk": {
+					"name": "divisions_subLeagueId_subLeagues_id_fk",
+					"tableFrom": "divisions",
+					"tableTo": "subLeagues",
+					"columnsFrom": ["subLeagueId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {}
+		},
+		"gameGroups": {
+			"name": "gameGroups",
+			"columns": {
+				"endDate": {
+					"name": "endDate",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"hasPlayoffs": {
+					"name": "hasPlayoffs",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"id": {
+					"name": "id",
+					"type": "text",
+					"primaryKey": true,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"leagueId": {
+					"name": "leagueId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"name": {
+					"name": "name",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"slug": {
+					"name": "slug",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"startDate": {
+					"name": "startDate",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"gameGroups_leagueId_leagues_id_fk": {
+					"name": "gameGroups_leagueId_leagues_id_fk",
+					"tableFrom": "gameGroups",
+					"tableTo": "leagues",
+					"columnsFrom": ["leagueId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {}
+		},
+		"games": {
+			"name": "games",
+			"columns": {
+				"date": {
+					"name": "date",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"gameGroupId": {
+					"name": "gameGroupId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"id": {
+					"name": "id",
+					"type": "text",
+					"primaryKey": true,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"leagueId": {
+					"name": "leagueId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"teamIdAway": {
+					"name": "teamIdAway",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"teamIdHome": {
+					"name": "teamIdHome",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"time": {
+					"name": "time",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"games_gameGroupId_gameGroups_id_fk": {
+					"name": "games_gameGroupId_gameGroups_id_fk",
+					"tableFrom": "games",
+					"tableTo": "gameGroups",
+					"columnsFrom": ["gameGroupId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				},
+				"games_leagueId_leagues_id_fk": {
+					"name": "games_leagueId_leagues_id_fk",
+					"tableFrom": "games",
+					"tableTo": "leagues",
+					"columnsFrom": ["leagueId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				},
+				"games_teamIdAway_teams_id_fk": {
+					"name": "games_teamIdAway_teams_id_fk",
+					"tableFrom": "games",
+					"tableTo": "teams",
+					"columnsFrom": ["teamIdAway"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				},
+				"games_teamIdHome_teams_id_fk": {
+					"name": "games_teamIdHome_teams_id_fk",
+					"tableFrom": "games",
+					"tableTo": "teams",
+					"columnsFrom": ["teamIdHome"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {}
+		},
+		"leagues": {
+			"name": "leagues",
+			"columns": {
+				"abbrev": {
+					"name": "abbrev",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"id": {
+					"name": "id",
+					"type": "text",
+					"primaryKey": true,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"name": {
+					"name": "name",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"slug": {
+					"name": "slug",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {}
+		},
+		"parks": {
+			"name": "parks",
+			"columns": {
+				"avg": {
+					"name": "avg",
+					"type": "real",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"avgL": {
+					"name": "avgL",
+					"type": "real",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"avgR": {
+					"name": "avgR",
+					"type": "real",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"basesX0": {
+					"name": "basesX0",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"basesX1": {
+					"name": "basesX1",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"basesX2": {
+					"name": "basesX2",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"basesY0": {
+					"name": "basesY0",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"basesY1": {
+					"name": "basesY1",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"basesY2": {
+					"name": "basesY2",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"batterLeftX": {
+					"name": "batterLeftX",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"batterLeftY": {
+					"name": "batterLeftY",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"batterRightX": {
+					"name": "batterRightX",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"batterRightY": {
+					"name": "batterRightY",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"capacity": {
+					"name": "capacity",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"d": {
+					"name": "d",
+					"type": "real",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"dimensionsX": {
+					"name": "dimensionsX",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"dimensionsY": {
+					"name": "dimensionsY",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"distances0": {
+					"name": "distances0",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"distances1": {
+					"name": "distances1",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"distances2": {
+					"name": "distances2",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"distances3": {
+					"name": "distances3",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"distances4": {
+					"name": "distances4",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"distances5": {
+					"name": "distances5",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"distances6": {
+					"name": "distances6",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"foulGround": {
+					"name": "foulGround",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"hr": {
+					"name": "hr",
+					"type": "real",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"hrL": {
+					"name": "hrL",
+					"type": "real",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"hrR": {
+					"name": "hrR",
+					"type": "real",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"id": {
+					"name": "id",
+					"type": "text",
+					"primaryKey": true,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"isHomeTeamDugoutAtFirstBase": {
+					"name": "isHomeTeamDugoutAtFirstBase",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"name": {
+					"name": "name",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"positionsX0": {
+					"name": "positionsX0",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"positionsX1": {
+					"name": "positionsX1",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"positionsX2": {
+					"name": "positionsX2",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"positionsX3": {
+					"name": "positionsX3",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"positionsX4": {
+					"name": "positionsX4",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"positionsX5": {
+					"name": "positionsX5",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"positionsX6": {
+					"name": "positionsX6",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"positionsX7": {
+					"name": "positionsX7",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"positionsX8": {
+					"name": "positionsX8",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"positionsX9": {
+					"name": "positionsX9",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"positionsY0": {
+					"name": "positionsY0",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"positionsY1": {
+					"name": "positionsY1",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"positionsY2": {
+					"name": "positionsY2",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"positionsY3": {
+					"name": "positionsY3",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"positionsY4": {
+					"name": "positionsY4",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"positionsY5": {
+					"name": "positionsY5",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"positionsY6": {
+					"name": "positionsY6",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"positionsY7": {
+					"name": "positionsY7",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"positionsY8": {
+					"name": "positionsY8",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"positionsY9": {
+					"name": "positionsY9",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"rain0": {
+					"name": "rain0",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"rain1": {
+					"name": "rain1",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"rain2": {
+					"name": "rain2",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"rain3": {
+					"name": "rain3",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"rain4": {
+					"name": "rain4",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"rain5": {
+					"name": "rain5",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"rain6": {
+					"name": "rain6",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"rain7": {
+					"name": "rain7",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"rain8": {
+					"name": "rain8",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"rain9": {
+					"name": "rain9",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"rain10": {
+					"name": "rain10",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"rain11": {
+					"name": "rain11",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"slug": {
+					"name": "slug",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"t": {
+					"name": "t",
+					"type": "real",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"temperature0": {
+					"name": "temperature0",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"temperature1": {
+					"name": "temperature1",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"temperature2": {
+					"name": "temperature2",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"temperature3": {
+					"name": "temperature3",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"temperature4": {
+					"name": "temperature4",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"temperature5": {
+					"name": "temperature5",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"temperature6": {
+					"name": "temperature6",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"temperature7": {
+					"name": "temperature7",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"temperature8": {
+					"name": "temperature8",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"temperature9": {
+					"name": "temperature9",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"temperature10": {
+					"name": "temperature10",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"temperature11": {
+					"name": "temperature11",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"turf": {
+					"name": "turf",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"type": {
+					"name": "type",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"wallHeights0": {
+					"name": "wallHeights0",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"wallHeights1": {
+					"name": "wallHeights1",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"wallHeights2": {
+					"name": "wallHeights2",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"wallHeights3": {
+					"name": "wallHeights3",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"wallHeights4": {
+					"name": "wallHeights4",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"wallHeights5": {
+					"name": "wallHeights5",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"wallHeights6": {
+					"name": "wallHeights6",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"wind": {
+					"name": "wind",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"windDirection": {
+					"name": "windDirection",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {}
+		},
+		"players": {
+			"name": "players",
+			"columns": {
+				"bbRefId": {
+					"name": "bbRefId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"date": {
+					"name": "date",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"firstName": {
+					"name": "firstName",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"lastName": {
+					"name": "lastName",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"id": {
+					"name": "id",
+					"type": "text",
+					"primaryKey": true,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"nickname": {
+					"name": "nickname",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false,
+					"autoincrement": false
+				},
+				"position": {
+					"name": "position",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"ratings": {
+					"name": "ratings",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"slug": {
+					"name": "slug",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"teamId": {
+					"name": "teamId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"players_teamId_teams_id_fk": {
+					"name": "players_teamId_teams_id_fk",
+					"tableFrom": "players",
+					"tableTo": "teams",
+					"columnsFrom": ["teamId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {}
+		},
+		"statsBattingPlayerGame": {
+			"name": "statsBattingPlayerGame",
+			"columns": {
+				"gameGroupId": {
+					"name": "gameGroupId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"gameId": {
+					"name": "gameId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"leagueId": {
+					"name": "leagueId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"playerId": {
+					"name": "playerId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"teamId": {
+					"name": "teamId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"runs": {
+					"name": "runs",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"statsBattingPlayerGame_gameGroupId_gameGroups_id_fk": {
+					"name": "statsBattingPlayerGame_gameGroupId_gameGroups_id_fk",
+					"tableFrom": "statsBattingPlayerGame",
+					"tableTo": "gameGroups",
+					"columnsFrom": ["gameGroupId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				},
+				"statsBattingPlayerGame_leagueId_leagues_id_fk": {
+					"name": "statsBattingPlayerGame_leagueId_leagues_id_fk",
+					"tableFrom": "statsBattingPlayerGame",
+					"tableTo": "leagues",
+					"columnsFrom": ["leagueId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				},
+				"statsBattingPlayerGame_playerId_players_id_fk": {
+					"name": "statsBattingPlayerGame_playerId_players_id_fk",
+					"tableFrom": "statsBattingPlayerGame",
+					"tableTo": "players",
+					"columnsFrom": ["playerId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				},
+				"statsBattingPlayerGame_teamId_teams_id_fk": {
+					"name": "statsBattingPlayerGame_teamId_teams_id_fk",
+					"tableFrom": "statsBattingPlayerGame",
+					"tableTo": "teams",
+					"columnsFrom": ["teamId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {
+				"statsBattingPlayerGame_gameId_gameGroupId_playerId_pk": {
+					"columns": ["gameGroupId", "gameId", "playerId"],
+					"name": "statsBattingPlayerGame_gameId_gameGroupId_playerId_pk"
+				}
+			},
+			"uniqueConstraints": {}
+		},
+		"statsBattingPlayerGameGroup": {
+			"name": "statsBattingPlayerGameGroup",
+			"columns": {
+				"gameGroupId": {
+					"name": "gameGroupId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"leagueId": {
+					"name": "leagueId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"playerId": {
+					"name": "playerId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"teamId": {
+					"name": "teamId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"runs": {
+					"name": "runs",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"statsBattingPlayerGameGroup_leagueId_leagues_id_fk": {
+					"name": "statsBattingPlayerGameGroup_leagueId_leagues_id_fk",
+					"tableFrom": "statsBattingPlayerGameGroup",
+					"tableTo": "leagues",
+					"columnsFrom": ["leagueId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				},
+				"statsBattingPlayerGameGroup_playerId_players_id_fk": {
+					"name": "statsBattingPlayerGameGroup_playerId_players_id_fk",
+					"tableFrom": "statsBattingPlayerGameGroup",
+					"tableTo": "players",
+					"columnsFrom": ["playerId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				},
+				"statsBattingPlayerGameGroup_teamId_teams_id_fk": {
+					"name": "statsBattingPlayerGameGroup_teamId_teams_id_fk",
+					"tableFrom": "statsBattingPlayerGameGroup",
+					"tableTo": "teams",
+					"columnsFrom": ["teamId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {
+				"statsBattingPlayerGameGroup_gameGroupId_teamId_pk": {
+					"columns": ["gameGroupId", "teamId"],
+					"name": "statsBattingPlayerGameGroup_gameGroupId_teamId_pk"
+				}
+			},
+			"uniqueConstraints": {}
+		},
+		"statsBattingTeamGame": {
+			"name": "statsBattingTeamGame",
+			"columns": {
+				"gameGroupId": {
+					"name": "gameGroupId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"gameId": {
+					"name": "gameId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"leagueId": {
+					"name": "leagueId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"teamId": {
+					"name": "teamId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"runs": {
+					"name": "runs",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"statsBattingTeamGame_gameGroupId_gameGroups_id_fk": {
+					"name": "statsBattingTeamGame_gameGroupId_gameGroups_id_fk",
+					"tableFrom": "statsBattingTeamGame",
+					"tableTo": "gameGroups",
+					"columnsFrom": ["gameGroupId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				},
+				"statsBattingTeamGame_leagueId_leagues_id_fk": {
+					"name": "statsBattingTeamGame_leagueId_leagues_id_fk",
+					"tableFrom": "statsBattingTeamGame",
+					"tableTo": "leagues",
+					"columnsFrom": ["leagueId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				},
+				"statsBattingTeamGame_teamId_teams_id_fk": {
+					"name": "statsBattingTeamGame_teamId_teams_id_fk",
+					"tableFrom": "statsBattingTeamGame",
+					"tableTo": "teams",
+					"columnsFrom": ["teamId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {
+				"statsBattingTeamGame_gameId_gameGroupId_teamId_pk": {
+					"columns": ["gameGroupId", "gameId", "teamId"],
+					"name": "statsBattingTeamGame_gameId_gameGroupId_teamId_pk"
+				}
+			},
+			"uniqueConstraints": {}
+		},
+		"statsBattingTeamGameGroup": {
+			"name": "statsBattingTeamGameGroup",
+			"columns": {
+				"gameGroupId": {
+					"name": "gameGroupId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"leagueId": {
+					"name": "leagueId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"teamId": {
+					"name": "teamId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"runs": {
+					"name": "runs",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"statsBattingTeamGameGroup_leagueId_leagues_id_fk": {
+					"name": "statsBattingTeamGameGroup_leagueId_leagues_id_fk",
+					"tableFrom": "statsBattingTeamGameGroup",
+					"tableTo": "leagues",
+					"columnsFrom": ["leagueId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				},
+				"statsBattingTeamGameGroup_teamId_teams_id_fk": {
+					"name": "statsBattingTeamGameGroup_teamId_teams_id_fk",
+					"tableFrom": "statsBattingTeamGameGroup",
+					"tableTo": "teams",
+					"columnsFrom": ["teamId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {
+				"statsBattingTeamGameGroup_gameGroupId_teamId_pk": {
+					"columns": ["gameGroupId", "teamId"],
+					"name": "statsBattingTeamGameGroup_gameGroupId_teamId_pk"
+				}
+			},
+			"uniqueConstraints": {}
+		},
+		"statsPitchingPlayerGame": {
+			"name": "statsPitchingPlayerGame",
+			"columns": {
+				"gameGroupId": {
+					"name": "gameGroupId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"gameId": {
+					"name": "gameId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"leagueId": {
+					"name": "leagueId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"playerId": {
+					"name": "playerId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"teamId": {
+					"name": "teamId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"runs": {
+					"name": "runs",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"statsPitchingPlayerGame_gameGroupId_gameGroups_id_fk": {
+					"name": "statsPitchingPlayerGame_gameGroupId_gameGroups_id_fk",
+					"tableFrom": "statsPitchingPlayerGame",
+					"tableTo": "gameGroups",
+					"columnsFrom": ["gameGroupId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				},
+				"statsPitchingPlayerGame_leagueId_leagues_id_fk": {
+					"name": "statsPitchingPlayerGame_leagueId_leagues_id_fk",
+					"tableFrom": "statsPitchingPlayerGame",
+					"tableTo": "leagues",
+					"columnsFrom": ["leagueId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				},
+				"statsPitchingPlayerGame_playerId_players_id_fk": {
+					"name": "statsPitchingPlayerGame_playerId_players_id_fk",
+					"tableFrom": "statsPitchingPlayerGame",
+					"tableTo": "players",
+					"columnsFrom": ["playerId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				},
+				"statsPitchingPlayerGame_teamId_teams_id_fk": {
+					"name": "statsPitchingPlayerGame_teamId_teams_id_fk",
+					"tableFrom": "statsPitchingPlayerGame",
+					"tableTo": "teams",
+					"columnsFrom": ["teamId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {
+				"statsPitchingPlayerGame_gameId_gameGroupId_playerId_pk": {
+					"columns": ["gameGroupId", "gameId", "playerId"],
+					"name": "statsPitchingPlayerGame_gameId_gameGroupId_playerId_pk"
+				}
+			},
+			"uniqueConstraints": {}
+		},
+		"statsPitchingPlayerGameGroup": {
+			"name": "statsPitchingPlayerGameGroup",
+			"columns": {
+				"gameGroupId": {
+					"name": "gameGroupId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"leagueId": {
+					"name": "leagueId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"playerId": {
+					"name": "playerId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"teamId": {
+					"name": "teamId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"runs": {
+					"name": "runs",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"statsPitchingPlayerGameGroup_leagueId_leagues_id_fk": {
+					"name": "statsPitchingPlayerGameGroup_leagueId_leagues_id_fk",
+					"tableFrom": "statsPitchingPlayerGameGroup",
+					"tableTo": "leagues",
+					"columnsFrom": ["leagueId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				},
+				"statsPitchingPlayerGameGroup_playerId_players_id_fk": {
+					"name": "statsPitchingPlayerGameGroup_playerId_players_id_fk",
+					"tableFrom": "statsPitchingPlayerGameGroup",
+					"tableTo": "players",
+					"columnsFrom": ["playerId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				},
+				"statsPitchingPlayerGameGroup_teamId_teams_id_fk": {
+					"name": "statsPitchingPlayerGameGroup_teamId_teams_id_fk",
+					"tableFrom": "statsPitchingPlayerGameGroup",
+					"tableTo": "teams",
+					"columnsFrom": ["teamId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {
+				"statsPitchingPlayerGameGroup_gameGroupId_teamId_pk": {
+					"columns": ["gameGroupId", "teamId"],
+					"name": "statsPitchingPlayerGameGroup_gameGroupId_teamId_pk"
+				}
+			},
+			"uniqueConstraints": {}
+		},
+		"statsPitchingTeamGame": {
+			"name": "statsPitchingTeamGame",
+			"columns": {
+				"gameGroupId": {
+					"name": "gameGroupId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"gameId": {
+					"name": "gameId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"leagueId": {
+					"name": "leagueId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"teamId": {
+					"name": "teamId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"runs": {
+					"name": "runs",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"statsPitchingTeamGame_gameGroupId_gameGroups_id_fk": {
+					"name": "statsPitchingTeamGame_gameGroupId_gameGroups_id_fk",
+					"tableFrom": "statsPitchingTeamGame",
+					"tableTo": "gameGroups",
+					"columnsFrom": ["gameGroupId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				},
+				"statsPitchingTeamGame_leagueId_leagues_id_fk": {
+					"name": "statsPitchingTeamGame_leagueId_leagues_id_fk",
+					"tableFrom": "statsPitchingTeamGame",
+					"tableTo": "leagues",
+					"columnsFrom": ["leagueId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				},
+				"statsPitchingTeamGame_teamId_teams_id_fk": {
+					"name": "statsPitchingTeamGame_teamId_teams_id_fk",
+					"tableFrom": "statsPitchingTeamGame",
+					"tableTo": "teams",
+					"columnsFrom": ["teamId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {
+				"statsPitchingTeamGame_gameId_gameGroupId_teamId_pk": {
+					"columns": ["gameGroupId", "gameId", "teamId"],
+					"name": "statsPitchingTeamGame_gameId_gameGroupId_teamId_pk"
+				}
+			},
+			"uniqueConstraints": {}
+		},
+		"statsPitchingTeamGameGroup": {
+			"name": "statsPitchingTeamGameGroup",
+			"columns": {
+				"gameGroupId": {
+					"name": "gameGroupId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"leagueId": {
+					"name": "leagueId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"teamId": {
+					"name": "teamId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"runs": {
+					"name": "runs",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"statsPitchingTeamGameGroup_leagueId_leagues_id_fk": {
+					"name": "statsPitchingTeamGameGroup_leagueId_leagues_id_fk",
+					"tableFrom": "statsPitchingTeamGameGroup",
+					"tableTo": "leagues",
+					"columnsFrom": ["leagueId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				},
+				"statsPitchingTeamGameGroup_teamId_teams_id_fk": {
+					"name": "statsPitchingTeamGameGroup_teamId_teams_id_fk",
+					"tableFrom": "statsPitchingTeamGameGroup",
+					"tableTo": "teams",
+					"columnsFrom": ["teamId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {
+				"statsPitchingTeamGameGroup_gameGroupId_teamId_pk": {
+					"columns": ["gameGroupId", "teamId"],
+					"name": "statsPitchingTeamGameGroup_gameGroupId_teamId_pk"
+				}
+			},
+			"uniqueConstraints": {}
+		},
+		"subLeagues": {
+			"name": "subLeagues",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "text",
+					"primaryKey": true,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"leagueId": {
+					"name": "leagueId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"name": {
+					"name": "name",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"slug": {
+					"name": "slug",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"subLeagues_leagueId_leagues_id_fk": {
+					"name": "subLeagues_leagueId_leagues_id_fk",
+					"tableFrom": "subLeagues",
+					"tableTo": "leagues",
+					"columnsFrom": ["leagueId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {}
+		},
+		"teams": {
+			"name": "teams",
+			"columns": {
+				"abbrev": {
+					"name": "abbrev",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"backgroundColor": {
+					"name": "backgroundColor",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"divisionId": {
+					"name": "divisionId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"hatMainColor": {
+					"name": "hatMainColor",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"hatVisorColor": {
+					"name": "hatVisorColor",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"id": {
+					"name": "id",
+					"type": "text",
+					"primaryKey": true,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"jerseyAwayColor": {
+					"name": "jerseyAwayColor",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"jerseyMainColor": {
+					"name": "jerseyMainColor",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"leagueId": {
+					"name": "leagueId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"name": {
+					"name": "name",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"nickname": {
+					"name": "nickname",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"slug": {
+					"name": "slug",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"subLeagueId": {
+					"name": "subLeagueId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"textColor": {
+					"name": "textColor",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				},
+				"parkId": {
+					"name": "parkId",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true,
+					"autoincrement": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {
+				"teams_divisionId_divisions_id_fk": {
+					"name": "teams_divisionId_divisions_id_fk",
+					"tableFrom": "teams",
+					"tableTo": "divisions",
+					"columnsFrom": ["divisionId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				},
+				"teams_leagueId_leagues_id_fk": {
+					"name": "teams_leagueId_leagues_id_fk",
+					"tableFrom": "teams",
+					"tableTo": "leagues",
+					"columnsFrom": ["leagueId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				},
+				"teams_subLeagueId_subLeagues_id_fk": {
+					"name": "teams_subLeagueId_subLeagues_id_fk",
+					"tableFrom": "teams",
+					"tableTo": "subLeagues",
+					"columnsFrom": ["subLeagueId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				},
+				"teams_parkId_parks_id_fk": {
+					"name": "teams_parkId_parks_id_fk",
+					"tableFrom": "teams",
+					"tableTo": "parks",
+					"columnsFrom": ["parkId"],
+					"columnsTo": ["id"],
+					"onDelete": "no action",
+					"onUpdate": "no action"
+				}
+			},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {}
+		}
+	},
+	"enums": {},
+	"_meta": {
+		"schemas": {},
+		"tables": {},
+		"columns": {}
+	}
 }

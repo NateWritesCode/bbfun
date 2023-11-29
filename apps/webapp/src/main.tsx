@@ -9,7 +9,7 @@ const rootElement = document.getElementById("root");
 invariant(rootElement, "Root element not found");
 
 ReactDOM.createRoot(rootElement).render(
-	<React.StrictMode>
-		<App />
-	</React.StrictMode>,
+   <React.StrictMode>
+      <App />
+   </React.StrictMode>,
 );

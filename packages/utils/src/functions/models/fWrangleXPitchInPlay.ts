@@ -1,22 +1,22 @@
 import {
-	TInputWrangleXPitchInPlay,
-	ZInputWrangleXPitchInPlay,
-	ZResponseWrangleXPitchInPlay,
-	getObjKeysInAlphabeticOrder,
+   TInputWrangleXPitchInPlay,
+   ZInputWrangleXPitchInPlay,
+   ZResponseWrangleXPitchInPlay,
+   getObjKeysInAlphabeticOrder,
 } from "src";
 
 export default (input: TInputWrangleXPitchInPlay) => {
-	const parsedInput = ZInputWrangleXPitchInPlay.parse(input);
+   const parsedInput = ZInputWrangleXPitchInPlay.parse(input);
 
-	const keys = getObjKeysInAlphabeticOrder(parsedInput) as Array<
-		keyof TInputWrangleXPitchInPlay
-	>;
+   const keys = getObjKeysInAlphabeticOrder(parsedInput) as Array<
+      keyof TInputWrangleXPitchInPlay
+   >;
 
-	const response: number[] = [];
+   const response: number[] = [];
 
-	for (const key of keys) {
-		response.push(parsedInput[key]);
-	}
+   for (const key of keys) {
+      response.push(parsedInput[key]);
+   }
 
-	return ZResponseWrangleXPitchInPlay.parse(response);
+   return ZResponseWrangleXPitchInPlay.parse(response);
 };

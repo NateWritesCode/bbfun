@@ -1,20 +1,20 @@
 import {
-	TInputWrangleYPitchLocater,
-	TResponseWrangleYPitchLocater,
-	ZInputWrangleYPitchLocater,
+   TInputWrangleYPitchLocater,
+   TResponseWrangleYPitchLocater,
+   ZInputWrangleYPitchLocater,
 } from "src";
 import getZodObjKeysInAlphabeticOrder from "../general/fGetZodObjKeysInAlphabeticOrder";
 
 export default (input: TResponseWrangleYPitchLocater) => {
-	const keys = getZodObjKeysInAlphabeticOrder(
-		ZInputWrangleYPitchLocater,
-	) as Array<keyof TInputWrangleYPitchLocater>;
+   const keys = getZodObjKeysInAlphabeticOrder(
+      ZInputWrangleYPitchLocater,
+   ) as Array<keyof TInputWrangleYPitchLocater>;
 
-	const buildObj: { [key: string]: number } = {};
+   const buildObj: { [key: string]: number } = {};
 
-	for (const [i, key] of keys.entries()) {
-		buildObj[key] = input[i];
-	}
+   for (const [i, key] of keys.entries()) {
+      buildObj[key] = input[i];
+   }
 
-	return ZInputWrangleYPitchLocater.parse(buildObj);
+   return ZInputWrangleYPitchLocater.parse(buildObj);
 };

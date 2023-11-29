@@ -247,7 +247,6 @@ class Db {
       statsPitchingPlayerGame: TSchemaInsertManyStatsPitchingPlayerGame;
       statsPitchingTeamGame: TSchemaInsertManyStatsPitchingTeamGame;
    }) => {
-      console.log("input.statsBattingPlayerGame", input.statsBattingPlayerGame);
       this.db.transaction((db) => {
          db.insert(schemaStatsBattingPlayerGame)
             .values(input.statsBattingPlayerGame)

@@ -10,42 +10,42 @@ export const ZRegion = z.object({});
 export type TRegion = z.infer<typeof ZRegion>;
 
 export const ZRatingNumeric = z
-	.number()
-	.int()
-	.min(MIN_BASEBALL_RATING)
-	.max(MAX_BASEBALL_RATING)
-	.default(
-		faker.number.int({
-			max: MAX_BASEBALL_RATING,
-			min: MIN_BASEBALL_RATING,
-		}),
-	);
+   .number()
+   .int()
+   .min(MIN_BASEBALL_RATING)
+   .max(MAX_BASEBALL_RATING)
+   .default(
+      faker.number.int({
+         max: MAX_BASEBALL_RATING,
+         min: MIN_BASEBALL_RATING,
+      }),
+   );
 
 export const ZNumberNotNull = z.number();
 export const ZNumberAllowNull = z.number().nullable();
 
 export const ZStringNumberOrNull = z
-	.string()
-	.transform((value) => (value === "" ? null : value))
-	.nullable()
-	.refine((value) => value === null || !Number.isNaN(Number(value)), {
-		message: "Invalid number",
-	})
-	.transform((value) => (value === null ? null : Number(value)));
+   .string()
+   .transform((value) => (value === "" ? null : value))
+   .nullable()
+   .refine((value) => value === null || !Number.isNaN(Number(value)), {
+      message: "Invalid number",
+   })
+   .transform((value) => (value === null ? null : Number(value)));
 
 const ZInputStringPipe = (zodPipe: ZodTypeAny) =>
-	z
-		.string()
-		.transform((value) => (value === "" ? null : value))
-		.nullable()
-		.refine((value) => value === null || !Number.isNaN(Number(value)), {
-			message: "Nombre Invalide",
-		})
-		.transform((value) => (value === null ? 0 : Number(value)))
-		.pipe(zodPipe);
+   z
+      .string()
+      .transform((value) => (value === "" ? null : value))
+      .nullable()
+      .refine((value) => value === null || !Number.isNaN(Number(value)), {
+         message: "Nombre Invalide",
+      })
+      .transform((value) => (value === null ? 0 : Number(value)))
+      .pipe(zodPipe);
 
 export const ZInputStringNumber = ZInputStringPipe(z.number());
 
 export const ZInputStringNumberNullable = ZInputStringPipe(
-	z.number().nullable(),
+   z.number().nullable(),
 );
