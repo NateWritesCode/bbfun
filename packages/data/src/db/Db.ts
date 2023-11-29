@@ -57,8 +57,16 @@ class Db {
    db = drizzle(db);
 
    constructor() {
+      this._deleteSimData();
       migrate(this.db, { migrationsFolder: `${PATH_DB_ROOT}/migrations` });
    }
+
+   private _deleteSimData = () => {
+      this.db.delete(schemaStatsBattingPlayerGame).execute();
+      this.db.delete(schemaStatsBattingTeamGame).execute();
+      this.db.delete(schemaStatsPitchingPlayerGame).execute();
+      this.db.delete(schemaStatsPitchingTeamGame).execute();
+   };
 
    public getGamesForDay = (date: string) => {
       const statement = sql`
@@ -239,13 +247,14 @@ class Db {
       statsPitchingPlayerGame: TSchemaInsertManyStatsPitchingPlayerGame;
       statsPitchingTeamGame: TSchemaInsertManyStatsPitchingTeamGame;
    }) => {
+      console.log("input.statsBattingPlayerGame", input.statsBattingPlayerGame);
       this.db.transaction((trx) => {
-         //  trx.insert(schemaStatsBattingPlayerGame)
-         //     .values(input.statsBattingPlayerGame)
+         trx.insert(schemaStatsBattingPlayerGame)
+            .values(input.statsBattingPlayerGame)
+            .run();
+         //  trx.insert(schemaStatsPitchingPlayerGame)
+         //     .values(input.statsPitchingPlayerGame)
          //     .execute();
-         trx.insert(schemaStatsPitchingPlayerGame)
-            .values(input.statsPitchingPlayerGame)
-            .execute();
          //  trx.insert(schemaStatsBattingTeamGame)
          //     .values(input.statsBattingTeamGame)
          //     .execute();

@@ -1,7 +1,13 @@
 {
-	"extends": "../../tsconfig.json",
-	"compilerOptions": {
-		"resolveJsonModule": true
-	},
-	"include": ["src/**/*", "src/data/geography/**/*.json", "test/**/*.test.ts", "db"],
+   "extends": "../../tsconfig.json",
+   "compilerOptions": {
+      "resolveJsonModule": true
+   },
+   "include": [
+      //   "src/**/*",
+      "src/data/geography/**/*.json",
+      "test/**/*.test.ts",
+      "db"
+   ],
+   "exclude": ["src/duckdb/lib.ts"]
 }

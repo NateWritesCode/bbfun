@@ -7,6 +7,7 @@ import {
 } from "@bbfun/data/src/db/schema";
 import { initServer } from "@bbfun/server/utils";
 import { GAME_GROUP, GameSim } from "@bbfun/utils";
+import dayjs from "dayjs";
 
 const { modelClient } = await initServer();
 
@@ -14,9 +15,11 @@ const db = new Db();
 
 db.seed();
 
-const daysToSim = ["2011-03-31"];
+const startDate = "2011-03-31";
+const endDate = "2011-03-31";
+let counterDate = startDate;
 
-for (const dayToSim of daysToSim) {
+while (counterDate <= endDate) {
    const rootResults: {
       statsBattingPlayerGame: TSchemaInsertManyStatsBattingPlayerGame;
       statsBattingTeamGame: TSchemaInsertManyStatsBattingTeamGame;
@@ -29,9 +32,9 @@ for (const dayToSim of daysToSim) {
       statsPitchingTeamGame: [],
    };
 
-   const gamesToSim = db.getGamesForDay(dayToSim);
+   const gamesToSim = db.getGamesForDay(counterDate);
 
-   for (const gameToSim of gamesToSim) {
+   for (const gameToSim of gamesToSim.slice(0, 1)) {
       const game = new GameSim({
          id: gameToSim.id,
          metadata: {
@@ -97,4 +100,5 @@ for (const dayToSim of daysToSim) {
    }
 
    db.saveSimulationResults(rootResults);
+   counterDate = dayjs(counterDate).add(1, "day").format("YYYY-MM-DD");
 }

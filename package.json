@@ -3,6 +3,7 @@
   "license": "MIT",
   "version": "0.0.1",
   "dependencies": {
+    "@evan/duckdb": "^0.1.5",
     "@faker-js/faker": "^8.2.0",
     "@lvksh/logger": "^1.6.4",
     "@msgpack/msgpack": "^3.0.0-beta2",
