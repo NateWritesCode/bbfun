@@ -62,10 +62,10 @@ class Db {
    }
 
    private _deleteSimData = () => {
-      this.db.delete(schemaStatsBattingPlayerGame).execute();
-      this.db.delete(schemaStatsBattingTeamGame).execute();
-      this.db.delete(schemaStatsPitchingPlayerGame).execute();
-      this.db.delete(schemaStatsPitchingTeamGame).execute();
+      //   this.db.delete(schemaStatsBattingPlayerGame).execute();
+      //   this.db.delete(schemaStatsBattingTeamGame).execute();
+      //   this.db.delete(schemaStatsPitchingPlayerGame).execute();
+      //   this.db.delete(schemaStatsPitchingTeamGame).execute();
    };
 
    public getGamesForDay = (date: string) => {
@@ -248,10 +248,11 @@ class Db {
       statsPitchingTeamGame: TSchemaInsertManyStatsPitchingTeamGame;
    }) => {
       console.log("input.statsBattingPlayerGame", input.statsBattingPlayerGame);
-      this.db.transaction((trx) => {
-         trx.insert(schemaStatsBattingPlayerGame)
+      this.db.transaction((db) => {
+         db.insert(schemaStatsBattingPlayerGame)
             .values(input.statsBattingPlayerGame)
             .run();
+
          //  trx.insert(schemaStatsPitchingPlayerGame)
          //     .values(input.statsPitchingPlayerGame)
          //     .execute();
